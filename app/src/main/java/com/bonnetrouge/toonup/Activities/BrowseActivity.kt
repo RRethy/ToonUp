@@ -1,11 +1,11 @@
-package com.bonnetrouge.toonup
+package com.bonnetrouge.toonup.Activities
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import com.bonnetrouge.toonup.Commons.app
+import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Modules.BrowseModule
+import com.bonnetrouge.toonup.R
 
-class BrowseActivity : AppCompatActivity() {
+class BrowseActivity: BaseActivity() {
 
     val component by lazy { app.component.plus(BrowseModule()) }
 

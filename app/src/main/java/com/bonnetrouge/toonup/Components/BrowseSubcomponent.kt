@@ -1,6 +1,6 @@
 package com.bonnetrouge.toonup.Components
 
-import com.bonnetrouge.toonup.BrowseActivity
+import com.bonnetrouge.toonup.Activities.BrowseActivity
 import com.bonnetrouge.toonup.Commons.Scopes.ActivityScope
 import com.bonnetrouge.toonup.Modules.BrowseModule
 import dagger.Subcomponent
