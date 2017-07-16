@@ -32,8 +32,14 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
 
+    // Dagger2
     compile 'com.google.dagger:dagger:2.11'
     kapt 'com.google.dagger:dagger-compiler:2.11'
+
+    // Lifecycles, LiveData, and ViewModel
+    compile "android.arch.lifecycle:runtime:1.0.0-alpha3"
+    compile "android.arch.lifecycle:extensions:1.0.0-alpha3"
+    kapt "android.arch.lifecycle:compiler:1.0.0-alpha3"
 }
 repositories {
     mavenCentral()

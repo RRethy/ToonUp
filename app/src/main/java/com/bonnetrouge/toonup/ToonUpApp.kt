@@ -1,8 +1,8 @@
 package com.bonnetrouge.toonup
 
 import android.app.Application
-import com.bonnetrouge.toonup.Components.DaggerToonUpAppComponent
-import com.bonnetrouge.toonup.Components.ToonUpAppComponent
+import com.bonnetrouge.toonup.DI.Components.DaggerToonUpAppComponent
+import com.bonnetrouge.toonup.DI.Components.ToonUpAppComponent
 
 class ToonUpApp: Application() {
 

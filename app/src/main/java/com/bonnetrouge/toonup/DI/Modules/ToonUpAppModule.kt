@@ -1,4 +1,4 @@
-package com.bonnetrouge.toonup.Modules
+package com.bonnetrouge.toonup.DI.Modules
 
 import com.bonnetrouge.toonup.ToonUpApp
 import dagger.Module
