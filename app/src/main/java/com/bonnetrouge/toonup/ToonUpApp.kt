@@ -10,8 +10,14 @@ class ToonUpApp: Application() {
         DaggerToonUpAppComponent.create()
     }
 
+    companion object {
+        lateinit var app: ToonUpApp
+            private set
+    }
+
     override fun onCreate() {
         super.onCreate()
+        app = this
         component.inject(this)
     }
 }
