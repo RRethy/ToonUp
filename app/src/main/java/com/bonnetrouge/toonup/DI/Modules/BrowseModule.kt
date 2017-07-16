@@ -8,5 +8,8 @@ import dagger.Provides
 @Module class BrowseModule {
 
     @Provides
-    fun providesBrowseViewModelFactory() = BrowseViewModelFactory(BrowseViewModel())
+    fun provideBrowseViewModel() = BrowseViewModel()
+
+    @Provides
+    fun providesBrowseViewModelFactory(browseViewModel: BrowseViewModel) = BrowseViewModelFactory(browseViewModel)
 }

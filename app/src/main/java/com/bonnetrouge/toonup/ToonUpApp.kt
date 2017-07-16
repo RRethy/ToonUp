@@ -6,13 +6,13 @@ import com.bonnetrouge.toonup.DI.Components.ToonUpAppComponent
 
 class ToonUpApp: Application() {
 
-    val component: ToonUpAppComponent by lazy {
-        DaggerToonUpAppComponent.create()
-    }
-
     companion object {
         lateinit var app: ToonUpApp
             private set
+    }
+
+    val component: ToonUpAppComponent by lazy {
+        DaggerToonUpAppComponent.create()
     }
 
     override fun onCreate() {
