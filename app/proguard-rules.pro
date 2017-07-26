@@ -38,3 +38,4 @@
 -keepclasseswithmembers class * {
     @com.squareup.moshi.* <methods>;
 }
+-dontwarn com.squareup.okhttp.**
