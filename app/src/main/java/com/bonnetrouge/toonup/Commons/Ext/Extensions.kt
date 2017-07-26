@@ -7,5 +7,5 @@ import com.bonnetrouge.toonup.Activities.BaseActivity
 val app: ToonUpApp
     get() = ToonUpApp.app
 
-inline fun BaseActivity.swapInFragment(swapInfo: FragmentTransaction.() -> FragmentTransaction)
+inline fun BaseActivity.fragmentTransaction(swapInfo: FragmentTransaction.() -> FragmentTransaction)
         = supportFragmentManager.beginTransaction().swapInfo().commit()
