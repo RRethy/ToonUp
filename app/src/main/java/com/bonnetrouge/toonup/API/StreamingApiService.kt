@@ -53,21 +53,4 @@ interface StreamingApiService {
 
 	@GET("/GetVideos/{episodeId}")
 	fun getPlainStreamingUrls(@Path("episodeId") id: Int): Observable<Collection<Collection<String>>>
-
-	companion object {
-		var appVersion = "8.0"
-
-		fun create(): StreamingApiService {
-			val okHttpClient = OkHttpClient.Builder().addInterceptor {
-				it.proceed(it.request().newBuilder().addHeader("App-Version", appVersion).build())
-			}.build()
-			val retrofit = Retrofit.Builder()
-					.baseUrl("")
-					.client(okHttpClient)
-					.addConverterFactory(MoshiConverterFactory.create())
-					.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-					.build()
-			return retrofit.create(StreamingApiService::class.java)
-		}
-	}
 }
