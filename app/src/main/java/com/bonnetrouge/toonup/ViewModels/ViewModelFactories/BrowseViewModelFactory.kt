@@ -3,10 +3,10 @@ package com.bonnetrouge.toonup.ViewModels.ViewModelFactories
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
+import javax.inject.Inject
 
 
-
-class BrowseViewModelFactory(val browseViewModel: BrowseViewModel): ViewModelProvider.Factory {
+class BrowseViewModelFactory @Inject constructor(val browseViewModel: BrowseViewModel): ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>?): T {
         modelClass?.let {

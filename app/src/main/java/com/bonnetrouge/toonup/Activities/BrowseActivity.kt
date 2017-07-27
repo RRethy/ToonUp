@@ -4,10 +4,9 @@ import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.Ext.fragmentTransaction
-import com.bonnetrouge.toonup.DI.Modules.BrowseModule
+import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
 import com.bonnetrouge.toonup.Fragments.BrowsePopularFragment
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
@@ -21,16 +20,17 @@ class BrowseActivity : BaseActivity(), LifecycleRegistryOwner {
 	lateinit var browseViewModelFactory: BrowseViewModelFactory
 	lateinit var browseViewModel: BrowseViewModel
 	val lifecycleRegistry = LifecycleRegistry(this)
-	val component by lazy { app.component.plus(BrowseModule()) }
+	@Inject
+	lateinit var browsePopularFragment: BrowsePopularFragment
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_browse)
-		component.inject(this)
+		app.component.plus(BrowseActivityModule()).inject(this)
 		browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
 		setSupportActionBar(toolbar)
 		fragmentTransaction {
-			replace(fragmentContainer.id, BrowsePopularFragment())
+			replace(fragmentContainer.id, browsePopularFragment)
 		}
 	}
 
