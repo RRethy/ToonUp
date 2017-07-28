@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#181818</color>
+    <color name="colorPrimary">#161616</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#232323</color>
+    <color name="colorAccent">#2d2d2d</color>
+    <color name="bottomNavItemsColour">@android:color/white</color>
+    <color name="tertiaryColour">#ff4400</color>
 </resources>

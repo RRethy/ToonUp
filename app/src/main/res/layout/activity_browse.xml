@@ -3,13 +3,13 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:background="@color/colorAccent">
 
 	<FrameLayout
 		android:id="@+id/fragmentContainer"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_marginBottom="?attr/actionBarSize"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
 	<android.support.design.widget.AppBarLayout
@@ -30,6 +30,8 @@
 		android:id="@+id/bottomNavView"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_gravity="bottom"/>
+		android:layout_gravity="bottom"
+		app:itemBackground="@color/tertiaryColour"
+		app:menu="@menu/browse_bottom_nav_menu"/>
 
 </android.support.design.widget.CoordinatorLayout>

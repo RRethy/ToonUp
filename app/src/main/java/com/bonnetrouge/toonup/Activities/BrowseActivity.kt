@@ -31,5 +31,8 @@ class BrowseActivity : BaseActivity() {
 		fragmentTransaction {
 			replace(fragmentContainer.id, browsePopularFragment)
 		}
+		bottomNavView.setOnNavigationItemSelectedListener {
+			true
+		}
 	}
 }

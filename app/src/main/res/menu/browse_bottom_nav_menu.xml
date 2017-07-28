@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	  xmlns:app="http://schemas.android.com/apk/res-auto">
+	<item
+		android:id="@+id/action_browse_tv_shows"
+		android:icon="@drawable/ic_tv_shows"
+		android:title="TV Shows"/>
+	<item
+		android:id="@+id/action_browse_movies"
+		android:icon="@drawable/ic_movie"
+		android:title="Movies"/>
+	<item
+		android:id="@+id/action_browse_recents"
+		android:icon="@drawable/ic_new_releases"
+		android:title="New"/>
+</menu>
