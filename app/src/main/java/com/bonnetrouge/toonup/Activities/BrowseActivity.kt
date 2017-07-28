@@ -14,14 +14,13 @@ import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.BrowseViewModelFacto
 import kotlinx.android.synthetic.main.activity_browse.*
 import javax.inject.Inject
 
-class BrowseActivity : BaseActivity(), LifecycleRegistryOwner {
+class BrowseActivity : BaseActivity() {
 
 	@Inject
 	lateinit var browsePopularFragment: BrowsePopularFragment
 	@Inject
 	lateinit var browseViewModelFactory: BrowseViewModelFactory
 	lateinit var browseViewModel: BrowseViewModel
-	val lifecycleRegistry = LifecycleRegistry(this)
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -33,6 +32,4 @@ class BrowseActivity : BaseActivity(), LifecycleRegistryOwner {
 			replace(fragmentContainer.id, browsePopularFragment)
 		}
 	}
-
-	override fun getLifecycle() = lifecycleRegistry
 }
