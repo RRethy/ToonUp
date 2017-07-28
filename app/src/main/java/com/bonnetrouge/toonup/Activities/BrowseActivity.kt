@@ -17,11 +17,11 @@ import javax.inject.Inject
 class BrowseActivity : BaseActivity(), LifecycleRegistryOwner {
 
 	@Inject
+	lateinit var browsePopularFragment: BrowsePopularFragment
+	@Inject
 	lateinit var browseViewModelFactory: BrowseViewModelFactory
 	lateinit var browseViewModel: BrowseViewModel
 	val lifecycleRegistry = LifecycleRegistry(this)
-	@Inject
-	lateinit var browsePopularFragment: BrowsePopularFragment
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)

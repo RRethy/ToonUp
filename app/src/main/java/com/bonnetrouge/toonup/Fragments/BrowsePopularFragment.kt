@@ -5,9 +5,11 @@ import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.bonnetrouge.toonup.API.StreamingApiService
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.VeryBasicAdapter
@@ -40,13 +42,14 @@ class BrowsePopularFragment @Inject constructor(): Fragment() {
 	}
 
 	fun populateRecyclerView() {
-		StreamingApiService.create()
-				.getPopularCartoons()
+		browseViewModel.popularCartoons
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
-				.subscribe {
+				.subscribe({
 					veryBasicAdapter.seriesItems.addAll(it)
 					veryBasicAdapter.notifyDataSetChanged()
-				}
+				},{
+					Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+				})
 	}
 }
