@@ -42,7 +42,7 @@ class BrowsePopularFragment @Inject constructor(): Fragment() {
 	}
 
 	fun populateRecyclerView() {
-		browseViewModel.popularCartoons
+		browseViewModel.getPopularCartoonObservable()
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe({
