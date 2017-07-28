@@ -4,6 +4,7 @@ import android.arch.lifecycle.LifecycleRegistry
 import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.util.Log
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.Ext.fragmentTransaction
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
@@ -28,11 +29,28 @@ class BrowseActivity : BaseActivity() {
 		app.component.plus(BrowseActivityModule()).inject(this)
 		browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
 		setSupportActionBar(toolbar)
-		fragmentTransaction {
-			replace(fragmentContainer.id, browsePopularFragment)
-		}
 		bottomNavView.setOnNavigationItemSelectedListener {
-			true
+			when (it.itemId) {
+				R.id.action_browse_tv_shows -> {
+					fragmentTransaction {
+						replace(fragmentContainer.id, browsePopularFragment)
+					}
+					true
+				}
+				R.id.action_browse_movies -> {
+					fragmentTransaction {
+						replace(fragmentContainer.id, browsePopularFragment)
+					}
+					true
+				}
+				R.id.action_browse_recents -> {
+					fragmentTransaction {
+						replace(fragmentContainer.id, browsePopularFragment)
+					}
+					true
+				}
+				else -> false
+			}
 		}
 	}
 }
