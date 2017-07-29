@@ -1,14 +1,13 @@
 package com.bonnetrouge.toonup.Activities
 
-import android.arch.lifecycle.LifecycleRegistry
-import android.arch.lifecycle.LifecycleRegistryOwner
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.util.Log
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.Ext.fragmentTransaction
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
-import com.bonnetrouge.toonup.Fragments.BrowsePopularFragment
+import com.bonnetrouge.toonup.Fragments.BrowseMoviesFragment
+import com.bonnetrouge.toonup.Fragments.BrowseRecentsFragment
+import com.bonnetrouge.toonup.Fragments.BrowseSeriesFragment
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.BrowseViewModelFactory
@@ -18,7 +17,11 @@ import javax.inject.Inject
 class BrowseActivity : BaseActivity() {
 
 	@Inject
-	lateinit var browsePopularFragment: BrowsePopularFragment
+	lateinit var browseSeriesFragment: BrowseSeriesFragment
+	@Inject
+	lateinit var browseMoviesFragment: BrowseMoviesFragment
+	@Inject
+	lateinit var browseRecentsFragment: BrowseRecentsFragment
 	@Inject
 	lateinit var browseViewModelFactory: BrowseViewModelFactory
 	lateinit var browseViewModel: BrowseViewModel
@@ -33,19 +36,19 @@ class BrowseActivity : BaseActivity() {
 			when (it.itemId) {
 				R.id.action_browse_tv_shows -> {
 					fragmentTransaction {
-						replace(fragmentContainer.id, browsePopularFragment)
+						replace(fragmentContainer.id, browseSeriesFragment)
 					}
 					true
 				}
 				R.id.action_browse_movies -> {
 					fragmentTransaction {
-						replace(fragmentContainer.id, browsePopularFragment)
+						replace(fragmentContainer.id, browseMoviesFragment)
 					}
 					true
 				}
 				R.id.action_browse_recents -> {
 					fragmentTransaction {
-						replace(fragmentContainer.id, browsePopularFragment)
+						replace(fragmentContainer.id, browseRecentsFragment)
 					}
 					true
 				}

@@ -13,10 +13,10 @@ import com.bonnetrouge.toonup.UI.VeryBasicAdapter
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_browse_recents.*
+import kotlinx.android.synthetic.main.fragment_browse_movies.*
 import javax.inject.Inject
 
-class BrowseRecentsFragment @Inject constructor() : Fragment() {
+class BrowseMoviesFragment @Inject constructor(): Fragment() {
 
 	val veryBasicAdapter by lazy {
 		VeryBasicAdapter(activity)
@@ -26,24 +26,24 @@ class BrowseRecentsFragment @Inject constructor() : Fragment() {
 	}
 
 	override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-		return inflater?.inflate(R.layout.fragment_browse_recents, container, false)
+		return inflater?.inflate(R.layout.fragment_browse_movies, container, false)
 	}
 
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		browseRecentsRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
-		browseRecentsRecyclerView.adapter = veryBasicAdapter
-		populateRecyclerView()
+		browseMoviesRecyclerView.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
+		browseMoviesRecyclerView.adapter = veryBasicAdapter
+		popularRecyclerView()
 	}
 
-	fun populateRecyclerView() {
+	fun popularRecyclerView() {
 		browseViewModel.getPopularCartoonObservable()
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe({
 					veryBasicAdapter.seriesItems.addAll(it)
 					veryBasicAdapter.notifyDataSetChanged()
-				},{
+				}, {
 					Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
 				})
 	}

@@ -13,11 +13,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 
 	private var popularCartoons: Collection<BasicSeriesInfo>? = null
 
-	fun getPopularCartoonObservable(): Single<Collection<BasicSeriesInfo>> {
-		if (popularCartoons != null) {
-			return Single.just(popularCartoons)
-		} else {
-			return videoRepository.getPopularCartoons().doOnSuccess { popularCartoons = it }
-		}
-	}
+	fun getPopularCartoonObservable()
+			= if (popularCartoons != null) Single.just(popularCartoons)
+			  else  videoRepository.getPopularCartoons().doOnSuccess { popularCartoons = it }
 }
