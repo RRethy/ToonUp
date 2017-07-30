@@ -32,22 +32,28 @@ class BrowseActivity : BaseActivity() {
 		app.component.plus(BrowseActivityModule()).inject(this)
 		browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
 		setSupportActionBar(toolbar)
+		fragmentTransaction {
+			replace(fragmentContainer.id, browseSeriesFragment)
+		}
 		bottomNavView.setOnNavigationItemSelectedListener {
 			when (it.itemId) {
 				R.id.action_browse_tv_shows -> {
 					fragmentTransaction {
+						setCustomAnimations(R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom)
 						replace(fragmentContainer.id, browseSeriesFragment)
 					}
 					true
 				}
 				R.id.action_browse_movies -> {
 					fragmentTransaction {
+						setCustomAnimations(R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom)
 						replace(fragmentContainer.id, browseMoviesFragment)
 					}
 					true
 				}
 				R.id.action_browse_recents -> {
 					fragmentTransaction {
+						setCustomAnimations(R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom)
 						replace(fragmentContainer.id, browseRecentsFragment)
 					}
 					true

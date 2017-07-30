@@ -11,9 +11,7 @@ import javax.inject.Inject
 
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository): ViewModel() {
 
-	private var popularCartoons: Collection<BasicSeriesInfo>? = null
+	var popularCartoons: Collection<BasicSeriesInfo>? = null
 
-	fun getPopularCartoonObservable()
-			= if (popularCartoons != null) Single.just(popularCartoons)
-			  else  videoRepository.getPopularCartoons().doOnSuccess { popularCartoons = it }
+	fun getPopularCartoonObservable() = videoRepository.getPopularCartoons().doOnSuccess { popularCartoons = it }
 }

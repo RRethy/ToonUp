@@ -5,4 +5,5 @@
     <color name="colorAccent">#2d2d2d</color>
     <color name="bottomNavItemsColour">@android:color/white</color>
     <color name="tertiaryColour">#ff4400</color>
+    <color name="thumbnailLoadingColour">#363636</color>
 </resources>

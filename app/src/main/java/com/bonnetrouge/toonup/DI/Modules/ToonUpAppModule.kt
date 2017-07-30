@@ -24,7 +24,7 @@ class ToonUpAppModule(val app: ToonUpApp) {
     @Provides
     @Singleton
     fun provideStreamingApiService(): StreamingApiService {
-        var appVersion = "8.0"
+        val appVersion = "8.0"
         val okHttpClient = OkHttpClient.Builder().addInterceptor {
             it.proceed(it.request().newBuilder().addHeader("App-Version", appVersion).build())
         }.build()
