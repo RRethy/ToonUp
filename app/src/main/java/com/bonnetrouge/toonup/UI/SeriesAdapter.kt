@@ -1,6 +1,5 @@
 package com.bonnetrouge.toonup.UI
 
-import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,14 +7,15 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Commons.Ext.convertToPixels
 import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
+import com.bonnetrouge.toonup.Fragments.BrowseSeriesFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.squareup.picasso.Picasso
 import java.lang.ref.WeakReference
 
-class SeriesAdapter(context: Context) : RecyclerView.Adapter<SeriesAdapter.SeriesThumbnailViewHolder>() {
+class SeriesAdapter(seriesFragment: BrowseSeriesFragment) : RecyclerView.Adapter<SeriesAdapter.SeriesThumbnailViewHolder>() {
 
-	private val contextWeakRef = WeakReference<Context>(context)
+	private val browseSeriesFragmentWeakRef = WeakReference<BrowseSeriesFragment>(seriesFragment)
 	val itemList = ArrayList<BasicSeriesInfo>()
 	val thumbnailWidthPx by lazy {
 		((getDisplayWidth() - convertToPixels(24.0)) / 3.0).toInt()
@@ -39,10 +39,13 @@ class SeriesAdapter(context: Context) : RecyclerView.Adapter<SeriesAdapter.Serie
 		init {
 			thumbnail.layoutParams.width = thumbnailWidthPx
 			thumbnail.layoutParams.height = thumbnailHeightPx
+			view.setOnClickListener {
+				browseSeriesFragmentWeakRef.get()?.onRecyclerViewItemClicked(itemList[adapterPosition])
+			}
 		}
 
 		fun bind(basicSeriesInfo: BasicSeriesInfo) {
-			Picasso.with(contextWeakRef.get())
+			Picasso.with(browseSeriesFragmentWeakRef.get()?.context)
 					.load("http://www.animetoon.org/images/series/big/${basicSeriesInfo.id}.jpg")
 					.resize(thumbnailWidthPx, thumbnailHeightPx)
 					.into(thumbnail)

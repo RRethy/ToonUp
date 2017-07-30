@@ -7,6 +7,9 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
+import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -16,10 +19,10 @@ import javax.inject.Inject
 import com.bonnetrouge.toonup.UI.SeriesAdapter
 
 
-class BrowseSeriesFragment @Inject constructor(): Fragment() {
+class BrowseSeriesFragment @Inject constructor(): Fragment(), OnRecyclerViewItemClicked {
 
 	val seriesAdapter by lazy {
-		SeriesAdapter(context)
+		SeriesAdapter(this)
 	}
 	val browseViewModel by lazy {
 		ViewModelProviders.of(activity).get(BrowseViewModel::class.java)
@@ -34,13 +37,12 @@ class BrowseSeriesFragment @Inject constructor(): Fragment() {
 		browseSeriesRecyclerView.layoutManager = GridLayoutManager(activity, 3, GridLayoutManager.VERTICAL, false)
 		browseSeriesRecyclerView.adapter = seriesAdapter
 		swipeRefreshLayout.setOnRefreshListener {
-			hideErrorMsg()
-			populateRecyclerView()
+			refreshRecyclerView()
 		}
-		populateRecyclerView()
+		refreshRecyclerView()
 	}
 
-	fun populateRecyclerView() {
+	fun refreshRecyclerView() {
 		if (browseViewModel.popularCartoons != null) {
 			hideErrorMsg()
 			seriesAdapter.itemList.addAll(browseViewModel.popularCartoons!!)
@@ -54,6 +56,7 @@ class BrowseSeriesFragment @Inject constructor(): Fragment() {
 						swipeRefreshLayout.isRefreshing = true
 					}
 					.subscribe({
+						hideErrorMsg()
 						seriesAdapter.itemList.addAll(it)
 						seriesAdapter.notifyItemRangeInserted(0, it.size)
 						swipeRefreshLayout.isRefreshing = false
@@ -70,5 +73,11 @@ class BrowseSeriesFragment @Inject constructor(): Fragment() {
 
 	fun hideErrorMsg() {
 		errorMessage.visibility = View.INVISIBLE
+	}
+
+	override fun onRecyclerViewItemClicked(item: Any) {
+		with (item as BasicSeriesInfo) {
+			Toast.makeText(context, item.name, Toast.LENGTH_LONG).show()
+		}
 	}
 }

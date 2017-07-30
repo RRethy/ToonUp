@@ -11,7 +11,7 @@
 		android:layout_height="match_parent"
 		android:gravity="center"
 		android:layout_marginBottom="?attr/actionBarSize"
-		android:visibility="visible"/>
+		android:visibility="invisible"/>
 	<android.support.v4.widget.SwipeRefreshLayout
 		android:id="@+id/swipeRefreshLayout"
 		android:layout_width="match_parent"
