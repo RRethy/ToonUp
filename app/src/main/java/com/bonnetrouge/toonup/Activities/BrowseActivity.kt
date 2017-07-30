@@ -6,7 +6,7 @@ import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.Ext.fragmentTransaction
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
 import com.bonnetrouge.toonup.Fragments.BrowseMoviesFragment
-import com.bonnetrouge.toonup.Fragments.BrowseRecentsFragment
+import com.bonnetrouge.toonup.Fragments.BrowseNewEpisodesFragment
 import com.bonnetrouge.toonup.Fragments.BrowseSeriesFragment
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
@@ -20,8 +20,6 @@ class BrowseActivity : BaseActivity() {
 	lateinit var browseSeriesFragment: BrowseSeriesFragment
 	@Inject
 	lateinit var browseMoviesFragment: BrowseMoviesFragment
-	@Inject
-	lateinit var browseRecentsFragment: BrowseRecentsFragment
 	@Inject
 	lateinit var browseViewModelFactory: BrowseViewModelFactory
 	lateinit var browseViewModel: BrowseViewModel
@@ -45,13 +43,6 @@ class BrowseActivity : BaseActivity() {
 					fragmentTransaction {
 						setCustomAnimations(R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom)
 						replace(fragmentContainer.id, browseMoviesFragment)
-					}
-					true
-				}
-				R.id.action_browse_recents -> {
-					fragmentTransaction {
-						setCustomAnimations(R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom)
-						replace(fragmentContainer.id, browseRecentsFragment)
 					}
 					true
 				}
