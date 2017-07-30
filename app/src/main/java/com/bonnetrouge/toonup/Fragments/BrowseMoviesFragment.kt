@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.bonnetrouge.toonup.Activities.DetailActivity
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
@@ -40,37 +41,37 @@ class BrowseMoviesFragment @Inject constructor(): Fragment(), OnRecyclerViewItem
 			hideErrorMsg()
 			moviesAdapter.itemList.addAll(browseViewModel.popularMovies!!)
 			moviesAdapter.notifyDataSetChanged()
-			swipeRefreshLayout.isRefreshing = false
+			swipeRefreshLayout?.isRefreshing = false
 		} else {
 			browseViewModel.getPopularMoviesObservable()
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 					.doOnSubscribe {
-						swipeRefreshLayout.isRefreshing = true
+						swipeRefreshLayout?.isRefreshing = true
 					}
 					.subscribe({
 						hideErrorMsg()
 						moviesAdapter.itemList.addAll(it)
 						moviesAdapter.notifyItemRangeInserted(0, it.size)
-						swipeRefreshLayout.isRefreshing = false
+						swipeRefreshLayout?.isRefreshing = false
 					},{
 						showErroMsg()
-						swipeRefreshLayout.isRefreshing = false
+						swipeRefreshLayout?.isRefreshing = false
 					})
 		}
 	}
 
 	fun showErroMsg() {
-		errorMessage.visibility = View.VISIBLE
+		errorMessage?.visibility = View.VISIBLE
 	}
 
 	fun hideErrorMsg() {
-		errorMessage.visibility = View.INVISIBLE
+		errorMessage?.visibility = View.INVISIBLE
 	}
 
 	override fun onRecyclerViewItemClicked(item: Any) {
 		with (item as BasicSeriesInfo) {
-			Toast.makeText(context, item.name, Toast.LENGTH_LONG).show()
+			DetailActivity.navigate(context, item)
 		}
 	}
 }
