@@ -4,17 +4,10 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import com.bonnetrouge.toonup.Commons.Ext.convertToPixels
-import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
-import com.bonnetrouge.toonup.Model.ListItemTypes
-import com.bonnetrouge.toonup.Model.LoadingItem
 import com.bonnetrouge.toonup.R
-import com.bonnetrouge.toonup.UI.VeryBasicAdapter
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -39,35 +32,43 @@ class BrowseSeriesFragment @Inject constructor(): Fragment() {
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
 		browseSeriesRecyclerView.layoutManager = GridLayoutManager(activity, 3, GridLayoutManager.VERTICAL, false)
-		(browseSeriesRecyclerView.layoutManager as GridLayoutManager).spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-			override fun getSpanSize(position: Int)
-					= if (seriesAdapter.itemList[position].getDataType() == ListItemTypes.LOADING) 3 else 1
-		}
 		browseSeriesRecyclerView.adapter = seriesAdapter
+		swipeRefreshLayout.setOnRefreshListener {
+			hideErrorMsg()
+			populateRecyclerView()
+		}
 		populateRecyclerView()
 	}
 
 	fun populateRecyclerView() {
 		if (browseViewModel.popularCartoons != null) {
+			hideErrorMsg()
 			seriesAdapter.itemList.addAll(browseViewModel.popularCartoons!!)
 			seriesAdapter.notifyDataSetChanged()
+			swipeRefreshLayout.isRefreshing = false
 		} else {
 			browseViewModel.getPopularCartoonObservable()
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 					.doOnSubscribe {
-						seriesAdapter.itemList.add(LoadingItem())
-						seriesAdapter.notifyItemInserted(0)
+						swipeRefreshLayout.isRefreshing = true
 					}
 					.subscribe({
-						seriesAdapter.itemList.removeAt(0)
-						seriesAdapter.notifyItemRemoved(0)
 						seriesAdapter.itemList.addAll(it)
 						seriesAdapter.notifyItemRangeInserted(0, it.size)
+						swipeRefreshLayout.isRefreshing = false
 					},{
-						//TODO: Add error handling
-						Toast.makeText(context, it.message, Toast.LENGTH_LONG).show()
+						showErroMsg()
+						swipeRefreshLayout.isRefreshing = false
 					})
 		}
+	}
+
+	fun showErroMsg() {
+		errorMessage.visibility = View.VISIBLE
+	}
+
+	fun hideErrorMsg() {
+		errorMessage.visibility = View.INVISIBLE
 	}
 }

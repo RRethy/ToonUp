@@ -6,6 +6,4 @@ data class BasicSeriesInfo(val id: String,
 						   val status: String,
 						   val released: String,
 						   val rating: Float,
-						   val genres: Collection<String>) : ListItem {
-	override fun getDataType() = ListItemTypes.BASIC_SERIES_INFO
-}
+						   val genres: Collection<String>)

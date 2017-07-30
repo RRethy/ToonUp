@@ -32,9 +32,6 @@ class BrowseActivity : BaseActivity() {
 		app.component.plus(BrowseActivityModule()).inject(this)
 		browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
 		setSupportActionBar(toolbar)
-		fragmentTransaction {
-			replace(fragmentContainer.id, browseSeriesFragment)
-		}
 		bottomNavView.setOnNavigationItemSelectedListener {
 			when (it.itemId) {
 				R.id.action_browse_tv_shows -> {
@@ -61,5 +58,6 @@ class BrowseActivity : BaseActivity() {
 				else -> false
 			}
 		}
+		if (savedInstanceState == null) bottomNavView.menu.performIdentifierAction(bottomNavView.selectedItemId, 0)
 	}
 }
