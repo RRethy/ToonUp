@@ -18,15 +18,10 @@ import kotlinx.android.synthetic.main.fragment_browse_series.*
 import javax.inject.Inject
 import com.bonnetrouge.toonup.UI.SeriesAdapter
 
-
 class BrowseSeriesFragment @Inject constructor(): Fragment(), OnRecyclerViewItemClicked {
 
-	val seriesAdapter by lazy {
-		SeriesAdapter(this)
-	}
-	val browseViewModel by lazy {
-		ViewModelProviders.of(activity).get(BrowseViewModel::class.java)
-	}
+	val seriesAdapter by lazy { SeriesAdapter(this) }
+	val browseViewModel by lazy { ViewModelProviders.of(activity).get(BrowseViewModel::class.java) }
 
 	override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 		return inflater?.inflate(R.layout.fragment_browse_series, container, false)
@@ -36,9 +31,7 @@ class BrowseSeriesFragment @Inject constructor(): Fragment(), OnRecyclerViewItem
 		super.onViewCreated(view, savedInstanceState)
 		browseSeriesRecyclerView.layoutManager = GridLayoutManager(activity, 3, GridLayoutManager.VERTICAL, false)
 		browseSeriesRecyclerView.adapter = seriesAdapter
-		swipeRefreshLayout.setOnRefreshListener {
-			refreshRecyclerView()
-		}
+		swipeRefreshLayout.setOnRefreshListener { refreshRecyclerView() }
 		refreshRecyclerView()
 	}
 

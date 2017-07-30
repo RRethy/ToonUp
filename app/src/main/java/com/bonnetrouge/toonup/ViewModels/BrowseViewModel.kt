@@ -13,5 +13,9 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 
 	var popularCartoons: Collection<BasicSeriesInfo>? = null
 
+	var popularMovies: Collection<BasicSeriesInfo>? = null
+
 	fun getPopularCartoonObservable() = videoRepository.getPopularCartoons().doOnSuccess { popularCartoons = it }
+
+	fun getPopularMoviesObservable() = videoRepository.getPopularMovies().doOnSuccess { popularMovies = it }
 }

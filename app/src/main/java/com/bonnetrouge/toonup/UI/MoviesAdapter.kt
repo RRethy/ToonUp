@@ -7,41 +7,41 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Commons.Ext.convertToPixels
 import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
-import com.bonnetrouge.toonup.Fragments.BrowseSeriesFragment
+import com.bonnetrouge.toonup.Fragments.BrowseMoviesFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.squareup.picasso.Picasso
 import java.lang.ref.WeakReference
 
-class SeriesAdapter(seriesFragment: BrowseSeriesFragment) : RecyclerView.Adapter<SeriesAdapter.SeriesThumbnailViewHolder>() {
+class MoviesAdapter(moviesFragment: BrowseMoviesFragment) : RecyclerView.Adapter<MoviesAdapter.MovieThumbnailViewHolder>() {
 
-	private val browseSeriesFragmentWeakRef = WeakReference<BrowseSeriesFragment>(seriesFragment)
+	private val browseMoviesWeakRef = WeakReference<BrowseMoviesFragment>(moviesFragment)
 	val itemList = ArrayList<BasicSeriesInfo>()
 	val thumbnailWidthPx by lazy { ((getDisplayWidth() - convertToPixels(24.0)) / 3.0).toInt() }
 	val thumbnailHeightPx by lazy { (thumbnailWidthPx * 16.0 / 9.0).toInt() }
 
 	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int)
-			= SeriesThumbnailViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.view_holder_thumbnail, parent, false))
+		= MovieThumbnailViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.view_holder_thumbnail, parent, false))
 
 
-	override fun onBindViewHolder(holder: SeriesThumbnailViewHolder, position: Int) = holder.bind(itemList[position])
+	override fun onBindViewHolder(holder: MovieThumbnailViewHolder, position: Int) = holder.bind(itemList[position])
 
 	override fun getItemCount() = itemList.size
 
-	inner class SeriesThumbnailViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+	inner class MovieThumbnailViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
-		val thumbnail by lazy { view.findViewById(R.id.thumbnail) as ImageView}
+		val thumbnail by lazy { view.findViewById(R.id.thumbnail) as ImageView }
 
 		init {
 			thumbnail.layoutParams.width = thumbnailWidthPx
 			thumbnail.layoutParams.height = thumbnailHeightPx
 			view.setOnClickListener {
-				browseSeriesFragmentWeakRef.get()?.onRecyclerViewItemClicked(itemList[adapterPosition])
+				browseMoviesWeakRef.get()?.onRecyclerViewItemClicked(itemList[adapterPosition])
 			}
 		}
 
 		fun bind(basicSeriesInfo: BasicSeriesInfo) {
-			Picasso.with(browseSeriesFragmentWeakRef.get()?.context)
+			Picasso.with(browseMoviesWeakRef.get()?.context)
 					.load("http://www.animetoon.org/images/series/big/${basicSeriesInfo.id}.jpg")
 					.resize(thumbnailWidthPx, thumbnailHeightPx)
 					.into(thumbnail)
