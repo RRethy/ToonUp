@@ -7,7 +7,7 @@
 	android:background="@color/colorAccent">
 
 	<FrameLayout
-		android:id="@+id/fragmentContainer"
+		android:id="@+id/browseFragmentContainer"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"/>

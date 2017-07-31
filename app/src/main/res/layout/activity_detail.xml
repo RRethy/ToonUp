@@ -38,10 +38,13 @@
 		</android.support.design.widget.CollapsingToolbarLayout>
 	</android.support.design.widget.AppBarLayout>
 
-	<FrameLayout
-		android:id="@+id/detail_fragment_holder"
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/detailsRecyclerView"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"/>
+		android:layout_height="match_parent"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		tools:context="com.bonnetrouge.toonup.Activities.DetailActivity"
+		tools:showIn="@layout/activity_detail"/>
 
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/fab"

@@ -6,12 +6,14 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import com.bonnetrouge.toonup.R
 import android.content.Intent
-import android.util.Log
+import android.support.v7.widget.LinearLayoutManager
+import android.widget.Toast
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.Ext.convertToPixels
 import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
 import com.bonnetrouge.toonup.DI.Modules.DetailActivityModule
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
+import com.bonnetrouge.toonup.UI.DetailsAdapter
 import com.bonnetrouge.toonup.ViewModels.DetailViewModel
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.DetailViewModelFactory
 import com.squareup.picasso.Picasso
@@ -26,6 +28,7 @@ class DetailActivity : BaseActivity() {
 	@Inject
 	lateinit var detailViewModelFactory: DetailViewModelFactory
 	lateinit var detailViewModel: DetailViewModel
+	val detailAdapter by lazy { DetailsAdapter(this) }
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -43,6 +46,23 @@ class DetailActivity : BaseActivity() {
 				.resize(getDisplayWidth(), convertToPixels(240.0))
 				.centerCrop()
 				.into(parallaxImage)
+		detailsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+		detailsRecyclerView.adapter = detailAdapter
+		popularRecyclerView()
+	}
+
+	fun popularRecyclerView() {
+		if (detailAdapter.itemList.isEmpty()) {
+			detailViewModel.getDetailsObservable(intent.getStringExtra(DetailActivity.ID))
+					.subscribeOn(Schedulers.io())
+					.observeOn(AndroidSchedulers.mainThread())
+					.subscribe({
+						detailAdapter.itemList.addAll(it.episode)
+						detailAdapter.notifyDataSetChanged()
+					}, {
+						Toast.makeText(this, "Shit fucked up", Toast.LENGTH_LONG).show()
+					})
+		}
 	}
 
 	companion object {

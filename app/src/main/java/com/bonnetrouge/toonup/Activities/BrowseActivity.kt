@@ -6,7 +6,6 @@ import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.Ext.fragmentTransaction
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
 import com.bonnetrouge.toonup.Fragments.BrowseMoviesFragment
-import com.bonnetrouge.toonup.Fragments.BrowseNewEpisodesFragment
 import com.bonnetrouge.toonup.Fragments.BrowseSeriesFragment
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
@@ -35,14 +34,14 @@ class BrowseActivity : BaseActivity() {
 				R.id.action_browse_tv_shows -> {
 					fragmentTransaction {
 						setCustomAnimations(R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom)
-						replace(fragmentContainer.id, browseSeriesFragment)
+						replace(browseFragmentContainer.id, browseSeriesFragment)
 					}
 					true
 				}
 				R.id.action_browse_movies -> {
 					fragmentTransaction {
 						setCustomAnimations(R.anim.abc_grow_fade_in_from_bottom, R.anim.abc_shrink_fade_out_from_bottom)
-						replace(fragmentContainer.id, browseMoviesFragment)
+						replace(browseFragmentContainer.id, browseMoviesFragment)
 					}
 					true
 				}

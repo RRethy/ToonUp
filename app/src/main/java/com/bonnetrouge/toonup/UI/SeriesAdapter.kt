@@ -23,7 +23,6 @@ class SeriesAdapter(seriesFragment: BrowseSeriesFragment) : RecyclerView.Adapter
 	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int)
 			= SeriesThumbnailViewHolder(LayoutInflater.from(parent?.context).inflate(R.layout.view_holder_thumbnail, parent, false))
 
-
 	override fun onBindViewHolder(holder: SeriesThumbnailViewHolder, position: Int) = holder.bind(itemList[position])
 
 	override fun getItemCount() = itemList.size
