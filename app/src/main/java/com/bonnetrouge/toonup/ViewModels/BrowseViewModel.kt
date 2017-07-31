@@ -9,6 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+// TODO: Change pattern to always return an observable
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository): ViewModel() {
 
 	var popularCartoons: Collection<BasicSeriesInfo>? = null

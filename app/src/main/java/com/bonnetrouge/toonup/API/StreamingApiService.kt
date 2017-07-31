@@ -42,7 +42,7 @@ interface StreamingApiService {
 	fun getNewEpisodes(): Single<NewEpisodes>
 
 	@GET("/GetDetails/{seriesId}")
-	fun getDetails(@Path("seriesId") id: Int): Single<Series>
+	fun getDetails(@Path("seriesId") id: String): Single<Series>
 
 	@GET("/GetVideos/{episodeId}?direct")
 	fun getDescriptiveStreamingUrls(@Path("episodeId") id: Int): Single<Collection<Collection<DescriptiveStreamingUrl>>>
