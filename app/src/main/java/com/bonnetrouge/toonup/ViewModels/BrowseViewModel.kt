@@ -9,14 +9,19 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-// TODO: Change pattern to always return an observable
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository): ViewModel() {
 
-	var popularCartoons: Collection<BasicSeriesInfo>? = null
+	private var popularCartoons: Collection<BasicSeriesInfo>? = null
 
-	var popularMovies: Collection<BasicSeriesInfo>? = null
+	private var popularMovies: Collection<BasicSeriesInfo>? = null
 
-	fun getPopularCartoonObservable() = videoRepository.getPopularCartoons().doOnSuccess { popularCartoons = it }
+	fun getPopularCartoonObservable(): Single<Collection<BasicSeriesInfo>> {
+		if (popularCartoons != null) return Single.just(popularCartoons)
+		else return videoRepository.getPopularCartoons().doOnSuccess { popularCartoons = it }
+	}
 
-	fun getPopularMoviesObservable() = videoRepository.getPopularMovies().doOnSuccess { popularMovies = it }
+	fun getPopularMoviesObservable(): Single<Collection<BasicSeriesInfo>> {
+		if (popularMovies != null) return Single.just(popularMovies)
+		else return videoRepository.getPopularMovies().doOnSuccess { popularMovies = it }
+	}
 }

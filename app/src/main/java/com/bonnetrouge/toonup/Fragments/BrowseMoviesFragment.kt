@@ -7,7 +7,6 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.bonnetrouge.toonup.Activities.DetailActivity
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
@@ -37,27 +36,21 @@ class BrowseMoviesFragment @Inject constructor(): Fragment(), OnRecyclerViewItem
 	}
 
 	fun refreshRecyclerView() {
-		if (browseViewModel.popularMovies != null) {
-			hideErrorMsg()
-			moviesAdapter.itemList.addAll(browseViewModel.popularMovies!!)
-			moviesAdapter.notifyDataSetChanged()
-			swipeRefreshLayout?.isRefreshing = false
-		} else {
+		if (moviesAdapter.itemList.isEmpty()) {
 			browseViewModel.getPopularMoviesObservable()
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
-					.doOnSubscribe {
-						swipeRefreshLayout?.isRefreshing = true
-					}
+					.doOnSubscribe { showLoading() }
+					.doFinally { hideLoading() }
 					.subscribe({
 						hideErrorMsg()
 						moviesAdapter.itemList.addAll(it)
 						moviesAdapter.notifyItemRangeInserted(0, it.size)
-						swipeRefreshLayout?.isRefreshing = false
-					},{
+					}, {
 						showErroMsg()
-						swipeRefreshLayout?.isRefreshing = false
 					})
+		} else {
+			hideLoading()
 		}
 	}
 
@@ -67,6 +60,14 @@ class BrowseMoviesFragment @Inject constructor(): Fragment(), OnRecyclerViewItem
 
 	fun hideErrorMsg() {
 		errorMessage?.visibility = View.INVISIBLE
+	}
+
+	fun showLoading() {
+		swipeRefreshLayout?.isRefreshing = true
+	}
+
+	fun hideLoading() {
+		swipeRefreshLayout?.isRefreshing = false
 	}
 
 	override fun onRecyclerViewItemClicked(item: Any) {

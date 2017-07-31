@@ -3,12 +3,15 @@ package com.bonnetrouge.toonup.ViewModels
 import android.arch.lifecycle.ViewModel
 import com.bonnetrouge.toonup.Data.VideoRepository
 import com.bonnetrouge.toonup.Model.Series
+import io.reactivex.Single
 import javax.inject.Inject
 
-// TODO: Change pattern to always return an observable
 class DetailViewModel @Inject constructor(private val videoRepository: VideoRepository) : ViewModel() {
 
-	var details: Series? = null
+	private var detailsMap: HashMap<String, Series> = HashMap()
 
-	fun getDetailsObservable(id: String) = videoRepository.getDetails(id)
+	fun getDetailsObservable(id: String): Single<Series> {
+		if (detailsMap.containsKey(id)) return Single.just(detailsMap[id])
+		else return videoRepository.getDetails(id).doOnSuccess { detailsMap.put(id, it) }
+	}
 }
