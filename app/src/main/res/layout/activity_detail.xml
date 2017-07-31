@@ -38,7 +38,10 @@
 		</android.support.design.widget.CollapsingToolbarLayout>
 	</android.support.design.widget.AppBarLayout>
 
-	<include layout="@layout/content_detail"/>
+	<FrameLayout
+		android:id="@+id/detail_fragment_holder"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
 
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/fab"
