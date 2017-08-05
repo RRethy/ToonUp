@@ -23,6 +23,8 @@
 			android:name=".Activities.DetailActivity"
 			android:theme="@style/Theme.AppCompat.NoActionBar">
 		</activity>
+		<activity android:name=".Activities.PlayerActivity">
+		</activity>
 	</application>
 
 </manifest>
