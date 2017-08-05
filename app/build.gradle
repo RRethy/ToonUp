@@ -59,9 +59,14 @@ dependencies {
 
     // Image loading: Picasso
     compile 'com.squareup.picasso:picasso:2.5.2'
+
+    // Video playing: Exoplayer
+    compile 'com.google.android.exoplayer:exoplayer-core:r2.4.4'
+    compile 'com.google.android.exoplayer:exoplayer-ui:r2.4.4'
 }
 repositories {
     maven {
         url "https://maven.google.com"
     }
+    jcenter()
 }
