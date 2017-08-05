@@ -10,7 +10,8 @@ import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
 import com.bonnetrouge.toonup.Fragments.BrowseSeriesFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
-import com.squareup.picasso.Picasso
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import java.lang.ref.WeakReference
 
 class SeriesAdapter(seriesFragment: BrowseSeriesFragment) : RecyclerView.Adapter<SeriesAdapter.SeriesThumbnailViewHolder>() {
@@ -40,9 +41,9 @@ class SeriesAdapter(seriesFragment: BrowseSeriesFragment) : RecyclerView.Adapter
 		}
 
 		fun bind(basicSeriesInfo: BasicSeriesInfo) {
-			Picasso.with(browseSeriesFragmentWeakRef.get()?.context)
+			Glide.with(browseSeriesFragmentWeakRef.get())
 					.load("http://www.animetoon.org/images/series/big/${basicSeriesInfo.id}.jpg")
-					.resize(thumbnailWidthPx, thumbnailHeightPx)
+					.apply(RequestOptions().override(thumbnailWidthPx, thumbnailHeightPx).fitCenter())
 					.into(thumbnail)
 		}
 	}

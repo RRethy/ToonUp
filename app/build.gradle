@@ -58,7 +58,12 @@ dependencies {
     compile 'io.reactivex.rxjava2:rxkotlin:2.0.0'
 
     // Image loading: Picasso
-    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.github.bumptech.glide:glide:4.0.0'
+    kapt 'com.github.bumptech.glide:compiler:4.0.0'
+    compile ("com.github.bumptech.glide:recyclerview-integration:4.0.0") {
+        // Excludes the support library because it's already included by Glide.
+        transitive = false
+    }
 
     // Video playing: Exoplayer
     compile 'com.google.android.exoplayer:exoplayer-core:r2.4.4'

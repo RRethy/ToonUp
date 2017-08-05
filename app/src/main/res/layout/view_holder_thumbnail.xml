@@ -7,6 +7,7 @@
 		android:layout_width="90dp"
 		android:layout_height="160dp"
 		android:layout_margin="4dp"
+		android:scaleType="fitXY"
 		android:background="@color/thumbnailLoadingColour"/>
 
 </FrameLayout>
