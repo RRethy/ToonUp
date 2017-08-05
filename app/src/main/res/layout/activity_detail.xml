@@ -28,6 +28,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				app:layout_collapseMode="parallax"/>
+
 			<android.support.v7.widget.Toolbar
 				android:id="@+id/toolbar"
 				android:layout_width="match_parent"
@@ -42,8 +43,8 @@
 		android:id="@+id/detailsRecyclerView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:paddingTop="24dp"
 		android:clipToPadding="false"
+		android:paddingTop="24dp"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"
 		tools:context="com.bonnetrouge.toonup.Activities.DetailActivity"
 		tools:showIn="@layout/activity_detail"/>
