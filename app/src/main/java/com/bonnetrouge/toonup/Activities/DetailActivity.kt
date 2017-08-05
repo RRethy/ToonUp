@@ -37,8 +37,7 @@ class DetailActivity : BaseActivity() {
 		toolbar.title = intent.getStringExtra(TITLE)
 		setSupportActionBar(toolbar)
 		fab.setOnClickListener {
-			Snackbar.make(it, "Added to your favorites!", Snackbar.LENGTH_LONG)
-					.setAction("Action", null).show()
+
 		}
 		Glide.with(this)
 				.load("http://www.animetoon.org/images/series/big/${intent.getStringExtra(ID)}.jpg")
