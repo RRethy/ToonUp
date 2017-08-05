@@ -61,5 +61,7 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.5.2'
 }
 repositories {
-    mavenCentral()
+    maven {
+        url "https://maven.google.com"
+    }
 }
