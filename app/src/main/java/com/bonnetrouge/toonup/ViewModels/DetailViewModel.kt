@@ -10,8 +10,8 @@ class DetailViewModel @Inject constructor(private val videoRepository: VideoRepo
 
 	private var detailsMap: HashMap<String, Series> = HashMap()
 
-	fun getDetailsObservable(id: String): Single<Series> {
-		if (detailsMap.containsKey(id)) return Single.just(detailsMap[id])
-		else return videoRepository.getDetails(id).doOnSuccess { detailsMap.put(id, it) }
+	fun getDetailsObservable(seriesId: String): Single<Series> {
+		if (detailsMap.containsKey(seriesId)) return Single.just(detailsMap[seriesId])
+		else return videoRepository.getDetails(seriesId).doOnSuccess { detailsMap.put(seriesId, it) }
 	}
 }

@@ -48,5 +48,5 @@ interface StreamingApiService {
 	fun getDescriptiveStreamingUrls(@Path("episodeId") id: String): Single<Collection<Collection<DescriptiveStreamingUrl>>>
 
 	@GET("/GetVideos/{episodeId}")
-	fun getPlainStreamingUrls(@Path("episodeId") id: String): Single<Collection<Collection<String>>>
+	fun getRawStreamingUrls(@Path("episodeId") id: String): Single<Collection<Collection<String>>>
 }
