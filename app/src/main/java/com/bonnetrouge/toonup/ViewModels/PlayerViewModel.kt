@@ -8,15 +8,15 @@ import javax.inject.Inject
 
 class PlayerViewModel @Inject constructor(private val videoRepository: VideoRepository) : ViewModel() {
 
-	private var fullStreamingUrls: Collection<Collection<DescriptiveStreamingUrl>>? = null
-	private var rawStreamingUrls: Collection<Collection<String>>? = null
+	private var fullStreamingUrls: List<List<DescriptiveStreamingUrl>>? = null
+	private var rawStreamingUrls: List<List<String>>? = null
 
-	fun getFullStreamingUrls(episodeId: String): Single<Collection<Collection<DescriptiveStreamingUrl>>> {
+	fun getFullStreamingUrls(episodeId: String): Single<List<List<DescriptiveStreamingUrl>>> {
 		if (fullStreamingUrls != null) return Single.just(fullStreamingUrls)
 		else return videoRepository.getFullStreamingUrls(episodeId).doOnSuccess { fullStreamingUrls = it }
 	}
 
-	fun getRawStreamingUrls(episodeId: String): Single<Collection<Collection<String>>> {
+	fun getRawStreamingUrls(episodeId: String): Single<List<List<String>>> {
 		if (rawStreamingUrls != null) return Single.just(rawStreamingUrls)
 		else return videoRepository.getRawStreamingUrls(episodeId).doOnSuccess { rawStreamingUrls = it }
 	}

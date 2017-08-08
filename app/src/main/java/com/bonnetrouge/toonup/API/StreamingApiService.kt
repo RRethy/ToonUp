@@ -12,31 +12,31 @@ interface StreamingApiService {
 	fun getGenres(): Single<VideoGenres>
 
 	@GET("/GetPopularCartoon")
-	fun getPopularCartoons(): Single<Collection<BasicSeriesInfo>>
+	fun getPopularCartoons(): Single<List<BasicSeriesInfo>>
 
 	@GET("/GetPopularDubbed")
-	fun getPopularAnime(): Single<Collection<BasicSeriesInfo>>
+	fun getPopularAnime(): Single<List<BasicSeriesInfo>>
 
 	@GET("/GetPopularMovies")
-	fun getPopularMovies(): Single<Collection<BasicSeriesInfo>>
+	fun getPopularMovies(): Single<List<BasicSeriesInfo>>
 
 	@GET("/GetAllCartoon")
-	fun getAllCartoons(): Single<Collection<BasicSeriesInfo>>
+	fun getAllCartoons(): Single<List<BasicSeriesInfo>>
 
 	@GET("/GetAllDubbed")
-	fun getAllAnime(): Single<Collection<BasicSeriesInfo>>
+	fun getAllAnime(): Single<List<BasicSeriesInfo>>
 
 	@GET("/GetAllMovies")
-	fun getAllMovies(): Single<Collection<BasicSeriesInfo>>
+	fun getAllMovies(): Single<List<BasicSeriesInfo>>
 
 	@GET("/GetNewCartoon")
-	fun getNewCartoons(): Single<Collection<BasicSeriesInfo>>
+	fun getNewCartoons(): Single<List<BasicSeriesInfo>>
 
 	@GET("/GetNewDubbed")
-	fun getNewAnime(): Single<Collection<BasicSeriesInfo>>
+	fun getNewAnime(): Single<List<BasicSeriesInfo>>
 
 	@GET("/GetNewMovies")
-	fun getNewMovies(): Single<Collection<BasicSeriesInfo>>
+	fun getNewMovies(): Single<List<BasicSeriesInfo>>
 	
 	@GET("/GetUpdates")
 	fun getNewEpisodes(): Single<NewEpisodes>
@@ -45,8 +45,8 @@ interface StreamingApiService {
 	fun getDetails(@Path("seriesId") id: String): Single<Series>
 
 	@GET("/GetVideos/{episodeId}?direct")
-	fun getDescriptiveStreamingUrls(@Path("episodeId") id: String): Single<Collection<Collection<DescriptiveStreamingUrl>>>
+	fun getDescriptiveStreamingUrls(@Path("episodeId") id: String): Single<List<List<DescriptiveStreamingUrl>>>
 
 	@GET("/GetVideos/{episodeId}")
-	fun getRawStreamingUrls(@Path("episodeId") id: String): Single<Collection<Collection<String>>>
+	fun getRawStreamingUrls(@Path("episodeId") id: String): Single<List<List<String>>>
 }

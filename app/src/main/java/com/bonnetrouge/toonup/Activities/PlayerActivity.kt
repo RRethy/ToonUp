@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.DI.Modules.PlayerActivityModule
+import com.bonnetrouge.toonup.Model.DescriptiveStreamingUrl
 
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.PlayerViewModel
@@ -21,6 +22,8 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_player.*
 import javax.inject.Inject
 
@@ -47,13 +50,33 @@ class PlayerActivity : BaseActivity() {
 		setContentView(R.layout.activity_player)
 		app.component.plus(PlayerActivityModule()).inject(this)
 		playerViewModel = ViewModelProviders.of(this, playerViewModelFactory).get(PlayerViewModel::class.java)
+		getStreamingUrls(intent.getStringExtra(VIDEO_ID))
+	}
+
+	override fun onStop() {
+		super.onStop()
+		player?.release()
+	}
+
+	fun getStreamingUrls(id: String) {
+		playerViewModel.getFullStreamingUrls(id)
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe({
+					setupVideoPlayer(it)
+				}, {
+					//TODO: Handle error
+				})
+	}
+
+	fun setupVideoPlayer(streamingUrls: List<List<DescriptiveStreamingUrl>>) {
 		player = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector())
 		exoPlayerView.player = player
 		val dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "ToonUp"))
 		val extractorFactory = DefaultExtractorsFactory()
 
 		val firstSource = ExtractorMediaSource(
-				Uri.parse(intent.getStringExtra("this is not a url")),
+				Uri.parse(intent.getStringExtra(streamingUrls[0][0].link)),
 				dataSourceFactory,
 				extractorFactory,
 				null,
@@ -61,10 +84,5 @@ class PlayerActivity : BaseActivity() {
 		val videoSource = ConcatenatingMediaSource(firstSource)
 		player?.prepare(videoSource)
 		player?.playWhenReady = true
-	}
-
-	override fun onStop() {
-		super.onStop()
-		player?.release()
 	}
 }
