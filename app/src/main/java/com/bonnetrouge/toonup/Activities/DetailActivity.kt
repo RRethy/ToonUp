@@ -10,7 +10,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.widget.Toast
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.DI.Modules.DetailActivityModule
+import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
+import com.bonnetrouge.toonup.Model.Episode
 import com.bonnetrouge.toonup.UI.DetailsAdapter
 import com.bonnetrouge.toonup.ViewModels.DetailViewModel
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.DetailViewModelFactory
@@ -22,7 +24,8 @@ import kotlinx.android.synthetic.main.activity_detail.*
 import javax.inject.Inject
 
 
-class DetailActivity : BaseActivity() {
+class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
+
 
 	@Inject
 	lateinit var detailViewModelFactory: DetailViewModelFactory
@@ -72,5 +75,9 @@ class DetailActivity : BaseActivity() {
 			intent.putExtra(TITLE, basicSeriesInfo.name)
 			context.startActivity(intent)
 		}
+	}
+
+	override fun onRecyclerViewItemClicked(item: Any) {
+		PlayerActivity.navigate(this, (item as Episode).id)
 	}
 }
