@@ -11,16 +11,16 @@ import javax.inject.Inject
 
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository): ViewModel() {
 
-	private var popularCartoons: Collection<BasicSeriesInfo>? = null
+	private var popularCartoons: List<BasicSeriesInfo>? = null
 
-	private var popularMovies: Collection<BasicSeriesInfo>? = null
+	private var popularMovies: List<BasicSeriesInfo>? = null
 
-	fun getPopularCartoonObservable(): Single<Collection<BasicSeriesInfo>> {
+	fun getPopularCartoonObservable(): Single<List<BasicSeriesInfo>> {
 		if (popularCartoons != null) return Single.just(popularCartoons)
 		else return videoRepository.getPopularCartoons().doOnSuccess { popularCartoons = it }
 	}
 
-	fun getPopularMoviesObservable(): Single<Collection<BasicSeriesInfo>> {
+	fun getPopularMoviesObservable(): Single<List<BasicSeriesInfo>> {
 		if (popularMovies != null) return Single.just(popularMovies)
 		else return videoRepository.getPopularMovies().doOnSuccess { popularMovies = it }
 	}
