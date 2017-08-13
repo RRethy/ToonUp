@@ -76,7 +76,7 @@ class PlayerActivity : BaseActivity() {
 		val extractorFactory = DefaultExtractorsFactory()
 
 		val firstSource = ExtractorMediaSource(
-				Uri.parse(intent.getStringExtra(streamingUrls[0][0].link)),
+				Uri.parse(streamingUrls[0][0].link),
 				dataSourceFactory,
 				extractorFactory,
 				null,
