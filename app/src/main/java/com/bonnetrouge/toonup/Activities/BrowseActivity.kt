@@ -9,6 +9,7 @@ import com.bonnetrouge.toonup.Commons.Ext.fragmentTransaction
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
 import com.bonnetrouge.toonup.Fragments.BrowseMoviesFragment
 import com.bonnetrouge.toonup.Fragments.BrowseSeriesFragment
+import com.bonnetrouge.toonup.Fragments.BrowseTvFragment
 import com.bonnetrouge.toonup.Fragments.CategoryChooserFragment
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
@@ -19,6 +20,8 @@ import javax.inject.Inject
 class BrowseActivity : BaseActivity() {
 
 	@Inject lateinit var categoryChooserFragment: CategoryChooserFragment
+	@Inject lateinit var browseTvFragment: BrowseTvFragment
+
 	@Inject lateinit var browseViewModelFactory: BrowseViewModelFactory
 	lateinit var browseViewModel: BrowseViewModel
 
@@ -27,13 +30,11 @@ class BrowseActivity : BaseActivity() {
 		setContentView(R.layout.activity_browse)
 		app.component.plus(BrowseActivityModule()).inject(this)
 		browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
-		fragmentTransaction {
-			replace(browseFragmentContainer.id, categoryChooserFragment)
-		}
+		fragmentTransaction { replace(browseFragmentContainer.id, categoryChooserFragment) }
 	}
 
 	fun navigateTvShows() {
-		dog("TVSHOWS")
+		fragmentTransaction { replace(browseFragmentContainer.id, browseTvFragment) }
 	}
 
 	fun navigateMovies() {
