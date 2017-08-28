@@ -7,4 +7,5 @@
 	<string name="connectivity_error_msg">Something fucked up... Swipe down to refresh!</string>
 	<string name="title_activity_detail">DetailActivity</string>
 	<string name="action_settings">Settings</string>
-</resources>
+	<string name="tv_shows">TV SHOWS</string>
+	<string name="movies">MOVIES</string></resources>

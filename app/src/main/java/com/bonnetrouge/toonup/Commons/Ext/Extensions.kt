@@ -1,6 +1,7 @@
 package com.bonnetrouge.toonup.Commons.Ext
 
 import android.support.v4.app.FragmentTransaction
+import android.util.Log
 import com.bonnetrouge.toonup.ToonUpApp
 import com.bonnetrouge.toonup.Activities.BaseActivity
 
@@ -15,6 +16,10 @@ inline fun BaseActivity.fragmentTransaction(swapInfo: FragmentTransaction.() -> 
 fun convertToPixels(sizeInDp: Double): Int {
     val scale = app.resources.displayMetrics.density
     return (sizeInDp * scale + 0.5f).toInt()
+}
+
+fun dog(text: String) {
+    Log.d("quman", text)
 }
 
 fun convertToDp(sizeInPixels: Int): Float {
