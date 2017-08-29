@@ -6,6 +6,8 @@ class VideoRepository(private val apiService: StreamingApiService) {
 
 	fun getPopularCartoons() = apiService.getPopularCartoons()
 
+	fun getAllCartoons() = apiService.getAllCartoons()
+
 	fun getPopularMovies() = apiService.getPopularMovies()
 
 	fun getDetails(seriesId: String) = apiService.getDetails(seriesId)
