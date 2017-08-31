@@ -13,6 +13,15 @@ val app: ToonUpApp
 inline fun BaseActivity.fragmentTransaction(swapInfo: FragmentTransaction.() -> FragmentTransaction)
         = supportFragmentManager.beginTransaction().swapInfo().commit()
 
+fun <T> MutableList<T>.shuffle() {
+    for (count in 1..4) {
+		for (i in 0..this.size step 2) {
+			this.add(this.size, this[i])
+			this.removeAt(i)
+		}
+    }
+}
+
 fun convertToPixels(sizeInDp: Double): Int {
     val scale = app.resources.displayMetrics.density
     return (sizeInDp * scale + 0.5f).toInt()

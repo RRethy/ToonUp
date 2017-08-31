@@ -7,8 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bonnetrouge.toonup.Commons.Ext.dog
+import com.bonnetrouge.toonup.Commons.Ext.shuffle
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
+import com.bonnetrouge.toonup.Model.BasicSeriesInfo
+import com.bonnetrouge.toonup.Model.VideoGenres
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.BannerListAdapter
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
@@ -37,18 +40,18 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 
 	fun refreshBanners() {
 		showLoading()
-		browseViewModel.ensureGenresNotNull( { onGenresSuccess() }, { onGenresFailure() } )
+		browseViewModel.ensureGenresNotNull( { onGenresSuccess(it) }, { onGenresFailure() } )
 	}
 
-	fun onGenresSuccess() {
-		getAllSeries()
+	fun onGenresSuccess(videoGenres: VideoGenres) {
+		getAllSeries(videoGenres)
 	}
 
 	fun onGenresFailure() {
 		showErroMsg()
 	}
 
-	fun getAllSeries() {
+	fun getAllSeries(videoGenres: VideoGenres) {
 		browseViewModel.getAllCartoonsObservable()
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
@@ -56,10 +59,17 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 				.doFinally {
 					hideLoading()
 				}
-				.flatMap { Observable.fromArray(it) }//TODO: Emit dem banners
+				.flatMap {
+					val seriesByGenre = HashMap<String, MutableList<BasicSeriesInfo>>()
+					for (videoGenre in videoGenres.genres) {
+						seriesByGenre.put(videoGenre, it.filter { it.genres.contains(videoGenre) }.toMutableList())
+						seriesByGenre[videoGenre]?.shuffle()
+					}
+					Observable.fromArray(seriesByGenre)
+				}
 				.subscribe({
 					hideErrorMsg()
-					// TODO: Show dem banners
+
 				}, {
 					showErroMsg()
 				})

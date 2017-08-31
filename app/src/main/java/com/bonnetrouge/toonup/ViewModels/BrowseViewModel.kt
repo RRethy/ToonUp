@@ -32,15 +32,15 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		else videoRepository.getPopularMovies().doOnSuccess { popularMovies = it }
 	}
 
-	fun ensureGenresNotNull(onSuccess: () -> Unit, onFailure: () -> Unit) {
-		if (genres != null) onSuccess()
+	fun ensureGenresNotNull(onSuccess: (VideoGenres) -> Unit, onFailure: () -> Unit) {
+		if (genres != null) onSuccess(genres!!)
 		else videoRepository.getGenres()
 				.subscribeOn(Schedulers.io())
 				.observeOn(Schedulers.io())
 				.retry(3)
 				.subscribe({
 					genres = it
-					onSuccess()
+					onSuccess(it)
 				}, {
 					onFailure()
 				})
