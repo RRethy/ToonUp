@@ -1,9 +1,7 @@
 package com.bonnetrouge.toonup.Fragments
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -15,12 +13,10 @@ import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.BannerListAdapter
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import io.reactivex.Observable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_browse_tv.*
 import kotlinx.android.synthetic.main.view_holder_banner.*
-import java.util.*
 import javax.inject.Inject
 
 class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItemClicked {
@@ -40,17 +36,30 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 	}
 
 	fun refreshBanners() {
+		showLoading()
+		browseViewModel.ensureGenresNotNull( { onGenresSuccess() }, { onGenresFailure() } )
+	}
+
+	fun onGenresSuccess() {
+		getAllSeries()
+	}
+
+	fun onGenresFailure() {
+		showErroMsg()
+	}
+
+	fun getAllSeries() {
 		browseViewModel.getAllCartoonsObservable()
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
-				.doOnSubscribe { showLoading() }
+				.retry(3)
 				.doFinally {
 					hideLoading()
 				}
 				.flatMap { Observable.fromArray(it) }//TODO: Emit dem banners
 				.subscribe({
-					it
 					hideErrorMsg()
+					// TODO: Show dem banners
 				}, {
 					showErroMsg()
 				})

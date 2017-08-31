@@ -4,6 +4,8 @@ import com.bonnetrouge.toonup.API.StreamingApiService
 
 class VideoRepository(private val apiService: StreamingApiService) {
 
+	fun getGenres() = apiService.getGenres()
+
 	fun getPopularCartoons() = apiService.getPopularCartoons()
 
 	fun getAllCartoons() = apiService.getAllCartoons()
