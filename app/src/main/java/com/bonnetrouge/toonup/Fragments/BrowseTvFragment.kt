@@ -69,7 +69,12 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 				}
 				.subscribe({
 					hideErrorMsg()
-
+					for ((genre, listOfSeries) in it) {
+						with (bannerListAdapter.banners) {
+							this.addAll(listOfSeries)
+							bannerListAdapter.notifyItemInserted(this.size - 1)
+						}
+					}
 				}, {
 					showErroMsg()
 				})
