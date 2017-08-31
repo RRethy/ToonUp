@@ -1,6 +1,7 @@
 package com.bonnetrouge.toonup.API
 
 import com.bonnetrouge.toonup.Model.*
+import io.reactivex.Observable
 import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -21,7 +22,7 @@ interface StreamingApiService {
 	fun getPopularMovies(): Single<List<BasicSeriesInfo>>
 
 	@GET("/GetAllCartoon")
-	fun getAllCartoons(): Single<List<BasicSeriesInfo>>
+	fun getAllCartoons(): Observable<List<BasicSeriesInfo>>
 
 	@GET("/GetAllDubbed")
 	fun getAllAnime(): Single<List<BasicSeriesInfo>>

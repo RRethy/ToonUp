@@ -20,9 +20,9 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		else return videoRepository.getPopularCartoons().doOnSuccess { popularCartoons = it }
 	}
 
-	fun getAllCartoonsObservable(): Single<List<BasicSeriesInfo>> {
-		if (allCartoons != null) return Single.just(allCartoons)
-		else return videoRepository.getAllCartoons().doOnSuccess { allCartoons = it }
+	fun getAllCartoonsObservable(): Observable<List<BasicSeriesInfo>> {
+		if (allCartoons != null) return Observable.just(allCartoons)
+		else return videoRepository.getAllCartoons().doOnNext { allCartoons = it }
 	}
 
 	fun getPopularMoviesObservable(): Single<List<BasicSeriesInfo>> {

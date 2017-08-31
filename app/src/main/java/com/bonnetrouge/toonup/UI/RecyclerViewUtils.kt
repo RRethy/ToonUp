@@ -7,5 +7,5 @@ interface RVItem {
 object RVItemViewTypes {
 	val LOADING = 0
 	val BANNER = 1
-	val BANNER_ITEM = 2
+	val BASIC_SERIES_ITEM = 2
 }
