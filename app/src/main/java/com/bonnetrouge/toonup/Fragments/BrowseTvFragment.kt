@@ -33,8 +33,8 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		bannerRecyclerView.adapter = bannerListAdapter
-		bannerRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+		tvRecyclerView.adapter = bannerListAdapter
+		tvRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 		swipeRefreshLayout.setOnRefreshListener { refreshBanners() }
 		refreshBanners()
 	}
@@ -65,7 +65,7 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 					val seriesByGenre = HashMap<String, MutableList<BasicSeriesInfo>>()
 					for (videoGenre in videoGenres.genres) {
 						seriesByGenre.put(videoGenre, it.filter { it.genres.contains(videoGenre) }.toMutableList())
-						seriesByGenre[videoGenre]?.shuffle()
+						//seriesByGenre[videoGenre]?.shuffle() //TODO: This crashes with IndexOutOfBounds
 					}
 					Observable.fromArray(seriesByGenre)
 				}
