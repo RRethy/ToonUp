@@ -12,8 +12,8 @@ val app: ToonUpApp
 
 val DTAG = "quman"
 
-inline fun BaseActivity.fragmentTransaction(swapInfo: FragmentTransaction.() -> FragmentTransaction)
-        = supportFragmentManager.beginTransaction().swapInfo().commit()
+inline fun BaseActivity.fragmentTransaction(tag: String? = null, swapInfo: FragmentTransaction.() -> FragmentTransaction)
+        = supportFragmentManager.beginTransaction().swapInfo().addToBackStack(tag).commit()
 
 fun <T> MutableList<T>.shuffle() {
     for (count in 1..4) {
