@@ -10,6 +10,7 @@ import com.bonnetrouge.toonup.Commons.Ext.dog
 import com.bonnetrouge.toonup.Commons.Ext.shuffle
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
+import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.Model.VideoGenres
 import com.bonnetrouge.toonup.R
@@ -48,6 +49,7 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 	}
 
 	fun onGenresFailure() {
+		hideLoading()
 		showErroMsg()
 	}
 
@@ -71,8 +73,8 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 					hideErrorMsg()
 					for ((genre, listOfSeries) in it) {
 						with (bannerListAdapter.banners) {
-							this.addAll(listOfSeries)
-							bannerListAdapter.notifyItemInserted(this.size - 1)
+							add(BannerModel(listOfSeries, genre))
+							bannerListAdapter.notifyItemInserted(size - 1)
 						}
 					}
 				}, {

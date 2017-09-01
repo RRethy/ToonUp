@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.R
@@ -13,7 +14,7 @@ import java.lang.ref.WeakReference
 class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
 	private val fragmentWeakRef = WeakReference<BaseFragment>(fragment)
-	val banners = mutableListOf<RVItem>()
+	val banners = mutableListOf<BannerModel>()
 
 	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
 		when (viewType) {
@@ -26,7 +27,7 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 		when (getItemViewType(position)) {
-			RVItemViewTypes.BANNER -> (holder as BannerViewHolder).bind(banners[position] as BannerModel)
+			RVItemViewTypes.BANNER -> (holder as BannerViewHolder).bind(banners[position])
 		}
 	}
 
@@ -36,8 +37,8 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 
 	inner class BannerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-		val layoutManager = LinearLayoutManager(fragmentWeakRef.get()?.context,
-				LinearLayoutManager.VERTICAL,
+		val layoutManager = LinearLayoutManager(app.applicationContext,
+				LinearLayoutManager.HORIZONTAL,
 				false)
 		val bannerItemsAdapter = BannerItemsAdapter(fragmentWeakRef.get())
 		val bannerRecyclerView = itemView.findViewById(R.id.bannerRecyclerView) as RecyclerView
@@ -48,7 +49,9 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 		}
 
 		fun bind(bannerModel: BannerModel) {
-
+			bannerItemsAdapter.items.clear()
+			bannerItemsAdapter.items.addAll(bannerModel.dataList)
+			bannerItemsAdapter.notifyDataSetChanged()//TODO: Don't use notifyDataSetChanged()
 		}
 	}
 }
