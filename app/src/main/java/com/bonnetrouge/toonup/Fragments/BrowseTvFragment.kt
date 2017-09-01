@@ -22,7 +22,6 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_browse_tv.*
-import kotlinx.android.synthetic.main.view_holder_banner.*
 import javax.inject.Inject
 
 class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItemClicked {

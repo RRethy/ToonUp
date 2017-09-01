@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import com.bonnetrouge.toonup.Commons.Ext.convertToPixels
+import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
@@ -15,6 +17,8 @@ import java.lang.ref.WeakReference
 class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 	private val fragmentWeakRef = WeakReference<BaseFragment>(fragment)
 	val items = mutableListOf<RVItem>()
+	val thumbnailWidthPx by lazy { ((getDisplayWidth() - convertToPixels(24.0)) / 3.0).toInt() }
+	val thumbnailHeightPx by lazy { (thumbnailWidthPx * 16.0 / 9.0).toInt() }
 
 	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
 		when (viewType) {
@@ -42,7 +46,7 @@ class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<Recycle
 		fun bind(basicSeriesInfo: BasicSeriesInfo) {
 			Glide.with(fragmentWeakRef.get())
 					.load("http://www.animetoon.org/images/series/big/${basicSeriesInfo.id}.jpg")
-					//.apply(RequestOptions().override(thumbnailWidthPx, thumbnailHeightPx).fitCenter())
+					.apply(RequestOptions().override(thumbnailWidthPx, thumbnailHeightPx).fitCenter())
 					.into(image)
 		}
 	}
