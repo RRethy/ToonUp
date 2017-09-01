@@ -68,7 +68,7 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 					for (videoGenre in videoGenres.genres) {
 						val seriesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
 						if (seriesList.size > 0) seriesByGenre.put(videoGenre, seriesList)
-						//seriesByGenre[videoGenre]?.shuffle() //TODO: This crashes with IndexOutOfBounds
+						seriesByGenre[videoGenre]?.shuffle() //TODO: This crashes with IndexOutOfBounds
 					}
 					Observable.fromArray(seriesByGenre)
 				}

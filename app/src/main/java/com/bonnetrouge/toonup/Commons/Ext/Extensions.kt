@@ -17,7 +17,7 @@ inline fun BaseActivity.fragmentTransaction(swapInfo: FragmentTransaction.() -> 
 
 fun <T> MutableList<T>.shuffle() {
     for (count in 1..4) {
-		for (i in 0..this.size step 2) {
+		for (i in 0 until this.size step 2) {
 			this.add(this.size, this[i])
 			this.removeAt(i)
 		}
