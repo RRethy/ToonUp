@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BannerModel
@@ -42,6 +43,7 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 				false)
 		val bannerItemsAdapter = BannerItemsAdapter(fragmentWeakRef.get())
 		val bannerRecyclerView = itemView.findViewById(R.id.bannerRecyclerView) as RecyclerView
+		val bannerTitle = itemView.findViewById(R.id.bannerTitle) as TextView
 
 		init {
 			bannerRecyclerView.layoutManager = layoutManager
@@ -49,6 +51,7 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 		}
 
 		fun bind(bannerModel: BannerModel) {
+			bannerTitle.text = bannerModel.title
 			bannerItemsAdapter.items.clear()
 			bannerItemsAdapter.items.addAll(bannerModel.dataList)
 			bannerItemsAdapter.notifyDataSetChanged()//TODO: Don't use notifyDataSetChanged()

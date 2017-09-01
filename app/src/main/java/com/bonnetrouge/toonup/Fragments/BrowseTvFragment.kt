@@ -64,19 +64,19 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 					hideLoading()
 				}
 				.flatMap {
-					val seriesByGenre = HashMap<String, MutableList<BasicSeriesInfo>>()
+					val seriesByGenre = mutableListOf<BannerModel>()
 					for (videoGenre in videoGenres.genres) {
 						val seriesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
-						if (seriesList.size > 0) seriesByGenre.put(videoGenre, seriesList)
-						seriesByGenre[videoGenre]?.shuffle() //TODO: This crashes with IndexOutOfBounds
+						seriesList.shuffle()
+						if (seriesList.size > 0) seriesByGenre.add(BannerModel(videoGenre, seriesList))
 					}
 					Observable.fromArray(seriesByGenre)
 				}
 				.subscribe({
 					hideErrorMsg()
-					for ((genre, listOfSeries) in it) {
+					for (bannerModel in it) {
 						with (bannerListAdapter.banners) {
-							add(BannerModel(listOfSeries, genre))
+							add(bannerModel)
 							bannerListAdapter.notifyItemInserted(size - 1)
 						}
 					}
