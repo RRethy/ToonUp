@@ -13,14 +13,16 @@
 			android:layout_height="120dp"
 			android:background="@color/thumbnailLoadingColour"
 			android:scaleType="fitXY"/>
+
 		<TextView
 			android:id="@+id/bannerItemTitle"
 			android:layout_width="match_parent"
 			android:layout_height="0dp"
 			android:layout_weight="1"
-			android:maxLines="2"
+			android:ellipsize="end"
+			android:fontFamily="serif"
 			android:gravity="center"
-			android:textColor="@android:color/white"
-			android:ellipsize="end"/>
+			android:maxLines="2"
+			android:textColor="@android:color/white"/>
 	</LinearLayout>
 </android.support.v7.widget.CardView>
