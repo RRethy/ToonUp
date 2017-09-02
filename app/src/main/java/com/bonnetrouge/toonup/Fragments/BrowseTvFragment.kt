@@ -67,7 +67,7 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 					val seriesByGenre = mutableListOf<BannerModel>()
 					for (videoGenre in videoGenres.genres) {
 						val seriesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
-						seriesList.shuffle()
+						seriesList.sortByDescending { it.rating }
 						if (seriesList.size > 0) seriesByGenre.add(BannerModel(videoGenre, seriesList))
 					}
 					Observable.fromArray(seriesByGenre)
