@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bonnetrouge.toonup.Activities.BrowseActivity
 import com.bonnetrouge.toonup.Commons.Ext.DTAG
 import com.bonnetrouge.toonup.Commons.Ext.dog
 import com.bonnetrouge.toonup.Commons.Ext.shuffle
@@ -103,6 +104,6 @@ class BrowseTvFragment @Inject constructor(): BaseFragment() {
 	}
 
 	override fun onRecyclerViewItemClicked(item: RVItem) {
-		dog(item.toString())
+		(activity as BrowseActivity).navigateDetail(item as BasicSeriesInfo)
 	}
 }

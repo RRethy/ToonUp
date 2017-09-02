@@ -8,11 +8,16 @@ import com.bonnetrouge.toonup.Commons.Ext.fragmentTransaction
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
 import com.bonnetrouge.toonup.Fragments.BrowseTvFragment
 import com.bonnetrouge.toonup.Fragments.CategoryChooserFragment
+import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.BrowseViewModelFactory
 import kotlinx.android.synthetic.main.activity_browse.*
 import javax.inject.Inject
+import com.bonnetrouge.toonup.R.id.toolbar
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CollapsingToolbarLayout
+
 
 class BrowseActivity : BaseActivity() {
 
@@ -29,7 +34,7 @@ class BrowseActivity : BaseActivity() {
 		browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
 		browseViewModel.prefetchGenres()
 		setSupportActionBar(toolbar)
-		fragmentTransaction { replace(browseFragmentContainer.id, categoryChooserFragment) }
+		fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) }
 	}
 
 	fun navigateTvShows() {
@@ -38,5 +43,9 @@ class BrowseActivity : BaseActivity() {
 
 	fun navigateMovies() {
 		dog("MOVIES")
+	}
+
+	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo) {
+
 	}
 }

@@ -6,4 +6,5 @@
     <color name="bottomNavItemsColour">@android:color/white</color>
     <color name="tertiaryColour">#ff4400</color>
     <color name="thumbnailLoadingColour">#363636</color>
+    <color name="transparent">#00ffffff</color>
 </resources>
