@@ -37,11 +37,6 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 		}
 	}
 
-	override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder?) {
-		super.onViewDetachedFromWindow(holder)
-		holder?.itemView?.clearAnimation()
-	}
-
 	override fun getItemViewType(position: Int) = banners[position].getItemViewType()
 
 	override fun getItemCount() = banners.size
@@ -64,7 +59,6 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 		}
 
 		fun bind(bannerModel: BannerModel) {
-			itemView.startAnimation(AnimationUtils.loadAnimation(fragmentWeakRef.get()?.context, R.anim.slide_up))
 			bannerTitle.text = bannerModel.title
 			bannerItemsAdapter.items.clear()
 			bannerItemsAdapter.items.addAll(bannerModel.dataList)

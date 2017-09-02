@@ -37,8 +37,14 @@ class BrowseActivity : BaseActivity() {
 		fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) }
 	}
 
+	override fun onBackPressed() {
+		super.onBackPressed()
+		supportActionBar?.setDisplayHomeAsUpEnabled(false)
+	}
+
 	fun navigateTvShows() {
 		fragmentTransaction { replace(browseFragmentContainer.id, browseTvFragment) }
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}
 
 	fun navigateMovies() {
