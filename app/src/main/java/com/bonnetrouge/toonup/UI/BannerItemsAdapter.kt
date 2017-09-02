@@ -4,22 +4,18 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
-import com.bonnetrouge.toonup.Commons.Ext.convertToPixels
-import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import java.lang.ref.WeakReference
 
 class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 	private val fragmentWeakRef = WeakReference<BaseFragment>(fragment)
 	val items = mutableListOf<RVItem>()
-	val thumbnailWidthPx by lazy { ((getDisplayWidth() - convertToPixels(24.0)) / 3.0).toInt() }
-	val thumbnailHeightPx by lazy { (thumbnailWidthPx * 16.0 / 9.0).toInt() }
 
 	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
 		when (viewType) {
@@ -36,6 +32,11 @@ class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<Recycle
 		}
 	}
 
+	override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder?) {
+		super.onViewDetachedFromWindow(holder)
+		holder?.itemView?.clearAnimation()
+	}
+
 	override fun getItemViewType(position: Int) = items[position].getItemViewType()
 
 	override fun getItemCount() = items.size
@@ -46,10 +47,10 @@ class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<Recycle
 		val title = view.findViewById(R.id.bannerItemTitle) as TextView
 
 		fun bind(basicSeriesInfo: BasicSeriesInfo) {
+			itemView.startAnimation(AnimationUtils.loadAnimation(fragmentWeakRef.get()?.context, R.anim.grow))
 			title.text = basicSeriesInfo.name
 			Glide.with(fragmentWeakRef.get())
 					.load("http://www.animetoon.org/images/series/big/${basicSeriesInfo.id}.jpg")
-					.apply(RequestOptions().override(thumbnailWidthPx, thumbnailHeightPx).fitCenter())
 					.into(image)
 		}
 	}
