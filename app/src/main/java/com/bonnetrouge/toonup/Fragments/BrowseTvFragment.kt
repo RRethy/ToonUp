@@ -18,6 +18,7 @@ import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.Model.VideoGenres
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.BannerListAdapter
+import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -25,7 +26,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_browse_tv.*
 import javax.inject.Inject
 
-class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItemClicked {
+class BrowseTvFragment @Inject constructor(): BaseFragment() {
 
 	val browseViewModel by lazy { ViewModelProviders.of(activity).get(BrowseViewModel::class.java) }
 	val bannerListAdapter by lazy { BannerListAdapter(this) }
@@ -101,7 +102,7 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 		swipeRefreshLayout?.isRefreshing = false
 	}
 
-	override fun onRecyclerViewItemClicked(item: Any) {
+	override fun onRecyclerViewItemClicked(item: RVItem) {
 		dog(item.toString())
 	}
 }

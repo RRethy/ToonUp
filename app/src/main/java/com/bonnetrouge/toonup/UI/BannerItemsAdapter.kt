@@ -41,6 +41,10 @@ class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<Recycle
 		val image = view.findViewById(R.id.bannerItemImage) as ImageView
 		val title = view.findViewById(R.id.bannerItemTitle) as TextView
 
+		init {
+			itemView.setOnClickListener { fragmentWeakRef.get()?.onRecyclerViewItemClicked(items[adapterPosition]) }
+		}
+
 		fun bind(basicSeriesInfo: BasicSeriesInfo) {
 			title.text = basicSeriesInfo.name
 			Glide.with(fragmentWeakRef.get())

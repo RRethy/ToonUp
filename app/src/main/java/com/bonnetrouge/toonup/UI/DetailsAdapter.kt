@@ -27,7 +27,7 @@ class DetailsAdapter(detailActivity: DetailActivity) : RecyclerView.Adapter<Deta
 		val title by lazy { view.findViewById(R.id.detail_item_title) as TextView }
 
 		init {
-			title.setOnClickListener { detailActivityWeakRef.get()?.onRecyclerViewItemClicked(itemList[adapterPosition]) }
+			//title.setOnClickListener { detailActivityWeakRef.get()?.onRecyclerViewItemClicked(itemList[adapterPosition]) }
 		}
 
 		fun bind(episode: Episode) {

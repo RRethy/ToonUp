@@ -11,6 +11,7 @@ import com.bonnetrouge.toonup.Activities.DetailActivity
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
+import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -70,7 +71,7 @@ class BrowseSeriesFragment @Inject constructor(): Fragment(), OnRecyclerViewItem
 		swipeRefreshLayout?.isRefreshing = false
 	}
 
-	override fun onRecyclerViewItemClicked(item: Any) {
+	override fun onRecyclerViewItemClicked(item: RVItem) {
 		with (item as BasicSeriesInfo) {
 			DetailActivity.navigate(context, item)
 		}

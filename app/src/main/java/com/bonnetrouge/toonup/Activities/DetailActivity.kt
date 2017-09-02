@@ -14,6 +14,7 @@ import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.Model.Episode
 import com.bonnetrouge.toonup.UI.DetailsAdapter
+import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.DetailViewModel
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.DetailViewModelFactory
 import com.bumptech.glide.Glide
@@ -77,7 +78,7 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 		}
 	}
 
-	override fun onRecyclerViewItemClicked(item: Any) {
+	override fun onRecyclerViewItemClicked(item: RVItem) {
 		PlayerActivity.navigate(this, (item as Episode).id)
 	}
 }
