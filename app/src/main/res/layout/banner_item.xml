@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-									android:layout_width="110dp"
+									android:layout_width="105dp"
 									android:layout_height="160dp"
 									android:layout_margin="4dp">
 	<LinearLayout
@@ -19,6 +19,7 @@
 			android:layout_height="0dp"
 			android:layout_weight="1"
 			android:maxLines="2"
+			android:gravity="center"
 			android:textColor="@android:color/white"
 			android:ellipsize="end"/>
 	</LinearLayout>

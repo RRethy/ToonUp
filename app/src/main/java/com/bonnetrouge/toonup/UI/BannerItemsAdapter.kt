@@ -32,11 +32,6 @@ class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<Recycle
 		}
 	}
 
-	override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder?) {
-		super.onViewDetachedFromWindow(holder)
-		holder?.itemView?.clearAnimation()
-	}
-
 	override fun getItemViewType(position: Int) = items[position].getItemViewType()
 
 	override fun getItemCount() = items.size
@@ -47,7 +42,6 @@ class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<Recycle
 		val title = view.findViewById(R.id.bannerItemTitle) as TextView
 
 		fun bind(basicSeriesInfo: BasicSeriesInfo) {
-			itemView.startAnimation(AnimationUtils.loadAnimation(fragmentWeakRef.get()?.context, R.anim.grow))
 			title.text = basicSeriesInfo.name
 			Glide.with(fragmentWeakRef.get())
 					.load("http://www.animetoon.org/images/series/big/${basicSeriesInfo.id}.jpg")

@@ -1,10 +1,13 @@
 package com.bonnetrouge.toonup.UI
 
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.SnapHelper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.widget.TextView
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Fragment.BaseFragment
@@ -32,6 +35,11 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 		}
 	}
 
+	override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder?) {
+		super.onViewDetachedFromWindow(holder)
+		holder?.itemView?.clearAnimation()
+	}
+
 	override fun getItemViewType(position: Int) = banners[position].getItemViewType()
 
 	override fun getItemCount() = banners.size
@@ -42,15 +50,19 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 				LinearLayoutManager.HORIZONTAL,
 				false)
 		val bannerItemsAdapter = BannerItemsAdapter(fragmentWeakRef.get())
+		val snapHelper = LinearSnapHelper()
+
 		val bannerRecyclerView = itemView.findViewById(R.id.bannerRecyclerView) as RecyclerView
 		val bannerTitle = itemView.findViewById(R.id.bannerTitle) as TextView
 
 		init {
 			bannerRecyclerView.layoutManager = layoutManager
 			bannerRecyclerView.adapter = bannerItemsAdapter
+			snapHelper.attachToRecyclerView(bannerRecyclerView)
 		}
 
 		fun bind(bannerModel: BannerModel) {
+			itemView.startAnimation(AnimationUtils.loadAnimation(fragmentWeakRef.get()?.context, R.anim.slide_up))
 			bannerTitle.text = bannerModel.title
 			bannerItemsAdapter.items.clear()
 			bannerItemsAdapter.items.addAll(bannerModel.dataList)
