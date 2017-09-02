@@ -28,6 +28,7 @@ class BrowseActivity : BaseActivity() {
 		app.component.plus(BrowseActivityModule()).inject(this)
 		browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
 		browseViewModel.prefetchGenres()
+		setSupportActionBar(toolbar)
 		fragmentTransaction { replace(browseFragmentContainer.id, categoryChooserFragment) }
 	}
 

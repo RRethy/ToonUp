@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import com.bonnetrouge.toonup.Commons.Ext.convertToPixels
 import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
 import com.bonnetrouge.toonup.Fragment.BaseFragment
@@ -42,8 +43,10 @@ class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<Recycle
 	inner class BannerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
 		val image = view.findViewById(R.id.bannerItemImage) as ImageView
+		val title = view.findViewById(R.id.bannerItemTitle) as TextView
 
 		fun bind(basicSeriesInfo: BasicSeriesInfo) {
+			title.text = basicSeriesInfo.name
 			Glide.with(fragmentWeakRef.get())
 					.load("http://www.animetoon.org/images/series/big/${basicSeriesInfo.id}.jpg")
 					.apply(RequestOptions().override(thumbnailWidthPx, thumbnailHeightPx).fitCenter())

@@ -2,6 +2,7 @@ package com.bonnetrouge.toonup.Fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.LayoutInflater
@@ -93,11 +94,11 @@ class BrowseTvFragment @Inject constructor(): BaseFragment(), OnRecyclerViewItem
 	}
 
 	fun showLoading() {
-		swipeRefreshLayout.isRefreshing = true
+		swipeRefreshLayout?.isRefreshing = true
 	}
 
 	fun hideLoading() {
-		swipeRefreshLayout.isRefreshing = false
+		swipeRefreshLayout?.isRefreshing = false
 	}
 
 	override fun onRecyclerViewItemClicked(item: Any) {
