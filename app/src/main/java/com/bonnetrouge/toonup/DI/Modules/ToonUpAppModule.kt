@@ -1,6 +1,8 @@
 package com.bonnetrouge.toonup.DI.Modules
 
 import com.bonnetrouge.toonup.API.StreamingApiService
+import com.bonnetrouge.toonup.Commons.WackClasses.UrbanFitGenerator
+import com.bonnetrouge.toonup.Commons.WackClasses.UrlGenerator
 import com.bonnetrouge.toonup.Data.VideoRepository
 import com.bonnetrouge.toonup.ToonUpApp
 import dagger.Module
@@ -28,12 +30,7 @@ class ToonUpAppModule(val app: ToonUpApp) {
         val okHttpClient = OkHttpClient.Builder().addInterceptor {
             it.proceed(it.request().newBuilder().addHeader("App-Version", appVersion).build())
         }.build()
-        val retrofit = Retrofit.Builder()
-                .baseUrl("")
-                .client(okHttpClient)
-                .addConverterFactory(MoshiConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .build()
+        val retrofit = UrbanFitGenerator.generate(okHttpClient)
 
         return retrofit.create(StreamingApiService::class.java)
     }
