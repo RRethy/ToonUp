@@ -3,21 +3,23 @@ package com.bonnetrouge.toonup.Activities
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.design.widget.Snackbar
 import com.bonnetrouge.toonup.R
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
-import android.widget.Toast
+import android.view.View
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.DI.Modules.DetailActivityModule
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.Model.Episode
+import com.bonnetrouge.toonup.Model.Loading
+import com.bonnetrouge.toonup.Model.Series
 import com.bonnetrouge.toonup.UI.DetailsAdapter
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.DetailViewModel
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.DetailViewModelFactory
 import com.bumptech.glide.Glide
+import com.bumptech.glide.TransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -38,31 +40,56 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 		setContentView(R.layout.activity_detail)
 		app.component.plus(DetailActivityModule()).inject(this)
 		detailViewModel = ViewModelProviders.of(this, detailViewModelFactory).get(DetailViewModel::class.java)
+		setupToolbar()
+		setupRecyclerView()
+		popularRecyclerView()
+	}
+
+	fun setupToolbar() {
 		toolbar.title = intent.getStringExtra(TITLE)
 		setSupportActionBar(toolbar)
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		fab.setOnClickListener {
 
 		}
 		Glide.with(this)
 				.load("http://www.animetoon.org/images/series/big/${intent.getStringExtra(ID)}.jpg")
-				.apply(RequestOptions.centerCropTransform())
 				.into(parallaxImage)
+	}
+
+	fun setupRecyclerView() {
 		detailsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
 		detailsRecyclerView.adapter = detailAdapter
-		popularRecyclerView()
 	}
 
 	fun popularRecyclerView() {
-		if (detailAdapter.itemList.isEmpty()) {
+		if (detailAdapter.items.isEmpty()) {
 			detailViewModel.getDetails(intent.getStringExtra(DetailActivity.ID))
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
+					.map {
+						(name, episode) ->
+						episode.forEach { it.name = it.name.removePrefix(name) }
+						return@map Series(name, episode)
+					}
+					.doOnSubscribe { detailAdapter.items.add(Loading()) }
 					.subscribe({
-
+						detailAdapter.items.clear()
+						detailAdapter.items.addAll(it.episode)
+						detailAdapter.notifyItemRemoved(0)
+						detailAdapter.notifyItemRangeInserted(0, it.episode.size)
 					}, {
-
+						showError()
 					})
 		}
+	}
+
+	fun hideError() {
+		errorMessage.visibility = View.VISIBLE
+	}
+
+	fun showError() {
+		errorMessage.visibility = View.GONE
 	}
 
 	override fun onRecyclerViewItemClicked(item: RVItem) {

@@ -10,5 +10,5 @@ data class BasicSeriesInfo(val id: String,
 						   val released: String,
 						   val rating: Float,
 						   val genres: Collection<String>) : RVItem {
-	override fun getItemViewType() = RVItemViewTypes.BASIC_SERIES_ITEM
+	override fun getItemViewType() = RVItemViewTypes.BASIC_SERIES
 }

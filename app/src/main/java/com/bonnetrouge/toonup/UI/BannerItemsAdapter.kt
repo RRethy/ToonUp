@@ -4,7 +4,6 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.ImageView
 import android.widget.TextView
 import com.bonnetrouge.toonup.Fragment.BaseFragment
@@ -19,7 +18,7 @@ class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<Recycle
 
 	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
 		when (viewType) {
-			RVItemViewTypes.BASIC_SERIES_ITEM->
+			RVItemViewTypes.BASIC_SERIES ->
 				return BannerItemViewHolder(LayoutInflater.from(parent?.context)
 						.inflate(R.layout.banner_item, parent, false))
 		}
@@ -28,7 +27,7 @@ class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<Recycle
 
 	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 		when (getItemViewType(position)) {
-			RVItemViewTypes.BASIC_SERIES_ITEM -> (holder as BannerItemViewHolder).bind(items[position] as BasicSeriesInfo)
+			RVItemViewTypes.BASIC_SERIES -> (holder as BannerItemViewHolder).bind(items[position] as BasicSeriesInfo)
 		}
 	}
 

@@ -4,7 +4,7 @@ import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.UI.RVItemViewTypes
 
 data class Episode(val id: String,
-				   val name: String,
+				   var name: String,
 				   val date: String) : RVItem {
 	override fun getItemViewType() = RVItemViewTypes.EPISODE
 }
