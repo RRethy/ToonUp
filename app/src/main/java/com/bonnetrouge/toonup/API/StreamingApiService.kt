@@ -2,7 +2,6 @@ package com.bonnetrouge.toonup.API
 
 import com.bonnetrouge.toonup.Model.*
 import io.reactivex.Observable
-import io.reactivex.Single
 import retrofit2.http.GET
 import retrofit2.http.Path
 
@@ -10,44 +9,44 @@ import retrofit2.http.Path
 interface StreamingApiService {
 
 	@GET("/GetGenres")
-	fun getGenres(): Single<VideoGenres>
+	fun getGenres(): Observable<VideoGenres>
 
 	@GET("/GetPopularCartoon")
-	fun getPopularCartoons(): Single<List<BasicSeriesInfo>>
+	fun getPopularCartoons(): Observable<List<BasicSeriesInfo>>
 
 	@GET("/GetPopularDubbed")
-	fun getPopularAnime(): Single<List<BasicSeriesInfo>>
+	fun getPopularAnime(): Observable<List<BasicSeriesInfo>>
 
 	@GET("/GetPopularMovies")
-	fun getPopularMovies(): Single<List<BasicSeriesInfo>>
+	fun getPopularMovies(): Observable<List<BasicSeriesInfo>>
 
 	@GET("/GetAllCartoon")
 	fun getAllCartoons(): Observable<List<BasicSeriesInfo>>
 
 	@GET("/GetAllDubbed")
-	fun getAllAnime(): Single<List<BasicSeriesInfo>>
+	fun getAllAnime(): Observable<List<BasicSeriesInfo>>
 
 	@GET("/GetAllMovies")
-	fun getAllMovies(): Single<List<BasicSeriesInfo>>
+	fun getAllMovies(): Observable<List<BasicSeriesInfo>>
 
 	@GET("/GetNewCartoon")
-	fun getNewCartoons(): Single<List<BasicSeriesInfo>>
+	fun getNewCartoons(): Observable<List<BasicSeriesInfo>>
 
 	@GET("/GetNewDubbed")
-	fun getNewAnime(): Single<List<BasicSeriesInfo>>
+	fun getNewAnime(): Observable<List<BasicSeriesInfo>>
 
 	@GET("/GetNewMovies")
-	fun getNewMovies(): Single<List<BasicSeriesInfo>>
+	fun getNewMovies(): Observable<List<BasicSeriesInfo>>
 	
 	@GET("/GetUpdates")
-	fun getNewEpisodes(): Single<NewEpisodes>
+	fun getNewEpisodes(): Observable<NewEpisodes>
 
 	@GET("/GetDetails/{seriesId}")
-	fun getDetails(@Path("seriesId") id: String): Single<Series>
+	fun getDetails(@Path("seriesId") id: String): Observable<Series>
 
 	@GET("/GetVideos/{episodeId}?direct")
-	fun getDescriptiveStreamingUrls(@Path("episodeId") id: String): Single<List<List<DescriptiveStreamingUrl>>>
+	fun getDescriptiveStreamingUrls(@Path("episodeId") id: String): Observable<List<List<DescriptiveStreamingUrl>>>
 
 	@GET("/GetVideos/{episodeId}")
-	fun getRawStreamingUrls(@Path("episodeId") id: String): Single<List<List<String>>>
+	fun getRawStreamingUrls(@Path("episodeId") id: String): Observable<List<List<String>>>
 }

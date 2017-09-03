@@ -59,8 +59,8 @@ class PlayerActivity : BaseActivity() {
 		player?.release()
 	}
 
-	fun setupVideoPlayer(streamingUrlsObservable: Single<List<List<DescriptiveStreamingUrl>>>) {
-		streamingUrlsObservable.subscribe(
+	fun setupVideoPlayer(streamingUrlsObservable: Single<List<List<DescriptiveStreamingUrl>>>?) {
+		streamingUrlsObservable?.subscribe(
 				{
 					configExoplayer(it)
 				},
@@ -69,10 +69,11 @@ class PlayerActivity : BaseActivity() {
 				})
 	}
 
-	fun getStreamingUrls(id: String): Single<List<List<DescriptiveStreamingUrl>>> {
-		return playerViewModel.getFullStreamingUrls(id)
+	fun getStreamingUrls(id: String): Single<List<List<DescriptiveStreamingUrl>>>? {
+		return null
+/*		return playerViewModel.getFullStreamingUrls(id)
 				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
+				.observeOn(AndroidSchedulers.mainThread())*/
 	}
 
 	fun configExoplayer(streamingUrls: List<List<DescriptiveStreamingUrl>>) {

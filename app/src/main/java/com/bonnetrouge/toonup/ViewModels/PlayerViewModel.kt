@@ -11,7 +11,7 @@ class PlayerViewModel @Inject constructor(private val videoRepository: VideoRepo
 	private var fullStreamingUrls: List<List<DescriptiveStreamingUrl>>? = null
 	private var rawStreamingUrls: List<List<String>>? = null
 
-	fun getFullStreamingUrls(episodeId: String): Single<List<List<DescriptiveStreamingUrl>>> {
+/*	fun getFullStreamingUrls(episodeId: String): Single<List<List<DescriptiveStreamingUrl>>> {
 		if (fullStreamingUrls != null) return Single.just(fullStreamingUrls)
 		else return videoRepository.getFullStreamingUrls(episodeId).doOnSuccess { fullStreamingUrls = it }
 	}
@@ -19,5 +19,5 @@ class PlayerViewModel @Inject constructor(private val videoRepository: VideoRepo
 	fun getRawStreamingUrls(episodeId: String): Single<List<List<String>>> {
 		if (rawStreamingUrls != null) return Single.just(rawStreamingUrls)
 		else return videoRepository.getRawStreamingUrls(episodeId).doOnSuccess { rawStreamingUrls = it }
-	}
+	}*/
 }

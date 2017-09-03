@@ -54,7 +54,7 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 
 	fun popularRecyclerView() {
 		if (detailAdapter.itemList.isEmpty()) {
-			detailViewModel.getDetailsObservable(intent.getStringExtra(DetailActivity.ID))
+/*			detailViewModel.getDetailsObservable(intent.getStringExtra(DetailActivity.ID))
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 					.subscribe({
@@ -62,7 +62,7 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 						detailAdapter.notifyDataSetChanged()
 					}, {
 						Toast.makeText(this, "Shit fucked up", Toast.LENGTH_LONG).show()
-					})
+					})*/
 		}
 	}
 

@@ -12,6 +12,8 @@ class VideoRepository(private val apiService: StreamingApiService) {
 
 	fun getPopularMovies() = apiService.getPopularMovies()
 
+	fun getAllMovies() = apiService.getAllMovies()
+
 	fun getDetails(seriesId: String) = apiService.getDetails(seriesId)
 
 	fun getFullStreamingUrls(episodeId: String) = apiService.getDescriptiveStreamingUrls(episodeId)

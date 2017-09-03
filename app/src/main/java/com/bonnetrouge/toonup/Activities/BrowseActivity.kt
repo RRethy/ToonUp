@@ -17,12 +17,14 @@ import javax.inject.Inject
 import com.bonnetrouge.toonup.R.id.toolbar
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
+import com.bonnetrouge.toonup.Fragments.BrowseMoviesFragment
 
 
 class BrowseActivity : BaseActivity() {
 
 	@Inject lateinit var categoryChooserFragment: CategoryChooserFragment
 	@Inject lateinit var browseTvFragment: BrowseTvFragment
+	@Inject lateinit var browseMoviesFragment: BrowseMoviesFragment
 
 	@Inject lateinit var browseViewModelFactory: BrowseViewModelFactory
 	lateinit var browseViewModel: BrowseViewModel
@@ -48,7 +50,8 @@ class BrowseActivity : BaseActivity() {
 	}
 
 	fun navigateMovies() {
-		dog("MOVIES")
+		fragmentTransaction { replace(browseFragmentContainer.id, browseMoviesFragment) }
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 	}
 
 	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo) {

@@ -12,24 +12,18 @@ import javax.inject.Inject
 
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository): ViewModel() {
 
-	private var popularCartoons: List<BasicSeriesInfo>? = null
 	private var allCartoons: List<BasicSeriesInfo>? = null
-	private var popularMovies: List<BasicSeriesInfo>? = null
+	private var allMovies: List<BasicSeriesInfo>? = null
 	var genres: VideoGenres? = null
-
-	fun getPopularCartoonObservable(): Single<List<BasicSeriesInfo>> {
-		return if (popularCartoons != null) Single.just(popularCartoons)
-		else videoRepository.getPopularCartoons().doOnSuccess { popularCartoons = it }
-	}
 
 	fun getAllCartoonsObservable(): Observable<List<BasicSeriesInfo>> {
 		return if (allCartoons != null) Observable.just(allCartoons)
 		else videoRepository.getAllCartoons().doOnNext { allCartoons = it }
 	}
 
-	fun getPopularMoviesObservable(): Single<List<BasicSeriesInfo>> {
-		return if (popularMovies != null) Single.just(popularMovies)
-		else videoRepository.getPopularMovies().doOnSuccess { popularMovies = it }
+	fun getAllMovies(): Observable<List<BasicSeriesInfo>> {
+		return if (allMovies != null) Observable.just(allMovies)
+		else videoRepository.getAllMovies().doOnNext { allMovies = it }
 	}
 
 	fun ensureGenresNotNull(onSuccess: (VideoGenres) -> Unit, onFailure: () -> Unit) {
