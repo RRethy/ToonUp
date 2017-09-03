@@ -24,13 +24,13 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_detail.*
 import javax.inject.Inject
 
-
+//TODO: Clean this shit up
 class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 
 
-	@Inject
-	lateinit var detailViewModelFactory: DetailViewModelFactory
+	@Inject lateinit var detailViewModelFactory: DetailViewModelFactory
 	lateinit var detailViewModel: DetailViewModel
+
 	val detailAdapter by lazy { DetailsAdapter(this) }
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,31 +54,32 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 
 	fun popularRecyclerView() {
 		if (detailAdapter.itemList.isEmpty()) {
-/*			detailViewModel.getDetailsObservable(intent.getStringExtra(DetailActivity.ID))
+			detailViewModel.getDetails(intent.getStringExtra(DetailActivity.ID))
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 					.subscribe({
-						detailAdapter.itemList.addAll(it.episode)
-						detailAdapter.notifyDataSetChanged()
+
 					}, {
-						Toast.makeText(this, "Shit fucked up", Toast.LENGTH_LONG).show()
-					})*/
-		}
-	}
 
-	companion object {
-		val ID = "Id"
-		val TITLE = "Title"
-
-		fun navigate(context: Context, basicSeriesInfo: BasicSeriesInfo) {
-			val intent = Intent(context, DetailActivity::class.java)
-			intent.putExtra(ID, basicSeriesInfo.id)
-			intent.putExtra(TITLE, basicSeriesInfo.name)
-			context.startActivity(intent)
+					})
 		}
 	}
 
 	override fun onRecyclerViewItemClicked(item: RVItem) {
 		PlayerActivity.navigate(this, (item as Episode).id)
+	}
+
+	companion object {
+		val ID = "Id"
+		val TITLE = "Title"
+		val DESCRIPTION = "Description"
+
+		fun navigate(context: Context, basicSeriesInfo: BasicSeriesInfo) {
+			val intent = Intent(context, DetailActivity::class.java)
+			intent.putExtra(ID, basicSeriesInfo.id)
+			intent.putExtra(TITLE, basicSeriesInfo.name)
+			intent.putExtra(DESCRIPTION, basicSeriesInfo.description)
+			context.startActivity(intent)
+		}
 	}
 }

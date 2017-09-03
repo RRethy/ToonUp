@@ -7,4 +7,5 @@
     <color name="tertiaryColour">#ff4400</color>
     <color name="thumbnailLoadingColour">#363636</color>
     <color name="transparent">#00ffffff</color>
+    <color name="black_tint">#2e000000</color>
 </resources>

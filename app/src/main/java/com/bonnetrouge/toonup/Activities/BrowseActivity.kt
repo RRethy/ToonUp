@@ -55,6 +55,6 @@ class BrowseActivity : BaseActivity() {
 	}
 
 	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo) {
-
+		DetailActivity.navigate(this, basicSeriesInfo)
 	}
 }
