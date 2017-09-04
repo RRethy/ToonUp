@@ -6,14 +6,13 @@ import android.os.Bundle
 import com.bonnetrouge.toonup.R
 import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.View
+import com.bonnetrouge.toonup.Commons.Ext.DTAG
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.DI.Modules.DetailActivityModule
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
-import com.bonnetrouge.toonup.Model.BasicSeriesInfo
-import com.bonnetrouge.toonup.Model.Episode
-import com.bonnetrouge.toonup.Model.Loading
-import com.bonnetrouge.toonup.Model.Series
+import com.bonnetrouge.toonup.Model.*
 import com.bonnetrouge.toonup.UI.DetailsAdapter
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.DetailViewModel
@@ -41,15 +40,13 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 		setupToolbar()
 		setupRecyclerView()
 		popularRecyclerView()
+		fetchBackingData()
 	}
 
 	fun setupToolbar() {
 		toolbar.title = intent.getStringExtra(TITLE)
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
-		fab.setOnClickListener {
-
-		}
 		Glide.with(this)
 				.load("http://www.animetoon.org/images/series/big/${intent.getStringExtra(ID)}.jpg")
 				.into(parallaxImage)
@@ -74,24 +71,16 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 					}, {
 
 					})
-/*			detailViewModel.getBasicDetails(intent.getStringExtra(DetailActivity.ID))
-					.subscribeOn(Schedulers.io())
-					.observeOn(AndroidSchedulers.mainThread())
-					.map {
-						(name, episode) ->
-						episode.forEach { it.name = it.name.removePrefix(name) }
-						return@map Series(name, episode)
-					}
-					.doOnSubscribe { detailAdapter.items.add(Loading()) }
-					.subscribe({
-						detailAdapter.items.clear()
-						detailAdapter.items.addAll(it.episode)
-						detailAdapter.notifyItemRemoved(0)
-						detailAdapter.notifyItemRangeInserted(0, it.episode.size)
-					}, {
-						showError()
-					})*/
 		}
+	}
+
+	fun fetchBackingData() {
+		detailViewModel.getBasicDetails(intent.getStringExtra(DetailActivity.ID))
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe {
+					Log.d(DTAG, it.toString())
+				}
 	}
 
 	fun hideError() {
@@ -103,7 +92,21 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 	}
 
 	override fun onRecyclerViewItemClicked(item: RVItem) {
-		PlayerActivity.navigate(this, (item as Episode).id)
+		if (item is ExtendedEpisodeInfo) {
+			val season = item.season?.toString() ?: "-1"
+			val episode = item.number?.toString() ?: "-1"
+			detailViewModel.basicSeriesDetails?.episode
+					?.forEach {
+						with (it.name.toLowerCase()) {
+							if (contains("episode $episode")
+									&& (contains("season $season") || (season == "1" && !contains("season")))
+									|| (contains("episode ${detailAdapter.items.indexOf(item) + 1}") && !contains("season"))) {
+								Log.d(DTAG, "${it.id} + ${it.name}")
+								return
+							}
+						}
+					}
+		}
 	}
 
 	companion object {

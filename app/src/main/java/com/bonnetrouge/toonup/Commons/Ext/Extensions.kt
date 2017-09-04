@@ -17,6 +17,10 @@ inline fun BaseActivity.fragmentTransaction(addToBackStack: Boolean = true, tag:
 	else supportFragmentManager.beginTransaction().swapInfo().commit()
 }
 
+inline fun String.doNotEmpty(predicate: String.() -> Unit) {
+	if (this.isNotEmpty()) this.predicate()
+}
+
 fun <T> MutableList<T>.shuffle() {
     for (count in 1..4) {
 		for (i in 0 until this.size step 2) {

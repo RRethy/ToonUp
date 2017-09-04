@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bonnetrouge.toonup.Activities.DetailActivity
 import com.bonnetrouge.toonup.Commons.Ext.app
+import com.bonnetrouge.toonup.Commons.Ext.doNotEmpty
 import com.bonnetrouge.toonup.Model.Episode
 import com.bonnetrouge.toonup.Model.ExtendedEpisodeInfo
 import com.bonnetrouge.toonup.R
@@ -46,20 +47,23 @@ class DetailsAdapter(detailActivity: DetailActivity) : RecyclerView.Adapter<Recy
 
 		val seasonEpisodeNumber by lazy { view.findViewById(R.id.seasonEpisodeNumber) as TextView }
 		val episodeName by lazy { view.findViewById(R.id.episodeName) as TextView }
-		val episodeImage by lazy { view.findViewById(R.id.episodeImage) as ImageView }
 
 		init {
-			//title.setOnClickListener { detailActivityWeakRef.get()?.onRecyclerViewItemClicked(items[adapterPosition]) }
+			itemView.setOnClickListener { detailActivityWeakRef.get()?.onRecyclerViewItemClicked(items[adapterPosition]) }
 		}
 
 		fun bind(episode: ExtendedEpisodeInfo) {
 			episodeName.text = episode.name
 			with (app.applicationContext) {
-				seasonEpisodeNumber.text = "${getString(R.string.season)}${episode.season}${getString(R.string.episode)}${episode.number}"
+				seasonEpisodeNumber.text = "${getString(R.string.season)}${episode.season}${getString(R.string.episode)}${episode.number}${ripAdditionInfo(episode)}"
 			}
-/*			Glide.with(detailActivityWeakRef.get())
-					.load(episode.image?.original)
-					.into(episodeImage)*/
+		}
+
+		fun ripAdditionInfo(episode: ExtendedEpisodeInfo): String {
+			episode.airtime?.doNotEmpty { return " - ${episode.airtime}" }
+			episode.airdate?.doNotEmpty { return " - ${episode.airdate}" }
+			episode.airstamp?.doNotEmpty { return " - ${episode.airstamp}" }
+			return ""
 		}
 	}
 
