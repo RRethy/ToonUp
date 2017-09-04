@@ -2,17 +2,22 @@ package com.bonnetrouge.toonup.ViewModels
 
 import android.arch.lifecycle.ViewModel
 import com.bonnetrouge.toonup.Data.VideoRepository
-import com.bonnetrouge.toonup.Model.Series
+import com.bonnetrouge.toonup.Model.*
 import io.reactivex.Observable
-import io.reactivex.Single
 import javax.inject.Inject
 
 class DetailViewModel @Inject constructor(private val videoRepository: VideoRepository) : ViewModel() {
 
-	private var mediaDetails: Series? = null
+	private var basicSeriesDetails: Series? = null
+	private var fullSeriesInfo: FullSeriesInfo? = null
 
-	fun getDetails(seriesId: String): Observable<Series> {
-		return if (mediaDetails != null) Observable.just(mediaDetails)
+	fun getBasicDetails(seriesId: String): Observable<Series> {
+		return if (basicSeriesDetails != null) Observable.just(basicSeriesDetails)
 		else return videoRepository.getDetails(seriesId)
+	}
+
+	fun getFullSeriesInfo(seriesName: String): Observable<FullSeriesInfo> {
+		return if (fullSeriesInfo != null) Observable.just(fullSeriesInfo)
+		else return videoRepository.getExtendedEpisodesInfo(seriesName)
 	}
 }

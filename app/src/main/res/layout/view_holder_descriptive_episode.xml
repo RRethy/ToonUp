@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			  android:orientation="horizontal"
+			  android:layout_width="match_parent"
+			  android:layout_height="wrap_content"
+			  android:layout_marginBottom="8dp">
+	<ImageView
+		android:id="@+id/episodeImage"
+		android:layout_width="145dp"
+		android:layout_height="130dp"
+		android:background="@color/black_tint"/>
+	<LinearLayout
+		android:layout_width="0dp"
+		android:layout_weight="1"
+		android:orientation="vertical"
+		android:layout_height="match_parent">
+		<TextView
+			android:id="@+id/seasonEpisodeNumber"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:textColor="@android:color/white"
+			android:textSize="16sp"/>
+		<TextView
+			android:id="@+id/episodeName"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:maxLines="2"
+			android:ellipsize="end"
+			android:textColor="@android:color/white"
+			android:textSize="16sp"/>
+	</LinearLayout>
+
+</LinearLayout>

@@ -19,8 +19,6 @@ import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.DetailViewModel
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.DetailViewModelFactory
 import com.bumptech.glide.Glide
-import com.bumptech.glide.TransitionOptions
-import com.bumptech.glide.request.RequestOptions
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_detail.*
@@ -64,7 +62,19 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 
 	fun popularRecyclerView() {
 		if (detailAdapter.items.isEmpty()) {
-			detailViewModel.getDetails(intent.getStringExtra(DetailActivity.ID))
+			detailViewModel.getFullSeriesInfo(intent.getStringExtra(DetailActivity.TITLE))
+					.subscribeOn(Schedulers.io())
+					.observeOn(AndroidSchedulers.mainThread())
+					.subscribe({
+						detailAdapter.items.clear()
+						if (it._embedded?.episodes != null) {
+							detailAdapter.items.addAll(it._embedded.episodes)
+							detailAdapter.notifyDataSetChanged()
+						}
+					}, {
+
+					})
+/*			detailViewModel.getBasicDetails(intent.getStringExtra(DetailActivity.ID))
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 					.map {
@@ -80,7 +90,7 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 						detailAdapter.notifyItemRangeInserted(0, it.episode.size)
 					}, {
 						showError()
-					})
+					})*/
 		}
 	}
 

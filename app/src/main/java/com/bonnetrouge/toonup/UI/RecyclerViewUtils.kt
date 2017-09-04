@@ -10,4 +10,5 @@ object RVItemViewTypes {
 	val BASIC_SERIES = 2
 	val EPISODE = 3
 	val PAGINATION = 4
+	val EXTENDED_EPISODE = 5
 }
