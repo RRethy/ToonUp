@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
+import butterknife.bindView
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.GravitySnapHelper
 import com.bonnetrouge.toonup.Fragment.BaseFragment
@@ -49,8 +50,8 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 		val bannerItemsAdapter = BannerItemsAdapter(fragmentWeakRef.get())
 		val snapHelper = LinearSnapHelper()
 
-		val bannerRecyclerView = itemView.findViewById(R.id.bannerRecyclerView) as RecyclerView
-		val bannerTitle = itemView.findViewById(R.id.bannerTitle) as TextView
+		val bannerRecyclerView: RecyclerView by bindView(R.id.bannerRecyclerView)
+		val bannerTitle: TextView by bindView(R.id.bannerTitle)
 
 		init {
 			bannerRecyclerView.layoutManager = layoutManager

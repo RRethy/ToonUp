@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import butterknife.bindView
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
@@ -37,8 +38,8 @@ class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<Recycle
 
 	inner class BannerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-		val image = view.findViewById(R.id.bannerItemImage) as ImageView
-		val title = view.findViewById(R.id.bannerItemTitle) as TextView
+		val image: ImageView by bindView(R.id.bannerItemImage)
+		val title: TextView by bindView(R.id.bannerItemTitle)
 
 		init {
 			itemView.setOnClickListener { fragmentWeakRef.get()?.onRecyclerViewItemClicked(items[adapterPosition]) }

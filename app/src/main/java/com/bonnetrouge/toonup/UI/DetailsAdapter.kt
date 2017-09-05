@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import butterknife.bindView
 import com.bonnetrouge.toonup.Activities.DetailActivity
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.Ext.notEmpty
@@ -43,8 +44,8 @@ class DetailsAdapter(detailActivity: DetailActivity) : RecyclerView.Adapter<Recy
 
 	inner class ExtendedDetailItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
-		val seasonEpisodeNumber by lazy { view.findViewById(R.id.seasonEpisodeNumber) as TextView }
-		val episodeName by lazy { view.findViewById(R.id.episodeName) as TextView }
+		val seasonEpisodeNumber: TextView by bindView(R.id.seasonEpisodeNumber)
+		val episodeName: TextView by bindView(R.id.episodeName)
 
 		init {
 			itemView.setOnClickListener { detailActivityWeakRef.get()?.onRecyclerViewItemClicked(items[adapterPosition]) }
@@ -67,7 +68,7 @@ class DetailsAdapter(detailActivity: DetailActivity) : RecyclerView.Adapter<Recy
 
 	inner class DetailItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
 
-		val title by lazy { view.findViewById(R.id.detail_item_title) as TextView }
+        val title: TextView by bindView(R.id.detail_item_title)
 
 		init {
 			title.setOnClickListener { detailActivityWeakRef.get()?.onRecyclerViewItemClicked(items[adapterPosition]) }

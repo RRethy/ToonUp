@@ -70,6 +70,8 @@ dependencies {
     // Video playing: Exoplayer
     compile 'com.google.android.exoplayer:exoplayer-core:r2.4.4'
     compile 'com.google.android.exoplayer:exoplayer-ui:r2.4.4'
+
+    compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
 }
 repositories {
     maven {
