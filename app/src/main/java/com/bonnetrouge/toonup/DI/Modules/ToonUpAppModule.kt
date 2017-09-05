@@ -34,11 +34,9 @@ class ToonUpAppModule(val app: ToonUpApp) {
     @Singleton
     fun provideStreamingApiService(): StreamingApiService {
         val appVersion = "8.0"
-		val logging = HttpLoggingInterceptor()
-		logging.level = HttpLoggingInterceptor.Level.BODY
         val okHttpClient = OkHttpClient.Builder().addInterceptor {
             it.proceed(it.request().newBuilder().addHeader("App-Version", appVersion).build())
-        }.addInterceptor(logging).build()
+        }.build()
         val retrofit = UrbanFitGenerator.generate(okHttpClient)
 
         return retrofit.create(StreamingApiService::class.java)
