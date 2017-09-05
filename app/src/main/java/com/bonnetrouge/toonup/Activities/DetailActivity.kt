@@ -130,11 +130,11 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 		val id: String
 		if (item is ExtendedEpisodeInfo) {
 			id = transformIntoId(item)
-			if (id.isNotEmpty()) Log.d(DTAG, id)//TODO: Pass to PlayerActivity
+			if (id.isNotEmpty()) PlayerActivity.navigate(this, id)
 			else Toast.makeText(this, "Dun work", Toast.LENGTH_LONG).show()
 		} else if (item is Episode) {
 			id = item.id
-			Log.d(DTAG, id)//TODO: Pass to PlayerActivity
+			PlayerActivity.navigate(this, id)
 		}
 	}
 

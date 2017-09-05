@@ -22,6 +22,7 @@ import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
+import io.reactivex.Observable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -56,24 +57,24 @@ class PlayerActivity : BaseActivity() {
 
 	override fun onStop() {
 		super.onStop()
-		player?.release()
 	}
 
-	fun setupVideoPlayer(streamingUrlsObservable: Single<List<List<DescriptiveStreamingUrl>>>?) {
-		streamingUrlsObservable?.subscribe(
+    override fun onDestroy() {
+        super.onDestroy()
+        player?.release()
+    }
+
+	fun setupVideoPlayer(streamingUrlsObservable: Observable<List<List<DescriptiveStreamingUrl>>>?) {
+		streamingUrlsObservable?.observeOn(AndroidSchedulers.mainThread())?.subscribe(
 				{
 					configExoplayer(it)
-				},
-				{
-					//TODO: Error handle
 				})
 	}
 
-	fun getStreamingUrls(id: String): Single<List<List<DescriptiveStreamingUrl>>>? {
-		return null
-/*		return playerViewModel.getFullStreamingUrls(id)
+	fun getStreamingUrls(id: String): Observable<List<List<DescriptiveStreamingUrl>>>? {
+		return playerViewModel.getFullStreamingUrls(id)
 				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())*/
+
 	}
 
 	fun configExoplayer(streamingUrls: List<List<DescriptiveStreamingUrl>>) {

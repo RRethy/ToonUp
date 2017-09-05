@@ -18,6 +18,6 @@ class DetailViewModel @Inject constructor(private val videoRepository: VideoRepo
 
 	fun getFullSeriesInfo(seriesName: String): Observable<FullSeriesInfo> {
 		return if (fullSeriesInfo != null) Observable.just(fullSeriesInfo)
-		else return videoRepository.getExtendedEpisodesInfo(seriesName)
+		else return videoRepository.getExtendedEpisodesInfo(seriesName).doOnNext { fullSeriesInfo = it }
 	}
 }
