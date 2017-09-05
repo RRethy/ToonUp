@@ -30,7 +30,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		if (genres != null) onSuccess(genres!!)
 		else videoRepository.getGenres()
 				.subscribeOn(Schedulers.io())
-				.observeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
 				.retry(3)
 				.subscribe({
 					genres = it

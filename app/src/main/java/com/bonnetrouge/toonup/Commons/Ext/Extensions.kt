@@ -17,7 +17,7 @@ inline fun BaseActivity.fragmentTransaction(addToBackStack: Boolean = true, tag:
 	else supportFragmentManager.beginTransaction().swapInfo().commit()
 }
 
-inline fun String.doNotEmpty(predicate: String.() -> Unit) {
+inline fun String.notEmpty(predicate: String.() -> Unit) {
 	if (this.isNotEmpty()) this.predicate()
 }
 

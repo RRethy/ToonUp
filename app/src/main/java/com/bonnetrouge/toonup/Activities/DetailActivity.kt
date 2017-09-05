@@ -8,8 +8,10 @@ import android.content.Intent
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.bonnetrouge.toonup.Commons.Ext.DTAG
 import com.bonnetrouge.toonup.Commons.Ext.app
+import com.bonnetrouge.toonup.Commons.Ext.notEmpty
 import com.bonnetrouge.toonup.DI.Modules.DetailActivityModule
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.*
@@ -57,21 +59,38 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 		detailsRecyclerView.adapter = detailAdapter
 	}
 
+	//TODO: Use coroutines instead of wack ass logic
 	fun popularRecyclerView() {
 		if (detailAdapter.items.isEmpty()) {
-			detailViewModel.getFullSeriesInfo(intent.getStringExtra(DetailActivity.TITLE))
-					.subscribeOn(Schedulers.io())
-					.observeOn(AndroidSchedulers.mainThread())
-					.subscribe({
-						detailAdapter.items.clear()
-						if (it._embedded?.episodes != null) {
-							detailAdapter.items.addAll(it._embedded.episodes)
-							detailAdapter.notifyDataSetChanged()
-						}
-					}, {
-
-					})
+			populateFromMaze()
 		}
+	}
+
+	fun populateFromMaze() {
+		detailViewModel.getFullSeriesInfo(intent.getStringExtra(DetailActivity.TITLE))
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe({
+					detailAdapter.items.clear()
+					if (it._embedded?.episodes != null) {
+						detailAdapter.items.addAll(it._embedded.episodes)
+						detailAdapter.notifyDataSetChanged()
+					}
+					fetchBackingData()
+				}, {
+					populateFromToon()
+				})
+	}
+
+	fun populateFromToon() {
+		detailViewModel.getBasicDetails(intent.getStringExtra(DetailActivity.ID))
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.subscribe {
+					detailAdapter.items.clear()
+					detailAdapter.items.addAll(it.episode)
+					detailAdapter.notifyDataSetChanged()
+				}
 	}
 
 	fun fetchBackingData() {
@@ -91,21 +110,31 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 		errorMessage.visibility = View.GONE
 	}
 
-	override fun onRecyclerViewItemClicked(item: RVItem) {
-		if (item is ExtendedEpisodeInfo) {
-			val season = item.season?.toString() ?: "-1"
-			val episode = item.number?.toString() ?: "-1"
-			detailViewModel.basicSeriesDetails?.episode
-					?.forEach {
-						with (it.name.toLowerCase()) {
-							if (contains("episode $episode")
-									&& (contains("season $season") || (season == "1" && !contains("season")))
-									|| (contains("episode ${detailAdapter.items.indexOf(item) + 1}") && !contains("season"))) {
-								Log.d(DTAG, "${it.id} + ${it.name}")
-								return
-							}
+	fun transformIntoId(item: ExtendedEpisodeInfo): String {
+		val season = item.season?.toString() ?: "-1"
+		val episode = item.number?.toString() ?: "-1"
+		detailViewModel.basicSeriesDetails?.episode
+				?.forEach {
+					with (it.name.toLowerCase()) {
+						if (contains("episode $episode")
+								&& (contains("season $season") || (season == "1" && !contains("season")))
+								|| (contains("episode ${detailAdapter.items.indexOf(item) + 1}") && !contains("season"))) {
+							return it.id
 						}
 					}
+				}
+		return ""
+	}
+
+	override fun onRecyclerViewItemClicked(item: RVItem) {
+		val id: String
+		if (item is ExtendedEpisodeInfo) {
+			id = transformIntoId(item)
+			if (id.isNotEmpty()) Log.d(DTAG, id)//TODO: Pass to PlayerActivity
+			else Toast.makeText(this, "Dun work", Toast.LENGTH_LONG).show()
+		} else if (item is Episode) {
+			id = item.id
+			Log.d(DTAG, id)//TODO: Pass to PlayerActivity
 		}
 	}
 

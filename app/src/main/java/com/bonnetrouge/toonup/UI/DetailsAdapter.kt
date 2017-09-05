@@ -4,15 +4,13 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import com.bonnetrouge.toonup.Activities.DetailActivity
 import com.bonnetrouge.toonup.Commons.Ext.app
-import com.bonnetrouge.toonup.Commons.Ext.doNotEmpty
+import com.bonnetrouge.toonup.Commons.Ext.notEmpty
 import com.bonnetrouge.toonup.Model.Episode
 import com.bonnetrouge.toonup.Model.ExtendedEpisodeInfo
 import com.bonnetrouge.toonup.R
-import com.bumptech.glide.Glide
 import java.lang.ref.WeakReference
 
 class DetailsAdapter(detailActivity: DetailActivity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -55,14 +53,14 @@ class DetailsAdapter(detailActivity: DetailActivity) : RecyclerView.Adapter<Recy
 		fun bind(episode: ExtendedEpisodeInfo) {
 			episodeName.text = episode.name
 			with (app.applicationContext) {
-				seasonEpisodeNumber.text = "${getString(R.string.season)}${episode.season}${getString(R.string.episode)}${episode.number}${ripAdditionInfo(episode)}"
+				seasonEpisodeNumber.text = "${getString(R.string.season)}${episode.season}${getString(R.string.episode)}${episode.number}${parseAdditionInfo(episode)}"
 			}
 		}
 
-		fun ripAdditionInfo(episode: ExtendedEpisodeInfo): String {
-			episode.airtime?.doNotEmpty { return " - ${episode.airtime}" }
-			episode.airdate?.doNotEmpty { return " - ${episode.airdate}" }
-			episode.airstamp?.doNotEmpty { return " - ${episode.airstamp}" }
+		fun parseAdditionInfo(episode: ExtendedEpisodeInfo): String {
+			episode.airtime?.notEmpty { return " - ${episode.airtime}" }
+			episode.airdate?.notEmpty { return " - ${episode.airdate}" }
+			episode.airstamp?.notEmpty { return " - ${episode.airstamp}" }
 			return ""
 		}
 	}
@@ -72,7 +70,7 @@ class DetailsAdapter(detailActivity: DetailActivity) : RecyclerView.Adapter<Recy
 		val title by lazy { view.findViewById(R.id.detail_item_title) as TextView }
 
 		init {
-			//title.setOnClickListener { detailActivityWeakRef.get()?.onRecyclerViewItemClicked(items[adapterPosition]) }
+			title.setOnClickListener { detailActivityWeakRef.get()?.onRecyclerViewItemClicked(items[adapterPosition]) }
 		}
 
 		fun bind(episode: Episode) {
