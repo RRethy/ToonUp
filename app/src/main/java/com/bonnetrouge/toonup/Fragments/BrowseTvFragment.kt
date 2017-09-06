@@ -2,15 +2,18 @@ package com.bonnetrouge.toonup.Fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.GridLayoutManager
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bonnetrouge.toonup.Activities.BrowseActivity
-import com.bonnetrouge.toonup.Activities.DetailActivity
+import com.bonnetrouge.toonup.Commons.Ext.DTAG
+import com.bonnetrouge.toonup.Commons.Ext.dog
+import com.bonnetrouge.toonup.Commons.Ext.shuffle
 import com.bonnetrouge.toonup.Fragment.BaseFragment
+import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.Model.VideoGenres
@@ -21,21 +24,21 @@ import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.fragment_browse_movies.*
+import kotlinx.android.synthetic.main.fragment_browse_tv.*
 import javax.inject.Inject
 
-class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
+class BrowseTvFragment @Inject constructor(): BaseFragment() {
 
 	val browseViewModel by lazy { ViewModelProviders.of(activity).get(BrowseViewModel::class.java) }
 	val bannerListAdapter by lazy { BannerListAdapter(this) }
 
 	override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
-			= inflater?.inflate(R.layout.fragment_browse_movies, container, false)
+			= inflater?.inflate(R.layout.fragment_browse_tv, container, false)
 
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		browseMoviesRecyclerView.adapter = bannerListAdapter
-		browseMoviesRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+		tvRecyclerView.adapter = bannerListAdapter
+		tvRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 		swipeRefreshLayout.setOnRefreshListener { refreshBanners() }
 		refreshBanners()
 	}
@@ -46,19 +49,30 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 	}
 
 	fun onGenresSuccess(videoGenres: VideoGenres) {
-		browseViewModel.getAllMovies()
+		getAllSeries(videoGenres)
+	}
+
+	fun onGenresFailure() {
+		hideLoading()
+		showErroMsg()
+	}
+
+	fun getAllSeries(videoGenres: VideoGenres) {
+		browseViewModel.getAllCartoonsObservable()
 				.subscribeOn(Schedulers.io())
 				.observeOn(AndroidSchedulers.mainThread())
 				.retry(3)
-				.doFinally { hideLoading() }
+				.doFinally {
+					hideLoading()
+				}
 				.flatMap {
-					val moviesByGenre = mutableListOf<BannerModel>()
+					val seriesByGenre = mutableListOf<BannerModel>()
 					for (videoGenre in videoGenres.genres) {
-						val moviesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
-						moviesList.sortByDescending { it.rating }
-						if (moviesList.size > 0) moviesByGenre.add(BannerModel(videoGenre, moviesList))
+						val seriesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
+						seriesList.sortByDescending { it.rating }
+						if (seriesList.size > 0) seriesByGenre.add(BannerModel(videoGenre, seriesList))
 					}
-					Observable.fromArray(moviesByGenre)
+					Observable.fromArray(seriesByGenre)
 				}
 				.subscribe({
 					hideErrorMsg()
@@ -71,11 +85,6 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 				}, {
 					showErroMsg()
 				})
-	}
-
-	fun onGenresFailure() {
-		hideLoading()
-		showErroMsg()
 	}
 
 	fun showErroMsg() {

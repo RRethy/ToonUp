@@ -1,16 +1,28 @@
 package com.bonnetrouge.toonup.Data
 
 import com.bonnetrouge.toonup.API.StreamingApiService
+import com.bonnetrouge.toonup.API.TvMazeApiService
 
-class VideoRepository(private val apiService: StreamingApiService) {
+class VideoRepository(private val streamingApiService: StreamingApiService, private val tvInfoApiService: TvMazeApiService) {
 
-	fun getPopularCartoons() = apiService.getPopularCartoons()
+	fun getGenres() = streamingApiService.getGenres()
 
-	fun getPopularMovies() = apiService.getPopularMovies()
+	fun getPopularCartoons() = streamingApiService.getPopularCartoons()
 
-	fun getDetails(seriesId: String) = apiService.getDetails(seriesId)
+	fun getAllCartoons() = streamingApiService.getAllCartoons()
 
-	fun getFullStreamingUrls(episodeId: String) = apiService.getDescriptiveStreamingUrls(episodeId)
+	fun getPopularMovies() = streamingApiService.getPopularMovies()
 
-	fun getRawStreamingUrls(episodeId: String) = apiService.getRawStreamingUrls(episodeId)
+	fun getAllMovies() = streamingApiService.getAllMovies()
+
+	fun getDetails(seriesId: String) = streamingApiService.getDetails(seriesId)
+
+	fun getFullStreamingUrls(episodeId: String) = streamingApiService.getDescriptiveStreamingUrls(episodeId)
+
+	fun getRawStreamingUrls(episodeId: String) = streamingApiService.getRawStreamingUrls(episodeId)
+
+
+	fun getExtendedSeriesInfo(seriesName: String) = tvInfoApiService.getExtendedSeriesInfo(seriesName)
+
+	fun getExtendedEpisodesInfo(seriesName: String) = tvInfoApiService.getExtendedEpisodesInfo(seriesName)
 }

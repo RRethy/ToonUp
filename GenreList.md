@@ -1,0 +1,57 @@
+# Genres
+- Comedy
+- Action
+- Adventure
+- Animation
+- Sci-Fi
+- Family
+- Fantasy
+- Drama
+- Shounen
+- Romance
+- Supernatural
+- Mecha
+- Mystery
+- Magic
+- School
+- Ecchi
+- Horror
+- Super Power
+- Military
+- Short
+- Slice of Life
+- Historical
+- Psychological
+- Seinen
+- Shoujo
+- Harem
+- Space
+- Martial Arts
+- Demons
+- Kids
+- Music
+- Thriller
+- Police
+- Sports
+- Samurai
+- Parody
+- Musical
+- Science Fiction
+- Game
+- Vampire
+- Crime
+- Tournament
+- Movie
+- Super Hero
+- Children
+- Sport
+- History
+- Cartoon
+- Shoujo Ai
+- Josei
+- Documentary
+- Supernat
+- Yuri
+- Comics
+- Vomics
+- Cars
