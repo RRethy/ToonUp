@@ -57,7 +57,13 @@ class PlayerActivity : BaseActivity() {
 
 	override fun onStop() {
 		super.onStop()
+        player?.playWhenReady = false
 	}
+
+    override fun onStart() {
+        super.onStart()
+		player?.playWhenReady = true
+    }
 
     override fun onDestroy() {
         super.onDestroy()
