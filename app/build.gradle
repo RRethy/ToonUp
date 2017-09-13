@@ -71,7 +71,11 @@ dependencies {
     compile 'com.google.android.exoplayer:exoplayer-core:r2.4.4'
     compile 'com.google.android.exoplayer:exoplayer-ui:r2.4.4'
 
+    // Butter knife for kotlin, good for ViewHolders
     compile 'com.jakewharton:kotterknife:0.1.0-SNAPSHOT'
+
+    // Best library ever: Kotlin Coroutines
+    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.18"
 }
 repositories {
     maven {

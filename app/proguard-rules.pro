@@ -39,3 +39,6 @@
     @com.squareup.moshi.* <methods>;
 }
 -dontwarn com.squareup.okhttp.**
+-keepclassmembernames class kotlinx.** {
+    volatile <fields>;
+}
