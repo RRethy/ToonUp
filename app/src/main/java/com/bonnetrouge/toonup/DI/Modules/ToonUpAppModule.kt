@@ -33,10 +33,12 @@ class ToonUpAppModule(val app: ToonUpApp) {
     @Provides
     @Singleton
     fun provideStreamingApiService(): StreamingApiService {
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BODY
         val appVersion = "8.0"
         val okHttpClient = OkHttpClient.Builder().addInterceptor {
             it.proceed(it.request().newBuilder().addHeader("App-Version", appVersion).build())
-        }.build()
+        }.addInterceptor(logging).build()
         val retrofit = UrbanFitGenerator.generate(okHttpClient)
 
         return retrofit.create(StreamingApiService::class.java)
@@ -47,12 +49,12 @@ class ToonUpAppModule(val app: ToonUpApp) {
     fun provideTvMazeApiService(): TvMazeApiService {
 		val logging = HttpLoggingInterceptor()
 		logging.level = HttpLoggingInterceptor.Level.BODY
-		val client = OkHttpClient.Builder()
+		val okHttpClient = OkHttpClient.Builder()
 				.addInterceptor(logging)
 				.build()
 		val retrofit = Retrofit.Builder()
 				.baseUrl("http://api.tvmaze.com")
-				.client(client)
+				.client(okHttpClient)
 				.addConverterFactory(MoshiConverterFactory.create())
 				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
 				.build()

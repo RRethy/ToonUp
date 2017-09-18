@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Toast
 import com.bonnetrouge.toonup.Commons.Ext.DTAG
 import com.bonnetrouge.toonup.Commons.Ext.app
+import com.bonnetrouge.toonup.Commons.Ext.dog
 import com.bonnetrouge.toonup.Commons.Ext.notEmpty
 import com.bonnetrouge.toonup.DI.Modules.DetailActivityModule
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
@@ -111,6 +112,7 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 	}
 
 	fun transformIntoId(item: ExtendedEpisodeInfo): String {
+		dog("Item clicked: $item")
 		val season = item.season?.toString() ?: "-1"
 		val episode = item.number?.toString() ?: "-1"
 		detailViewModel.basicSeriesDetails?.episode

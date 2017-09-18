@@ -13,12 +13,12 @@ class PlayerViewModel @Inject constructor(private val videoRepository: VideoRepo
 	private var rawStreamingUrls: List<List<String>>? = null
 
 	fun getFullStreamingUrls(episodeId: String): Observable<List<List<DescriptiveStreamingUrl>>> {
-		if (fullStreamingUrls != null) return Observable.just(fullStreamingUrls)
-		else return videoRepository.getFullStreamingUrls(episodeId).doOnNext { fullStreamingUrls = it }
+        return if (fullStreamingUrls != null) Observable.just(fullStreamingUrls)
+        else videoRepository.getFullStreamingUrls(episodeId).doOnNext { fullStreamingUrls = it }
 	}
 
 	fun getRawStreamingUrls(episodeId: String): Observable<List<List<String>>> {
-		if (rawStreamingUrls != null) return Observable.just(rawStreamingUrls)
-		else return videoRepository.getRawStreamingUrls(episodeId).doOnNext { rawStreamingUrls = it }
+        return if (rawStreamingUrls != null) Observable.just(rawStreamingUrls)
+        else videoRepository.getRawStreamingUrls(episodeId).doOnNext { rawStreamingUrls = it }
 	}
 }

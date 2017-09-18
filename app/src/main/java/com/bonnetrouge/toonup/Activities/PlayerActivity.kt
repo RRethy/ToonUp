@@ -6,19 +6,20 @@ import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import com.bonnetrouge.toonup.Commons.Ext.app
+import com.bonnetrouge.toonup.Commons.Ext.dog
 import com.bonnetrouge.toonup.DI.Modules.PlayerActivityModule
 import com.bonnetrouge.toonup.Model.DescriptiveStreamingUrl
 
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.PlayerViewModel
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.PlayerViewModelFactory
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
-import com.google.android.exoplayer2.source.ConcatenatingMediaSource
-import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.*
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DataSource
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
@@ -35,6 +36,10 @@ class PlayerActivity : BaseActivity() {
 	@Inject
 	lateinit var playerViewModelFactory: PlayerViewModelFactory
 	lateinit var playerViewModel: PlayerViewModel
+	lateinit var trackSelector: DefaultTrackSelector
+    lateinit var dataSourceFactory: DefaultDataSourceFactory
+    lateinit var extractorFactory: DefaultExtractorsFactory
+    lateinit var dynamicMediaSource: DynamicConcatenatingMediaSource
 
 	companion object {
 
@@ -70,7 +75,45 @@ class PlayerActivity : BaseActivity() {
         player?.release()
     }
 
+    fun test() {
+        dog("jj")
+    }
+
 	fun setupVideoPlayer(streamingUrlsObservable: Observable<List<List<DescriptiveStreamingUrl>>>?) {
+        trackSelector = DefaultTrackSelector()
+        player = ExoPlayerFactory.newSimpleInstance(this, trackSelector)
+        trackSelector.parameters
+        player?.addListener(object : Player.EventListener {
+            override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) {
+            }
+
+            override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) {
+            }
+
+            override fun onPlayerError(error: ExoPlaybackException?) {
+                dog("quman")
+                test()
+            }
+
+            override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+            }
+
+            override fun onLoadingChanged(isLoading: Boolean) {
+            }
+
+            override fun onPositionDiscontinuity() {
+            }
+
+            override fun onRepeatModeChanged(repeatMode: Int) {
+            }
+
+            override fun onTimelineChanged(timeline: Timeline?, manifest: Any?) {
+            }
+
+        })
+        exoPlayerView.player = player
+        dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "ToonUp"))
+        extractorFactory = DefaultExtractorsFactory()
 		streamingUrlsObservable?.observeOn(AndroidSchedulers.mainThread())?.subscribe(
 				{
 					configExoplayer(it)
@@ -80,23 +123,41 @@ class PlayerActivity : BaseActivity() {
 	fun getStreamingUrls(id: String): Observable<List<List<DescriptiveStreamingUrl>>>? {
 		return playerViewModel.getFullStreamingUrls(id)
 				.subscribeOn(Schedulers.io())
-
 	}
 
-	fun configExoplayer(streamingUrls: List<List<DescriptiveStreamingUrl>>) {
-		player = ExoPlayerFactory.newSimpleInstance(this, DefaultTrackSelector())
-		exoPlayerView.player = player
-		val dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "ToonUp"))
-		val extractorFactory = DefaultExtractorsFactory()
-
-		val firstSource = ExtractorMediaSource(
-				Uri.parse(streamingUrls[0][0].link),
-				dataSourceFactory,
-				extractorFactory,
-				null,
-				null)
-		val videoSource = ConcatenatingMediaSource(firstSource)
-		player?.prepare(videoSource)
+	fun configExoplayer(streamingUrls: List<List<DescriptiveStreamingUrl>?>) {
+        dynamicMediaSource = DynamicConcatenatingMediaSource()
+		for (streamingUrlObject in streamingUrls) {
+			if (streamingUrlObject != null) {
+                val mediaSource = ExtractorMediaSource(
+                        Uri.parse(streamingUrlObject[0].link),
+                        dataSourceFactory,
+                        extractorFactory,
+                        null,
+                        null
+                )
+                val mediaSource3 = ExtractorMediaSource(
+                        Uri.parse(streamingUrlObject[0].link),
+                        dataSourceFactory,
+                        extractorFactory,
+                        null,
+                        null
+                )
+                val mediaSource2 = ExtractorMediaSource(
+                        Uri.parse("a"),
+                        dataSourceFactory,
+                        extractorFactory,
+                        null,
+                        null
+                )
+                dynamicMediaSource.addMediaSource(mediaSource)
+                dynamicMediaSource.addMediaSource(mediaSource3)
+                dynamicMediaSource.addMediaSource(mediaSource2)
+            } else {
+                dog("Api fuckup when getting streaming link")
+            }
+        }
+		player?.prepare(dynamicMediaSource)
 		player?.playWhenReady = true
 	}
 }
