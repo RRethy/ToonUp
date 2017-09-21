@@ -3,7 +3,6 @@ package com.bonnetrouge.toonup.Activities
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import com.bonnetrouge.toonup.Commons.Ext.app
-import com.bonnetrouge.toonup.Commons.Ext.dog
 import com.bonnetrouge.toonup.Commons.Ext.fragmentTransaction
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
 import com.bonnetrouge.toonup.Fragments.BrowseTvFragment
@@ -14,9 +13,8 @@ import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.BrowseViewModelFactory
 import kotlinx.android.synthetic.main.activity_browse.*
 import javax.inject.Inject
-import com.bonnetrouge.toonup.R.id.toolbar
-import android.support.design.widget.AppBarLayout
-import android.support.design.widget.CollapsingToolbarLayout
+import com.bonnetrouge.toonup.Commons.Ext.doElse
+import com.bonnetrouge.toonup.Commons.Ext.dog
 import com.bonnetrouge.toonup.Fragments.BrowseMoviesFragment
 
 
@@ -31,12 +29,16 @@ class BrowseActivity : BaseActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_browse)
-		app.component.plus(BrowseActivityModule()).inject(this)
-		browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
-		browseViewModel.prefetchGenres()
-		setSupportActionBar(toolbar)
-		fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) }
+		if (savedInstanceState == null) {
+            setContentView(R.layout.activity_browse)
+            app.component.plus(BrowseActivityModule()).inject(this)
+            browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
+            browseViewModel.prefetchGenres()
+            setSupportActionBar(toolbar)
+            fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) }
+        } else {
+			dog("quman")
+        }
 	}
 
 	override fun onBackPressed() {
