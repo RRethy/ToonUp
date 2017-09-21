@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import butterknife.bindView
+import com.bonnetrouge.toonup.Commons.bindView
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R

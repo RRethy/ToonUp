@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import butterknife.bindView
 import com.bonnetrouge.toonup.Activities.DetailActivity
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.Ext.notEmpty
+import com.bonnetrouge.toonup.Commons.bindView
 import com.bonnetrouge.toonup.Model.Episode
 import com.bonnetrouge.toonup.Model.ExtendedEpisodeInfo
 import com.bonnetrouge.toonup.R

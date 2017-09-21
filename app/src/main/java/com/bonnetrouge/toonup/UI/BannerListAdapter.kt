@@ -10,9 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.TextView
-import butterknife.bindView
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.GravitySnapHelper
+import com.bonnetrouge.toonup.Commons.bindView
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.R
