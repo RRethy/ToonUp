@@ -3,6 +3,7 @@ package com.bonnetrouge.toonup.Fragments
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -34,6 +35,7 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		(activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		browseMoviesRecyclerView.adapter = bannerListAdapter
 		browseMoviesRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 		swipeRefreshLayout.setOnRefreshListener { refreshBanners() }

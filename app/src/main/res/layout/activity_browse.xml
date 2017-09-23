@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/rootBackground"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:background="@color/colorAccent">
+	android:background="@drawable/gradient_animation_list">
 
-	<android.support.design.widget.AppBarLayout
+	<android.support.v7.widget.Toolbar
+		android:id="@+id/toolbar"
+		android:background="@color/dark_transparent"
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
-		<android.support.v7.widget.Toolbar
-			android:id="@+id/toolbar"
-			android:layout_width="match_parent"
-			android:layout_height="?attr/actionBarSize"/>
-
-	</android.support.design.widget.AppBarLayout>
+		android:layout_height="?attr/actionBarSize"/>
 	<FrameLayout
 		android:id="@+id/browseFragmentContainer"
 		android:layout_width="match_parent"

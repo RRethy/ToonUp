@@ -59,3 +59,11 @@ fun <T> T?.doElse(notNullAction: () -> Unit, nullAction: () -> Unit) {
         nullAction()
     }
 }
+
+fun <T> withNotNull(variable: T?, action: T.() -> Unit) {
+    variable?.let { variable.action() }
+}
+
+fun <T> T?.doWith(action: T.() -> Unit) {
+    this?.let { this.action() }
+}
