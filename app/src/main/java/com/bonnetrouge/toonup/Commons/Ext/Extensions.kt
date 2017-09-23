@@ -17,8 +17,8 @@ inline fun BaseActivity.fragmentTransaction(addToBackStack: Boolean = true, tag:
 	else supportFragmentManager.beginTransaction().swapInfo().commit()
 }
 
-inline fun String.notEmpty(predicate: String.() -> Unit) {
-	if (this.isNotEmpty()) this.predicate()
+inline fun String.notEmpty(action: String.() -> Unit) {
+	if (this.isNotEmpty()) this.action()
 }
 
 fun <T> MutableList<T>.shuffle() {
@@ -50,4 +50,20 @@ fun getDisplayWidth(): Int {
 
 fun getDisplayHeight(): Int {
     return app.resources.displayMetrics.heightPixels
+}
+
+fun <T> T?.doElse(notNullAction: () -> Unit, nullAction: () -> Unit) {
+    if (this != null) {
+        notNullAction()
+    } else {
+        nullAction()
+    }
+}
+
+fun <T> withNotNull(variable: T?, action: T.() -> Unit) {
+    variable?.let { variable.action() }
+}
+
+fun <T> T?.doWith(action: T.() -> Unit) {
+    this?.let { this.action() }
 }

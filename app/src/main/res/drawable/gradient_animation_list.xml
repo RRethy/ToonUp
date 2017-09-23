@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animation-list xmlns:android="http://schemas.android.com/apk/res/android">
+	<item
+		android:drawable="@drawable/purple_teal_gradient"
+		android:duration="7500" />
+	<item
+		android:drawable="@drawable/red_violet_gradient"
+		android:duration="7500" />
+	<item
+		android:drawable="@drawable/violet_red_gradient"
+		android:duration="7500" />
+</animation-list>

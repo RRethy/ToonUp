@@ -34,8 +34,7 @@ import javax.inject.Inject
 class PlayerActivity : BaseActivity() {
 
 	var player: SimpleExoPlayer? = null
-	@Inject
-	lateinit var playerViewModelFactory: PlayerViewModelFactory
+	@Inject lateinit var playerViewModelFactory: PlayerViewModelFactory
 	lateinit var playerViewModel: PlayerViewModel
 	lateinit var trackSelector: DefaultTrackSelector
     lateinit var dataSourceFactory: DefaultDataSourceFactory
