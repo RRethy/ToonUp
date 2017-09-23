@@ -2,11 +2,11 @@
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android">
 	<item
 		android:drawable="@drawable/purple_teal_gradient"
-		android:duration="7500" />
+		android:duration="4000" />
 	<item
 		android:drawable="@drawable/red_violet_gradient"
-		android:duration="7500" />
+		android:duration="4000" />
 	<item
 		android:drawable="@drawable/violet_red_gradient"
-		android:duration="7500" />
+		android:duration="4000" />
 </animation-list>
