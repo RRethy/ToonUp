@@ -11,13 +11,16 @@
 		android:label="@string/app_name"
 		android:supportsRtl="true"
 		android:theme="@style/Theme.AppCompat.NoActionBar">
-		<activity android:name=".Activities.BrowseActivity">
+		<activity android:name=".Activities.SplashActivity"
+				  android:theme="@style/SplashTheme">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
+		<activity android:name=".Activities.BrowseActivity"
+			android:theme="@style/Theme.AppCompat.NoActionBar"/>
 		<activity
 			android:name=".Activities.DetailActivity"
 			android:theme="@style/Theme.AppCompat.NoActionBar">
@@ -26,5 +29,4 @@
 			android:screenOrientation="landscape">
 		</activity>
 	</application>
-
 </manifest>

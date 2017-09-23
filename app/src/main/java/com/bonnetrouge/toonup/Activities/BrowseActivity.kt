@@ -1,6 +1,8 @@
 package com.bonnetrouge.toonup.Activities
 
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
+import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.os.PersistableBundle
@@ -28,6 +30,13 @@ class BrowseActivity : BaseActivity() {
 
 	@Inject lateinit var browseViewModelFactory: BrowseViewModelFactory
 	lateinit var browseViewModel: BrowseViewModel
+
+	companion object {
+        fun navigate(context: Context) {
+			val intent = Intent(context, BrowseActivity::class.java)
+			context.startActivity(intent)
+		}
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
