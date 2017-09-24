@@ -4,48 +4,39 @@
 			  android:orientation="vertical"
 			  android:layout_width="match_parent"
 			  android:layout_height="match_parent">
-	<RelativeLayout
+	<LinearLayout
 		android:id="@+id/tvShowsChooserContainer"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="1"
-		android:layout_margin="24dp">
-
+		android:layout_weight="1">
 		<ImageView
 			android:id="@+id/tvShowsIcon"
 			android:layout_width="96dp"
 			android:layout_height="96dp"
-			app:srcCompat="@drawable/ic_tv_shows"
-			android:layout_centerVertical="true"
-			android:layout_centerHorizontal="true"/>
+			app:srcCompat="@drawable/ic_tv_shows" />
 		<TextView
 			android:id="@+id/tvShowsText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="@string/tv_shows"
-			android:layout_below="@id/tvShowsIcon"
 			android:gravity="center_horizontal"/>
-	</RelativeLayout>
-	<RelativeLayout
+	</LinearLayout>
+	<LinearLayout
 		android:id="@+id/moviesChooserContainer"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="1"
-		android:layout_margin="24dp">
+		android:layout_weight="1">
 		<ImageView
 			android:id="@+id/moviesIcon"
 			android:layout_width="96dp"
 			android:layout_height="96dp"
-			app:srcCompat="@drawable/ic_movie_category"
-			android:layout_centerVertical="true"
-			android:layout_centerHorizontal="true"/>
+			app:srcCompat="@drawable/ic_movie_category" />
 		<TextView
 			android:id="@+id/moviesText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="@string/movies"
-			android:layout_below="@id/moviesIcon"
+			android:layout_gravity=""
 			android:gravity="center_horizontal"/>
-	</RelativeLayout>
-
+	</LinearLayout>
 </LinearLayout>

@@ -45,8 +45,8 @@ class BrowseActivity : BaseActivity() {
         browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
         browseViewModel.prefetchGenres()
         setSupportActionBar(toolbar)
-        savedInstanceState?.let { fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) } }
-		with(backgroundAnimation) {
+        savedInstanceState.letNull { fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) } }
+        with(backgroundAnimation) {
             setEnterFadeDuration(1000)
             setExitFadeDuration(4000)
         }
