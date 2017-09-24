@@ -67,3 +67,7 @@ fun <T> withNotNull(variable: T?, action: T.() -> Unit) {
 fun <T> T?.doWith(action: T.() -> Unit) {
     this?.let { this.action() }
 }
+
+fun <T> T?.letNull(action: () -> Unit) {
+    if (this == null) action()
+}
