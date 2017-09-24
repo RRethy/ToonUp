@@ -8,35 +8,77 @@
 		android:id="@+id/tvShowsChooserContainer"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="1">
+		android:layout_weight="1"
+		android:layout_marginStart="24dp"
+		android:layout_marginEnd="24dp"
+		android:layout_marginTop="12dp"
+		android:layout_marginBottom="12dp"
+		android:background="@drawable/border">
 		<ImageView
 			android:id="@+id/tvShowsIcon"
 			android:layout_width="96dp"
 			android:layout_height="96dp"
+			android:layout_gravity="center"
+			android:layout_margin="8dp"
 			app:srcCompat="@drawable/ic_tv_shows" />
 		<TextView
 			android:id="@+id/tvShowsText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="@string/tv_shows"
+			android:layout_gravity="center"
 			android:gravity="center_horizontal"/>
 	</LinearLayout>
 	<LinearLayout
 		android:id="@+id/moviesChooserContainer"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
-		android:layout_weight="1">
+		android:layout_weight="1"
+		android:layout_marginStart="24dp"
+		android:layout_marginEnd="24dp"
+		android:layout_marginTop="12dp"
+		android:layout_marginBottom="12dp"
+		android:background="@drawable/border">
 		<ImageView
 			android:id="@+id/moviesIcon"
 			android:layout_width="96dp"
 			android:layout_height="96dp"
+			android:layout_gravity="center"
+			android:layout_margin="8dp"
 			app:srcCompat="@drawable/ic_movie_category" />
 		<TextView
 			android:id="@+id/moviesText"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:text="@string/movies"
-			android:layout_gravity=""
+			android:layout_margin="16dp"
+			android:layout_gravity="center"
+			android:gravity="center_horizontal"/>
+	</LinearLayout>
+	<LinearLayout
+		android:id="@+id/animeChooserContainer"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:layout_marginStart="24dp"
+		android:layout_marginEnd="24dp"
+		android:layout_marginTop="12dp"
+		android:layout_marginBottom="12dp"
+		android:background="@drawable/border">
+		<ImageView
+			android:id="@+id/animeIcon"
+			android:layout_width="96dp"
+			android:layout_height="96dp"
+			android:layout_gravity="center"
+			android:layout_margin="8dp"
+			app:srcCompat="@drawable/ic_anime_smile" />
+		<TextView
+			android:id="@+id/animeText"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="@string/anime"
+			android:layout_margin="8dp"
+			android:layout_gravity="center"
 			android:gravity="center_horizontal"/>
 	</LinearLayout>
 </LinearLayout>
