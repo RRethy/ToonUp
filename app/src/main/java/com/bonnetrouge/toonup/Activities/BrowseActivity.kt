@@ -75,6 +75,10 @@ class BrowseActivity : BaseActivity() {
 		fragmentTransaction { replace(browseFragmentContainer.id, browseMoviesFragment) }
 	}
 
+/*	fun navigateAnime() {
+        fragmentTransaction { replace(browseFragmentContainer.id, ) }
+	}*/
+
 	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo) {
 		DetailActivity.navigate(this, basicSeriesInfo)
 	}
