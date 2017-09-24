@@ -60,30 +60,27 @@ class BrowseTvFragment @Inject constructor(): BaseFragment() {
 
 	fun getAllSeries(videoGenres: VideoGenres) {
 		browseViewModel.getAllCartoonsObservable()
-				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
 				.retry(3)
-				.doFinally {
-					hideLoading()
-				}
-				.flatMap {
+				.map {
 					val seriesByGenre = mutableListOf<BannerModel>()
 					for (videoGenre in videoGenres.genres) {
 						val seriesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
 						seriesList.sortByDescending { it.rating }
 						if (seriesList.size > 0) seriesByGenre.add(BannerModel(videoGenre, seriesList))
 					}
-					Observable.fromArray(seriesByGenre)
+                    seriesByGenre
 				}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe({
+					hideLoading()
 					hideErrorMsg()
-					for (bannerModel in it) {
-						with (bannerListAdapter.banners) {
-							add(bannerModel)
-							bannerListAdapter.notifyItemInserted(size - 1)
-						}
-					}
+					swipeRefreshLayout.postDelayed({
+						bannerListAdapter.banners.addAll(it)
+						bannerListAdapter.notifyDataSetChanged()
+					}, 150)
 				}, {
+					hideLoading()
 					showErroMsg()
 				})
 	}

@@ -49,28 +49,27 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 
 	fun onGenresSuccess(videoGenres: VideoGenres) {
 		browseViewModel.getAllMovies()
-				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
 				.retry(3)
-				.doFinally { hideLoading() }
-				.flatMap {
+				.map {
 					val moviesByGenre = mutableListOf<BannerModel>()
 					for (videoGenre in videoGenres.genres) {
 						val moviesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
 						moviesList.sortByDescending { it.rating }
 						if (moviesList.size > 0) moviesByGenre.add(BannerModel(videoGenre, moviesList))
 					}
-					Observable.fromArray(moviesByGenre)
+                    moviesByGenre
 				}
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe({
+					hideLoading()
 					hideErrorMsg()
-					for (bannerModel in it) {
-						with (bannerListAdapter.banners) {
-							add(bannerModel)
-							bannerListAdapter.notifyItemInserted(size - 1)
-						}
-					}
+					swipeRefreshLayout.postDelayed({
+                        bannerListAdapter.banners.addAll(it)
+						bannerListAdapter.notifyDataSetChanged()
+					}, 150)
 				}, {
+					hideLoading()
 					showErroMsg()
 				})
 	}
