@@ -42,65 +42,26 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 
 	fun refreshBanners() {
 		showLoading()
-		browseViewModel.ensureGenresNotNull( { onGenresSuccess(it) }, { onGenresFailure() } )
+		browseViewModel.fetchMovies({
+			this.subscribe({
+				hideLoading()
+				hideErrorMsg()
+				swipeRefreshLayout.postDelayed({
+					bannerListAdapter.banners.addAll(it)
+					bannerListAdapter.notifyDataSetChanged()
+				}, 150)
+			}, {
+				onNetworkError()
+			})
+		}, {
+			onNetworkError()
+		})
 	}
 
-	fun onGenresSuccess(videoGenres: VideoGenres) {
-		populateBanners(videoGenres)
-	}
-
-	fun onGenresFailure() {
+	fun onNetworkError() {
 		hideLoading()
 		showErroMsg()
 	}
-
-	fun populateBanners(videoGenres: VideoGenres) {
-		Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
-				getAllMoviesObservable(videoGenres),
-				getPopularMoviesObservable(),
-				io.reactivex.functions.BiFunction {
-					allMovies, popularMovies ->
-					val list = mutableListOf<BannerModel>()
-					list.add(popularMovies)
-					list.addAll(allMovies)
-					list
-				})
-				.subscribe({
-					hideLoading()
-					hideErrorMsg()
-					swipeRefreshLayout.postDelayed({
-						bannerListAdapter.banners.addAll(it)
-						bannerListAdapter.notifyDataSetChanged()
-					}, 150)
-				}, {
-					hideLoading()
-					showErroMsg()
-				})
-	}
-
-	fun getAllMoviesObservable(videoGenres: VideoGenres) =
-			browseViewModel.getAllMovies()
-					.retry(3)
-					.map {
-						val moviesByGenre = mutableListOf<BannerModel>()
-						for (videoGenre in videoGenres.genres) {
-							val moviesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
-							moviesList.sortByDescending { it.rating }
-							if (moviesList.size > 0) moviesByGenre.add(BannerModel(videoGenre, moviesList))
-						}
-						moviesByGenre
-					}
-					.subscribeOn(Schedulers.io())
-					.observeOn(AndroidSchedulers.mainThread())
-
-	fun getPopularMoviesObservable() =
-			browseViewModel.getPopularMovies()
-					.retry(3)
-					.map {
-						BannerModel(resString(R.string.popular), it)
-					}
-					.subscribeOn(Schedulers.io())
-					.observeOn(AndroidSchedulers.mainThread())
 
 	fun showErroMsg() {
 		errorMessage?.visibility = View.VISIBLE

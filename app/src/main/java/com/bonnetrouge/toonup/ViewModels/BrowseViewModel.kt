@@ -17,8 +17,8 @@ import javax.inject.Inject
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository): ViewModel() {
 
 	private var cartoons: MutableList<BannerModel>? = null
-
 	private var movies: MutableList<BannerModel>? = null
+    private var animes: MutableList<BannerModel>? = null
 	private var allMovies: List<BasicSeriesInfo>? = null
 	private var popularMovies: List<BasicSeriesInfo>? = null
 
@@ -36,8 +36,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 				val observable = Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
 						getAllCartoons(it),
 						getPopularCartoons(),
-						BiFunction {
-							allSeries, popularCartoons ->
+						BiFunction { allSeries, popularCartoons ->
 							val list = mutableListOf<BannerModel>()
 							list.add(popularCartoons)
 							list.addAll(allSeries)
@@ -77,15 +76,51 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 	//endregion
 
 	//region Movies
-	fun getAllMovies(): Observable<List<BasicSeriesInfo>> {
-		return if (allMovies != null) Observable.just(allMovies)
-		else videoRepository.getAllMovies().doOnNext { allMovies = it }
+	fun fetchMovies(subscription: Observable<MutableList<BannerModel>>.() -> Unit, error: () -> Unit) {
+		ensureGenresNotNull({
+			if (movies != null) {
+				Observable.just(movies!!).subscription()
+			} else {
+				val observable = Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
+						getAllMovies(it),
+						getPopularMovies(),
+						BiFunction { allMovies, popularMovies ->
+							val list = mutableListOf<BannerModel>()
+							list.add(popularMovies)
+							list.addAll(allMovies)
+							list
+						}
+				).doOnNext { movies = it }
+				observable.subscription()
+			}
+		}, {
+			error()
+		})
 	}
 
-	fun getPopularMovies(): Observable<List<BasicSeriesInfo>> {
-		return if (popularMovies != null) Observable.just(popularMovies)
-		else videoRepository.getPopularMovies().doOnNext { popularMovies = null }
-	}
+	fun getAllMovies(videoGenres: VideoGenres) =
+			videoRepository.getAllMovies()
+					.retry(3)
+					.map {
+						val moviesByGenre = mutableListOf<BannerModel>()
+						for (videoGenre in videoGenres.genres) {
+							val moviesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
+							moviesList.sortByDescending { it.rating }
+							if (moviesList.size > 0) moviesByGenre.add(BannerModel(videoGenre, moviesList))
+						}
+						moviesByGenre
+					}
+					.subscribeOn(Schedulers.io())
+					.observeOn(AndroidSchedulers.mainThread())
+
+	fun getPopularMovies() =
+			videoRepository.getPopularMovies()
+					.retry(3)
+					.map {
+						BannerModel(resString(R.string.popular), it)
+					}
+					.subscribeOn(Schedulers.io())
+					.observeOn(AndroidSchedulers.mainThread())
 	//endregion
 
     //region Anime
