@@ -42,65 +42,26 @@ class BrowseAnimeFragment @Inject constructor(): BaseFragment() {
 
     fun refreshBanners() {
         showLoading()
-        browseViewModel.ensureGenresNotNull( { onGenresSuccess(it) }, { onGenresFailure() } )
+        browseViewModel.fetchAnime({
+            this.subscribe({
+                hideLoading()
+                hideErrorMsg()
+                swipeRefreshLayout.postDelayed({
+                    bannerListAdapter.banners.addAll(it)
+                    bannerListAdapter.notifyDataSetChanged()
+                }, 150)
+            }, {
+                onNetworkError()
+            })
+        }, {
+            onNetworkError()
+        })
     }
 
-    fun onGenresSuccess(videoGenres: VideoGenres) {
-        populateBanners(videoGenres)
-    }
-
-    fun onGenresFailure() {
+    fun onNetworkError() {
         hideLoading()
         showErroMsg()
     }
-
-    fun populateBanners(videoGenres: VideoGenres) {
-        Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
-                getAllMoviesObservable(videoGenres),
-                getPopularMoviesObservable(),
-                io.reactivex.functions.BiFunction {
-                    allAnime, popularAnime ->
-                    val list = mutableListOf<BannerModel>()
-                    list.add(popularAnime)
-                    list.addAll(allAnime)
-                    list
-                })
-                .subscribe({
-                    hideLoading()
-                    hideErrorMsg()
-                    swipeRefreshLayout.postDelayed({
-                        bannerListAdapter.banners.addAll(it)
-                        bannerListAdapter.notifyDataSetChanged()
-                    }, 150)
-                }, {
-                    hideLoading()
-                    showErroMsg()
-                })
-    }
-
-    fun getAllMoviesObservable(videoGenres: VideoGenres) =
-            browseViewModel.getAllAnime()
-                    .retry(3)
-                    .map {
-                        val animeByGenre = mutableListOf<BannerModel>()
-                        for (videoGenre in videoGenres.genres) {
-                            val animeList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
-                            animeList.sortByDescending { it.rating }
-                            if (animeList.size > 0) animeByGenre.add(BannerModel(videoGenre, animeList))
-                        }
-                        animeByGenre
-                    }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-
-    fun getPopularMoviesObservable() =
-            browseViewModel.getPopularAnime()
-                    .retry(3)
-                    .map {
-                        BannerModel(resString(R.string.popular), it)
-                    }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
 
     fun showErroMsg() {
         errorMessage?.visibility = View.VISIBLE

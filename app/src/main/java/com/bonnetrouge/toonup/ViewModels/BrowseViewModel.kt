@@ -19,11 +19,6 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 	private var cartoons: MutableList<BannerModel>? = null
 	private var movies: MutableList<BannerModel>? = null
     private var animes: MutableList<BannerModel>? = null
-	private var allMovies: List<BasicSeriesInfo>? = null
-	private var popularMovies: List<BasicSeriesInfo>? = null
-
-	private var allAnime: List<BasicSeriesInfo>? = null
-	private var popularAnime: List<BasicSeriesInfo>? = null
 
 	var genres: VideoGenres? = null
 
@@ -124,15 +119,51 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 	//endregion
 
     //region Anime
-	fun getAllAnime(): Observable<List<BasicSeriesInfo>> {
-		return if (allAnime != null) Observable.just(allAnime)
-		else videoRepository.getAllAnime().doOnNext { allAnime = it }
+	fun fetchAnime(subscription: Observable<MutableList<BannerModel>>.() -> Unit, error: () -> Unit) {
+		ensureGenresNotNull({
+			if (animes != null) {
+				Observable.just(animes!!).subscription()
+			} else {
+				val observable = Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
+						getAllAnime(it),
+						getPopularAnime(),
+						BiFunction { allAnime, popularAnime ->
+							val list = mutableListOf<BannerModel>()
+							list.add(popularAnime)
+							list.addAll(allAnime)
+							list
+						}
+				).doOnNext { animes = it }
+				observable.subscription()
+			}
+		}, {
+			error()
+		})
 	}
 
-	fun getPopularAnime(): Observable<List<BasicSeriesInfo>> {
-		return if (popularAnime != null) Observable.just(popularAnime)
-		else videoRepository.getPopularAnime().doOnNext { popularAnime = null }
-	}
+	fun getAllAnime(videoGenres: VideoGenres) =
+			videoRepository.getAllMovies()
+					.retry(3)
+					.map {
+						val animeByGenre = mutableListOf<BannerModel>()
+						for (videoGenre in videoGenres.genres) {
+							val animeList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
+							animeList.sortByDescending { it.rating }
+							if (animeList.size > 0) animeByGenre.add(BannerModel(videoGenre, animeList))
+						}
+						animeByGenre
+					}
+					.subscribeOn(Schedulers.io())
+					.observeOn(AndroidSchedulers.mainThread())
+
+	fun getPopularAnime() =
+			videoRepository.getPopularAnime()
+					.retry(3)
+					.map {
+						BannerModel(resString(R.string.popular), it)
+					}
+					.subscribeOn(Schedulers.io())
+					.observeOn(AndroidSchedulers.mainThread())
 	//endregion
 
 	fun ensureGenresNotNull(onSuccess: (VideoGenres) -> Unit, onFailure: () -> Unit) {
