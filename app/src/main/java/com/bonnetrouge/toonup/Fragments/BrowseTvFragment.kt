@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import com.bonnetrouge.toonup.Activities.BrowseActivity
 import com.bonnetrouge.toonup.Commons.Ext.DTAG
 import com.bonnetrouge.toonup.Commons.Ext.dog
-import com.bonnetrouge.toonup.Commons.Ext.shuffle
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.BannerModel

@@ -5,8 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.support.v4.app.Fragment
 import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
 import com.bonnetrouge.toonup.Fragments.BrowseTvFragment
@@ -45,7 +43,7 @@ class BrowseActivity : BaseActivity() {
         browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
         browseViewModel.prefetchGenres()
         setSupportActionBar(toolbar)
-        savedInstanceState.letNull { fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) } }
+        savedInstanceState.ifNull { fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) } }
         with(backgroundAnimation) {
             setEnterFadeDuration(1000)
             setExitFadeDuration(4000)

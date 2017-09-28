@@ -4,7 +4,7 @@
 	<string name="title_home">Home</string>
 	<string name="title_dashboard">Dashboard</string>
 	<string name="title_notifications">Notifications</string>
-	<string name="connectivity_error_msg">Something fucked up... Swipe down to refresh!</string>
+	<string name="connectivity_error_msg">Your internet fucked up… Swipe down to refresh!</string>
 	<string name="title_activity_detail">DetailActivity</string>
 	<string name="action_settings">Settings</string>
 	<string name="tv_shows">Tv Shows</string>

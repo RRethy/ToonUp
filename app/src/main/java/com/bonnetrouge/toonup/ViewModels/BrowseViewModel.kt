@@ -44,6 +44,6 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		if (genres == null) videoRepository.getGenres()
 				.subscribeOn(Schedulers.io())
 				.observeOn(Schedulers.io())
-				.subscribe({ genres = it })
+				.subscribe({ genres = it }, { dog("Prefetch Genres failed!") })
 	}
 }
