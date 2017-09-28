@@ -14,6 +14,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 
 	private var allCartoons: List<BasicSeriesInfo>? = null
 	private var allMovies: List<BasicSeriesInfo>? = null
+	private var allAnime: List<BasicSeriesInfo>? = null
 	var genres: VideoGenres? = null
 
 	fun getAllCartoonsObservable(): Observable<List<BasicSeriesInfo>> {
@@ -24,6 +25,11 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 	fun getAllMovies(): Observable<List<BasicSeriesInfo>> {
 		return if (allMovies != null) Observable.just(allMovies)
 		else videoRepository.getAllMovies().doOnNext { allMovies = it }
+	}
+
+	fun getAllAnime(): Observable<List<BasicSeriesInfo>> {
+		return if (allAnime != null) Observable.just(allAnime)
+		else videoRepository.getAllAnime().doOnNext { allAnime = it }
 	}
 
 	fun ensureGenresNotNull(onSuccess: (VideoGenres) -> Unit, onFailure: () -> Unit) {

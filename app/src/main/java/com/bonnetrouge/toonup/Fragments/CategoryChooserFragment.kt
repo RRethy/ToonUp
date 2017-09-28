@@ -21,6 +21,6 @@ class CategoryChooserFragment @Inject constructor(): Fragment() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
 		tvShowsChooserContainer.setOnClickListener { (activity as BrowseActivity).navigateTvShows() }
 		moviesChooserContainer.setOnClickListener { (activity as BrowseActivity).navigateMovies() }
-/*		animeChooserContainer.setOnClickListener { (activity as BrowseActivity). }*/
+		animeChooserContainer.setOnClickListener { (activity as BrowseActivity).navigateAnime() }
 	}
 }

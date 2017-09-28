@@ -7,6 +7,7 @@ import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
+import com.bonnetrouge.toonup.Fragments.BrowseAnimeFragment
 import com.bonnetrouge.toonup.Fragments.BrowseTvFragment
 import com.bonnetrouge.toonup.Fragments.CategoryChooserFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
@@ -23,6 +24,7 @@ class BrowseActivity : BaseActivity() {
 	@Inject lateinit var categoryChooserFragment: CategoryChooserFragment
 	@Inject lateinit var browseTvFragment: BrowseTvFragment
 	@Inject lateinit var browseMoviesFragment: BrowseMoviesFragment
+    @Inject lateinit var browseAnimeFragment: BrowseAnimeFragment
 
     val backgroundAnimation by lazy { rootBackground.background as AnimationDrawable }
 
@@ -73,9 +75,9 @@ class BrowseActivity : BaseActivity() {
 		fragmentTransaction { replace(browseFragmentContainer.id, browseMoviesFragment) }
 	}
 
-/*	fun navigateAnime() {
-        fragmentTransaction { replace(browseFragmentContainer.id, ) }
-	}*/
+	fun navigateAnime() {
+        fragmentTransaction { replace(browseFragmentContainer.id, browseAnimeFragment) }
+	}
 
 	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo) {
 		DetailActivity.navigate(this, basicSeriesInfo)
