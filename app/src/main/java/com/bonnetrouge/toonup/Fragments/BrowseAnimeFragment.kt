@@ -59,10 +59,10 @@ class BrowseAnimeFragment @Inject constructor(): BaseFragment() {
                 getAllMoviesObservable(videoGenres),
                 getPopularMoviesObservable(),
                 io.reactivex.functions.BiFunction {
-                    allSeries, popularCartoons ->
+                    allAnime, popularAnime ->
                     val list = mutableListOf<BannerModel>()
-                    list.add(popularCartoons)
-                    list.addAll(allSeries)
+                    list.add(popularAnime)
+                    list.addAll(allAnime)
                     list
                 })
                 .subscribe({
@@ -82,13 +82,13 @@ class BrowseAnimeFragment @Inject constructor(): BaseFragment() {
             browseViewModel.getAllAnime()
                     .retry(3)
                     .map {
-                        val seriesByGenre = mutableListOf<BannerModel>()
+                        val animeByGenre = mutableListOf<BannerModel>()
                         for (videoGenre in videoGenres.genres) {
-                            val seriesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
-                            seriesList.sortByDescending { it.rating }
-                            if (seriesList.size > 0) seriesByGenre.add(BannerModel(videoGenre, seriesList))
+                            val animeList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
+                            animeList.sortByDescending { it.rating }
+                            if (animeList.size > 0) animeByGenre.add(BannerModel(videoGenre, animeList))
                         }
-                        seriesByGenre
+                        animeByGenre
                     }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
