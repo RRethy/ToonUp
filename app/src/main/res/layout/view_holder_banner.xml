@@ -7,13 +7,22 @@
 		android:id="@+id/bannerTitle"
 		android:layout_width="match_parent"
 		android:layout_height="25dp"
-		android:layout_marginStart="8dp"
-		android:layout_marginTop="8dp"
+		android:gravity="center_horizontal"
+		android:layout_marginTop="16dp"
+		android:layout_marginBottom="8dp"
 		android:textAllCaps="true"
-		android:fontFamily="sans-serif-condensed"
+		android:fontFamily="casual"
 		android:textSize="18sp"/>
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:layout_marginRight="24dp"
+		android:layout_marginLeft="24dp"
+		android:layout_below="@id/bannerTitle"
+		android:background="@android:color/white"/>
 	<android.support.v7.widget.RecyclerView
 		android:id="@+id/bannerRecyclerView"
+		android:layout_marginTop="8dp"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_below="@id/bannerTitle"/>

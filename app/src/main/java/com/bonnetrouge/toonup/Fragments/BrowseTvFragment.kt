@@ -8,18 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bonnetrouge.toonup.Activities.BrowseActivity
-import com.bonnetrouge.toonup.Commons.Ext.resString
 import com.bonnetrouge.toonup.Fragment.BaseFragment
-import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
-import com.bonnetrouge.toonup.Model.VideoGenres
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.BannerListAdapter
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_browse_tv.*
 import javax.inject.Inject
 
@@ -42,65 +36,26 @@ class BrowseTvFragment @Inject constructor(): BaseFragment() {
 
 	fun refreshBanners() {
 		showLoading()
-		browseViewModel.ensureGenresNotNull( { onGenresSuccess(it) }, { onGenresFailure() } )
+        browseViewModel.fetchCartoons({
+			this.subscribe({
+				hideLoading()
+				hideErrorMsg()
+				swipeRefreshLayout.postDelayed({
+					bannerListAdapter.banners.addAll(it)
+					bannerListAdapter.notifyDataSetChanged()
+				}, 150)
+			}, {
+                onNetworkError()
+			})
+		}, {
+			onNetworkError()
+		})
 	}
 
-	fun onGenresSuccess(videoGenres: VideoGenres) {
-		populateBanners(videoGenres)
-	}
-
-	fun onGenresFailure() {
+    fun onNetworkError() {
 		hideLoading()
 		showErroMsg()
 	}
-
-	fun populateBanners(videoGenres: VideoGenres) {
-		Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
-				getAllCartoonsObservable(videoGenres),
-				getPopularCartoonsObservable(),
-				io.reactivex.functions.BiFunction {
-					allSeries, popularCartoons ->
-					val list = mutableListOf<BannerModel>()
-					list.add(popularCartoons)
-					list.addAll(allSeries)
-					list
-				})
-				.subscribe({
-					hideLoading()
-					hideErrorMsg()
-					swipeRefreshLayout.postDelayed({
-						bannerListAdapter.banners.addAll(it)
-						bannerListAdapter.notifyDataSetChanged()
-					}, 150)
-				}, {
-					hideLoading()
-					showErroMsg()
-				})
-	}
-
-	fun getAllCartoonsObservable(videoGenres: VideoGenres) =
-		browseViewModel.getAllCartoonsObservable()
-				.retry(3)
-				.map {
-					val seriesByGenre = mutableListOf<BannerModel>()
-					for (videoGenre in videoGenres.genres) {
-						val seriesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
-						seriesList.sortByDescending { it.rating }
-						if (seriesList.size > 0) seriesByGenre.add(BannerModel(videoGenre, seriesList))
-					}
-					seriesByGenre
-				}
-				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
-
-	fun getPopularCartoonsObservable() =
-			browseViewModel.getPopularCartoonsObservable()
-					.retry(3)
-					.map {
-						BannerModel(resString(R.string.popular), it)
-					}
-					.subscribeOn(Schedulers.io())
-					.observeOn(AndroidSchedulers.mainThread())
 
 	fun showErroMsg() {
 		errorMessage?.visibility = View.VISIBLE
