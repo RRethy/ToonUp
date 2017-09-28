@@ -5,10 +5,9 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.os.PersistableBundle
-import android.support.v4.app.Fragment
 import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
+import com.bonnetrouge.toonup.Fragments.BrowseAnimeFragment
 import com.bonnetrouge.toonup.Fragments.BrowseTvFragment
 import com.bonnetrouge.toonup.Fragments.CategoryChooserFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
@@ -25,6 +24,7 @@ class BrowseActivity : BaseActivity() {
 	@Inject lateinit var categoryChooserFragment: CategoryChooserFragment
 	@Inject lateinit var browseTvFragment: BrowseTvFragment
 	@Inject lateinit var browseMoviesFragment: BrowseMoviesFragment
+    @Inject lateinit var browseAnimeFragment: BrowseAnimeFragment
 
     val backgroundAnimation by lazy { rootBackground.background as AnimationDrawable }
 
@@ -45,7 +45,7 @@ class BrowseActivity : BaseActivity() {
         browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
         browseViewModel.prefetchGenres()
         setSupportActionBar(toolbar)
-        savedInstanceState.letNull { fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) } }
+        savedInstanceState.ifNull { fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) } }
         with(backgroundAnimation) {
             setEnterFadeDuration(1000)
             setExitFadeDuration(4000)
@@ -75,7 +75,9 @@ class BrowseActivity : BaseActivity() {
 		fragmentTransaction { replace(browseFragmentContainer.id, browseMoviesFragment) }
 	}
 
-	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo) {
-		DetailActivity.navigate(this, basicSeriesInfo)
+	fun navigateAnime() {
+        fragmentTransaction { replace(browseFragmentContainer.id, browseAnimeFragment) }
 	}
+
+	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo) { DetailActivity.navigate(this, basicSeriesInfo) }
 }
