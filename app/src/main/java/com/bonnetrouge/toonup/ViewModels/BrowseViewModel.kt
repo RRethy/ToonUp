@@ -16,9 +16,9 @@ import javax.inject.Inject
 
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository): ViewModel() {
 
-	private var allCartoons: List<BasicSeriesInfo>? = null
-	private var popularCartoons: List<BasicSeriesInfo>? = null
+	private var cartoons: MutableList<BannerModel>? = null
 
+	private var movies: MutableList<BannerModel>? = null
 	private var allMovies: List<BasicSeriesInfo>? = null
 	private var popularMovies: List<BasicSeriesInfo>? = null
 
@@ -28,37 +28,31 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 	var genres: VideoGenres? = null
 
 	//region Cartoons
-	fun getAllCartoonsObservable(): Observable<List<BasicSeriesInfo>> {
-		return if (allCartoons != null) Observable.just(allCartoons)
-		else videoRepository.getAllCartoons().doOnNext { allCartoons = it }
-	}
-
-	fun getPopularCartoonsObservable(): Observable<List<BasicSeriesInfo>> {
-		return if (popularCartoons != null) Observable.just(popularCartoons)
-		else videoRepository.getPopularCartoons().doOnNext { popularCartoons = null }
-	}
-
 	fun fetchCartoons(subscription: Observable<MutableList<BannerModel>>.() -> Unit, error: () -> Unit) {
 		ensureGenresNotNull({
-			val observable = Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
-					processAllCartoonsObservable(it),
-					processPopularCartoonsObservable(),
-					BiFunction {
-						allSeries, popularCartoons ->
-						val list = mutableListOf<BannerModel>()
-						list.add(popularCartoons)
-						list.addAll(allSeries)
-						list
-					}
-			)
-			observable.subscription()
+            if (cartoons != null) {
+                Observable.just(cartoons!!).subscription()
+			} else {
+				val observable = Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
+						getAllCartoons(it),
+						getPopularCartoons(),
+						BiFunction {
+							allSeries, popularCartoons ->
+							val list = mutableListOf<BannerModel>()
+							list.add(popularCartoons)
+							list.addAll(allSeries)
+							list
+						}
+				).doOnNext { cartoons = it }
+				observable.subscription()
+			}
 		}, {
 			error()
 		})
 	}
 
-	fun processAllCartoonsObservable(videoGenres: VideoGenres) =
-			getAllCartoonsObservable()
+	fun getAllCartoons(videoGenres: VideoGenres) =
+			videoRepository.getAllCartoons()
 					.retry(3)
 					.map {
 						val seriesByGenre = mutableListOf<BannerModel>()
@@ -72,8 +66,8 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 
-	fun processPopularCartoonsObservable() =
-			getPopularCartoonsObservable()
+	fun getPopularCartoons() =
+			videoRepository.getPopularCartoons()
 					.retry(3)
 					.map {
 						BannerModel(resString(R.string.popular), it)

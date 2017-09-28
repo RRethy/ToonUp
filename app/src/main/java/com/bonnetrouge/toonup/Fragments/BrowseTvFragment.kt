@@ -8,18 +8,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bonnetrouge.toonup.Activities.BrowseActivity
-import com.bonnetrouge.toonup.Commons.Ext.resString
 import com.bonnetrouge.toonup.Fragment.BaseFragment
-import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
-import com.bonnetrouge.toonup.Model.VideoGenres
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.BannerListAdapter
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_browse_tv.*
 import javax.inject.Inject
 
@@ -51,13 +45,16 @@ class BrowseTvFragment @Inject constructor(): BaseFragment() {
 					bannerListAdapter.notifyDataSetChanged()
 				}, 150)
 			}, {
-				hideLoading()
-				showErroMsg()
+                onNetworkError()
 			})
 		}, {
-            hideLoading()
-			showErroMsg()
+			onNetworkError()
 		})
+	}
+
+    fun onNetworkError() {
+		hideLoading()
+		showErroMsg()
 	}
 
 	fun showErroMsg() {
