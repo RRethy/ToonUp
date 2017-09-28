@@ -42,65 +42,23 @@ class BrowseTvFragment @Inject constructor(): BaseFragment() {
 
 	fun refreshBanners() {
 		showLoading()
-		browseViewModel.ensureGenresNotNull( { onGenresSuccess(it) }, { onGenresFailure() } )
+        browseViewModel.fetchCartoons({
+			this.subscribe({
+				hideLoading()
+				hideErrorMsg()
+				swipeRefreshLayout.postDelayed({
+					bannerListAdapter.banners.addAll(it)
+					bannerListAdapter.notifyDataSetChanged()
+				}, 150)
+			}, {
+				hideLoading()
+				showErroMsg()
+			})
+		}, {
+            hideLoading()
+			showErroMsg()
+		})
 	}
-
-	fun onGenresSuccess(videoGenres: VideoGenres) {
-		populateBanners(videoGenres)
-	}
-
-	fun onGenresFailure() {
-		hideLoading()
-		showErroMsg()
-	}
-
-	fun populateBanners(videoGenres: VideoGenres) {
-		Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
-				getAllCartoonsObservable(videoGenres),
-				getPopularCartoonsObservable(),
-				io.reactivex.functions.BiFunction {
-					allSeries, popularCartoons ->
-					val list = mutableListOf<BannerModel>()
-					list.add(popularCartoons)
-					list.addAll(allSeries)
-					list
-				})
-				.subscribe({
-					hideLoading()
-					hideErrorMsg()
-					swipeRefreshLayout.postDelayed({
-						bannerListAdapter.banners.addAll(it)
-						bannerListAdapter.notifyDataSetChanged()
-					}, 150)
-				}, {
-					hideLoading()
-					showErroMsg()
-				})
-	}
-
-	fun getAllCartoonsObservable(videoGenres: VideoGenres) =
-		browseViewModel.getAllCartoonsObservable()
-				.retry(3)
-				.map {
-					val seriesByGenre = mutableListOf<BannerModel>()
-					for (videoGenre in videoGenres.genres) {
-						val seriesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
-						seriesList.sortByDescending { it.rating }
-						if (seriesList.size > 0) seriesByGenre.add(BannerModel(videoGenre, seriesList))
-					}
-					seriesByGenre
-				}
-				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
-
-	fun getPopularCartoonsObservable() =
-			browseViewModel.getPopularCartoonsObservable()
-					.retry(3)
-					.map {
-						BannerModel(resString(R.string.popular), it)
-					}
-					.subscribeOn(Schedulers.io())
-					.observeOn(AndroidSchedulers.mainThread())
 
 	fun showErroMsg() {
 		errorMessage?.visibility = View.VISIBLE
