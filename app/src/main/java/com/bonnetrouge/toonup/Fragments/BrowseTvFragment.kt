@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bonnetrouge.toonup.Activities.BrowseActivity
+import com.bonnetrouge.toonup.Commons.Ext.resString
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
@@ -96,7 +97,7 @@ class BrowseTvFragment @Inject constructor(): BaseFragment() {
 			browseViewModel.getPopularCartoonsObservable()
 					.retry(3)
 					.map {
-						BannerModel("POP", it)
+						BannerModel(resString(R.string.popular), it)
 					}
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())

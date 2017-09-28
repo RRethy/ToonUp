@@ -56,3 +56,5 @@ fun <T> T.with(action: T.() -> Unit) {
 fun <T> T?.ifNull(action: () -> Unit) {
     if (this == null) action()
 }
+
+fun resString(resId: Int) = app.getString(resId)
