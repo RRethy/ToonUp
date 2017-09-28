@@ -16,6 +16,7 @@ import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.BannerListAdapter
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_browse_anime.*
@@ -44,7 +45,7 @@ class BrowseAnimeFragment @Inject constructor(): BaseFragment() {
     }
 
     fun onGenresSuccess(videoGenres: VideoGenres) {
-        getAllSeries(videoGenres)
+        populateBanners(videoGenres)
     }
 
     fun onGenresFailure() {
@@ -52,20 +53,17 @@ class BrowseAnimeFragment @Inject constructor(): BaseFragment() {
         showErroMsg()
     }
 
-    fun getAllSeries(videoGenres: VideoGenres) {
-        browseViewModel.getAllAnime()
-                .retry(3)
-                .map {
-                    val seriesByGenre = mutableListOf<BannerModel>()
-                    for (videoGenre in videoGenres.genres) {
-                        val seriesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
-                        seriesList.sortByDescending { it.rating }
-                        if (seriesList.size > 0) seriesByGenre.add(BannerModel(videoGenre, seriesList))
-                    }
-                    seriesByGenre
-                }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+    fun populateBanners(videoGenres: VideoGenres) {
+        Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
+                getAllMoviesObservable(videoGenres),
+                getPopularMoviesObservable(),
+                io.reactivex.functions.BiFunction {
+                    allSeries, popularCartoons ->
+                    val list = mutableListOf<BannerModel>()
+                    list.add(popularCartoons)
+                    list.addAll(allSeries)
+                    list
+                })
                 .subscribe({
                     hideLoading()
                     hideErrorMsg()
@@ -78,6 +76,30 @@ class BrowseAnimeFragment @Inject constructor(): BaseFragment() {
                     showErroMsg()
                 })
     }
+
+    fun getAllMoviesObservable(videoGenres: VideoGenres) =
+            browseViewModel.getAllAnime()
+                    .retry(3)
+                    .map {
+                        val seriesByGenre = mutableListOf<BannerModel>()
+                        for (videoGenre in videoGenres.genres) {
+                            val seriesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
+                            seriesList.sortByDescending { it.rating }
+                            if (seriesList.size > 0) seriesByGenre.add(BannerModel(videoGenre, seriesList))
+                        }
+                        seriesByGenre
+                    }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+
+    fun getPopularMoviesObservable() =
+            browseViewModel.getPopularAnime()
+                    .retry(3)
+                    .map {
+                        BannerModel("POP", it)
+                    }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
 
     fun showErroMsg() {
         errorMessage?.visibility = View.VISIBLE

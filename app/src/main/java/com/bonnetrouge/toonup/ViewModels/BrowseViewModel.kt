@@ -13,8 +13,11 @@ import javax.inject.Inject
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository): ViewModel() {
 
 	private var allCartoons: List<BasicSeriesInfo>? = null
+	private var popularCartoons: List<BasicSeriesInfo>? = null
 	private var allMovies: List<BasicSeriesInfo>? = null
+	private var popularMovies: List<BasicSeriesInfo>? = null
 	private var allAnime: List<BasicSeriesInfo>? = null
+	private var popularAnime: List<BasicSeriesInfo>? = null
 	var genres: VideoGenres? = null
 
 	fun getAllCartoonsObservable(): Observable<List<BasicSeriesInfo>> {
@@ -22,14 +25,29 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		else videoRepository.getAllCartoons().doOnNext { allCartoons = it }
 	}
 
+	fun getPopularCartoonsObservable(): Observable<List<BasicSeriesInfo>> {
+		return if (popularCartoons != null) Observable.just(popularCartoons)
+		else videoRepository.getPopularCartoons().doOnNext { popularCartoons = null }
+	}
+
 	fun getAllMovies(): Observable<List<BasicSeriesInfo>> {
 		return if (allMovies != null) Observable.just(allMovies)
 		else videoRepository.getAllMovies().doOnNext { allMovies = it }
 	}
 
+	fun getPopularMovies(): Observable<List<BasicSeriesInfo>> {
+		return if (popularMovies != null) Observable.just(popularMovies)
+		else videoRepository.getPopularMovies().doOnNext { popularMovies = null }
+	}
+
 	fun getAllAnime(): Observable<List<BasicSeriesInfo>> {
 		return if (allAnime != null) Observable.just(allAnime)
 		else videoRepository.getAllAnime().doOnNext { allAnime = it }
+	}
+
+	fun getPopularAnime(): Observable<List<BasicSeriesInfo>> {
+		return if (popularAnime != null) Observable.just(popularAnime)
+		else videoRepository.getPopularAnime().doOnNext { popularAnime = null }
 	}
 
 	fun ensureGenresNotNull(onSuccess: (VideoGenres) -> Unit, onFailure: () -> Unit) {

@@ -79,7 +79,5 @@ class BrowseActivity : BaseActivity() {
         fragmentTransaction { replace(browseFragmentContainer.id, browseAnimeFragment) }
 	}
 
-	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo) {
-		DetailActivity.navigate(this, basicSeriesInfo)
-	}
+	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo) { DetailActivity.navigate(this, basicSeriesInfo) }
 }

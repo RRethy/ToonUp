@@ -10,6 +10,7 @@
 	<string name="tv_shows">Tv Shows</string>
 	<string name="movies">Movies</string>
 	<string name="anime">Anime</string>
+	<string name="popular">POPULAR</string>
 	<string name="episode">E</string>
 	<string name="season">S</string>
 </resources>
