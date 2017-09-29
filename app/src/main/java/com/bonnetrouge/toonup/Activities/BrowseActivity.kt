@@ -25,15 +25,15 @@ class BrowseActivity : BaseActivity() {
 	@Inject lateinit var categoryChooserFragment: CategoryChooserFragment
 	@Inject lateinit var browseTvFragment: BrowseTvFragment
 	@Inject lateinit var browseMoviesFragment: BrowseMoviesFragment
-    @Inject lateinit var browseAnimeFragment: BrowseAnimeFragment
+	@Inject lateinit var browseAnimeFragment: BrowseAnimeFragment
 
-    val backgroundAnimation by lazy { rootBackground.background as AnimationDrawable }
+	val backgroundAnimation by lazy { rootBackground.background as AnimationDrawable }
 
 	@Inject lateinit var browseViewModelFactory: BrowseViewModelFactory
 	lateinit var browseViewModel: BrowseViewModel
 
 	companion object {
-        fun navigate(context: Context) {
+		fun navigate(context: Context) {
 			val intent = Intent(context, BrowseActivity::class.java)
 			context.startActivity(intent)
 		}
@@ -41,27 +41,27 @@ class BrowseActivity : BaseActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_browse)
-        app.component.plus(BrowseActivityModule()).inject(this)
-        browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
-        browseViewModel.prefetchGenres()
-        setSupportActionBar(toolbar)
-        savedInstanceState.ifNull { fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) } }
-        with(backgroundAnimation) {
-            setEnterFadeDuration(1000)
-            setExitFadeDuration(4000)
-        }
+		setContentView(R.layout.activity_browse)
+		app.component.plus(BrowseActivityModule()).inject(this)
+		browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
+		browseViewModel.prefetchGenres()
+		setSupportActionBar(toolbar)
+		savedInstanceState.ifNull { fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) } }
+		with(backgroundAnimation) {
+			setEnterFadeDuration(1000)
+			setExitFadeDuration(4000)
+		}
 	}
 
-    override fun onResume() {
-        super.onResume()
+	override fun onResume() {
+		super.onResume()
 		backgroundAnimation.start()
-    }
+	}
 
-    override fun onPause() {
-        super.onPause()
+	override fun onPause() {
+		super.onPause()
 		backgroundAnimation.stop()
-    }
+	}
 
 	override fun onBackPressed() {
 		super.onBackPressed()
@@ -69,15 +69,24 @@ class BrowseActivity : BaseActivity() {
 	}
 
 	fun navigateTvShows() {
-		fragmentTransaction { replace(browseFragmentContainer.id, browseTvFragment) }
+		fragmentTransaction {
+			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
+			replace(browseFragmentContainer.id, browseTvFragment)
+		}
 	}
 
 	fun navigateMovies() {
-		fragmentTransaction { replace(browseFragmentContainer.id, browseMoviesFragment) }
+		fragmentTransaction {
+			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
+			replace(browseFragmentContainer.id, browseMoviesFragment)
+		}
 	}
 
 	fun navigateAnime() {
-		fragmentTransaction { replace(browseFragmentContainer.id, browseAnimeFragment) }
+		fragmentTransaction {
+			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
+			replace(browseFragmentContainer.id, browseAnimeFragment)
+		}
 	}
 
 	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo, imageView: ImageView) {
