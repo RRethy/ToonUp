@@ -14,13 +14,22 @@ import javax.inject.Inject
 class CategoryChooserFragment @Inject constructor(): Fragment() {
 
 	override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_category_chooser, container, false)
+			inflater?.inflate(R.layout.fragment_category_chooser, container, false)
 
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
-		tvShowsChooserContainer.setOnClickListener { (activity as BrowseActivity).navigateTvShows() }
-		moviesChooserContainer.setOnClickListener { (activity as BrowseActivity).navigateMovies() }
-		animeChooserContainer.setOnClickListener { (activity as BrowseActivity).navigateAnime() }
+		(activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
+		tvShowsChooserContainer.setOnClickListener {
+			tvShowsChooserContainer.animate().scaleX(0.9f).scaleY(0.9f).setDuration(250).start()
+			(activity as BrowseActivity).navigateTvShows()
+		}
+		moviesChooserContainer.setOnClickListener {
+			moviesChooserContainer.animate().scaleX(0.9f).scaleY(0.9f).setDuration(250).start()
+			(activity as BrowseActivity).navigateMovies()
+		}
+		animeChooserContainer.setOnClickListener {
+			animeChooserContainer.animate().scaleX(0.9f).scaleY(0.9f).setDuration(250).start()
+			(activity as BrowseActivity).navigateAnime()
+		}
 	}
 }
