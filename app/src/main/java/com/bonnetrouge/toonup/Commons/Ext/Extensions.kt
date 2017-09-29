@@ -1,8 +1,10 @@
 package com.bonnetrouge.toonup.Commons.Ext
 
+import android.graphics.Rect
 import android.os.Handler
 import android.support.v4.app.FragmentTransaction
 import android.util.Log
+import android.view.View
 import com.bonnetrouge.toonup.ToonUpApp
 import com.bonnetrouge.toonup.Activities.BaseActivity
 
@@ -64,4 +66,13 @@ fun postDelayed(milliDelay: Long, action: () -> Unit) {
     Handler().postDelayed({
         action()
     }, milliDelay)
+}
+
+fun isInViewBounds(view: View, x: Int, y: Int): Boolean {
+    var outRect = Rect()
+    var location = IntArray(2)
+    view.getDrawingRect(outRect)
+    view.getLocationOnScreen(location)
+    outRect.offset(location[0], location[1])
+    return outRect.contains(x, y)
 }
