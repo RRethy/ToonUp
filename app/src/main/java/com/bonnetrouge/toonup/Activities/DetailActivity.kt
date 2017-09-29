@@ -1,18 +1,20 @@
 package com.bonnetrouge.toonup.Activities
 
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.os.Bundle
 import com.bonnetrouge.toonup.R
 import android.content.Intent
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import com.bonnetrouge.toonup.Commons.Ext.DTAG
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.Ext.dog
-import com.bonnetrouge.toonup.Commons.Ext.notEmpty
+import com.bonnetrouge.toonup.Commons.Ext.postDelayed
 import com.bonnetrouge.toonup.DI.Modules.DetailActivityModule
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.*
@@ -42,12 +44,18 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 		detailViewModel = ViewModelProviders.of(this, detailViewModelFactory).get(DetailViewModel::class.java)
 		setupToolbar()
 		setupRecyclerView()
-		popularRecyclerView()
-		fetchBackingData()
+	}
+
+	override fun onEnterAnimationComplete() {
+        postDelayed(200) {
+			popularRecyclerView()
+			fetchBackingData()
+			toolbar.title = intent.getStringExtra(DetailActivity.TITLE)
+		}
 	}
 
 	fun setupToolbar() {
-		toolbar.title = intent.getStringExtra(TITLE)
+		toolbar.title = ""
 		setSupportActionBar(toolbar)
 		supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		Glide.with(this)
@@ -145,12 +153,13 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 		val TITLE = "Title"
 		val DESCRIPTION = "Description"
 
-		fun navigate(context: Context, basicSeriesInfo: BasicSeriesInfo) {
-			val intent = Intent(context, DetailActivity::class.java)
+		fun navigate(activity: AppCompatActivity, basicSeriesInfo: BasicSeriesInfo, imageView: ImageView) {
+			val intent = Intent(activity, DetailActivity::class.java)
 			intent.putExtra(ID, basicSeriesInfo.id)
 			intent.putExtra(TITLE, basicSeriesInfo.name)
 			intent.putExtra(DESCRIPTION, basicSeriesInfo.description)
-			context.startActivity(intent)
+			val options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, imageView, "DetailParallaxImage")
+			activity.startActivity(intent, options.toBundle())
 		}
 	}
 }

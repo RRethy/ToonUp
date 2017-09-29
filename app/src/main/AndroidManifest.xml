@@ -20,10 +20,10 @@
 			</intent-filter>
 		</activity>
 		<activity android:name=".Activities.BrowseActivity"
-			android:theme="@style/Theme.AppCompat.NoActionBar"/>
+			android:theme="@style/AppTheme"/>
 		<activity
 			android:name=".Activities.DetailActivity"
-			android:theme="@style/Theme.AppCompat.NoActionBar">
+			android:theme="@style/AppTheme">
 		</activity>
 		<activity android:name=".Activities.PlayerActivity"
 			android:screenOrientation="landscape">

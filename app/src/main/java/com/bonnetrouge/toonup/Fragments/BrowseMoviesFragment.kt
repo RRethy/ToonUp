@@ -7,6 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import com.bonnetrouge.toonup.Activities.BrowseActivity
 import com.bonnetrouge.toonup.Commons.Ext.resString
 import com.bonnetrouge.toonup.Fragment.BaseFragment
@@ -79,7 +80,7 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 		swipeRefreshLayout?.isRefreshing = false
 	}
 
-	override fun onRecyclerViewItemClicked(item: RVItem) {
-		(activity as BrowseActivity).navigateDetail(item as BasicSeriesInfo)
+	override fun onRVItemClicked(item: RVItem, imageView: ImageView) {
+		(activity as BrowseActivity).navigateDetail(item as BasicSeriesInfo, imageView)
 	}
 }
