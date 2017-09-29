@@ -1,5 +1,6 @@
 package com.bonnetrouge.toonup.Commons.Ext
 
+import android.os.Handler
 import android.support.v4.app.FragmentTransaction
 import android.util.Log
 import com.bonnetrouge.toonup.ToonUpApp
@@ -58,3 +59,9 @@ fun <T> T?.ifNull(action: () -> Unit) {
 }
 
 fun resString(resId: Int) = app.getString(resId)
+
+fun postDelayed(milliDelay: Long, action: () -> Unit) {
+    Handler().postDelayed({
+        action()
+    }, milliDelay)
+}

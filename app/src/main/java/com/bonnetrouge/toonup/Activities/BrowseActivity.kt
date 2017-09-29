@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.widget.ImageView
 import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
 import com.bonnetrouge.toonup.Fragments.BrowseAnimeFragment
@@ -76,8 +77,10 @@ class BrowseActivity : BaseActivity() {
 	}
 
 	fun navigateAnime() {
-        fragmentTransaction { replace(browseFragmentContainer.id, browseAnimeFragment) }
+		fragmentTransaction { replace(browseFragmentContainer.id, browseAnimeFragment) }
 	}
 
-	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo) { DetailActivity.navigate(this, basicSeriesInfo) }
+	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo, imageView: ImageView) {
+		DetailActivity.navigate(this, basicSeriesInfo, imageView)
+	}
 }

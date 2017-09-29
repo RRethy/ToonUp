@@ -48,7 +48,7 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 				LinearLayoutManager.HORIZONTAL,
 				false)
 		val bannerItemsAdapter = BannerItemsAdapter(fragmentWeakRef.get())
-		val snapHelper = LinearSnapHelper()
+		//val snapHelper = GravitySnapHelper(Gravity.START)
 
 		val bannerRecyclerView: RecyclerView by bindView(R.id.bannerRecyclerView)
 		val bannerTitle: TextView by bindView(R.id.bannerTitle)
@@ -56,7 +56,7 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 		init {
 			bannerRecyclerView.layoutManager = layoutManager
 			bannerRecyclerView.adapter = bannerItemsAdapter
-			snapHelper.attachToRecyclerView(bannerRecyclerView)
+			//snapHelper.attachToRecyclerView(bannerRecyclerView)
 		}
 
 		fun bind(bannerModel: BannerModel) {

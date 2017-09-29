@@ -42,7 +42,9 @@ class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<Recycle
 		val title: TextView by bindView(R.id.bannerItemTitle)
 
 		init {
-			itemView.setOnClickListener { fragmentWeakRef.get()?.onRecyclerViewItemClicked(items[adapterPosition]) }
+			itemView.setOnClickListener {
+				fragmentWeakRef.get()?.onRVItemClicked(items[adapterPosition], image)
+			}
 		}
 
 		fun bind(basicSeriesInfo: BasicSeriesInfo) {
