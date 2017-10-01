@@ -9,6 +9,7 @@ import android.widget.ImageView
 import com.bonnetrouge.toonup.Activities.BrowseActivity
 import com.bonnetrouge.toonup.Adapters.SearchAdapter
 import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
+import com.bonnetrouge.toonup.Commons.Ext.ifAdded
 import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
@@ -17,22 +18,34 @@ import com.bonnetrouge.toonup.UI.GridAutofitLayoutManager
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import kotlinx.android.synthetic.main.fragment_search.*
+import javax.inject.Inject
 
-class SearchFragment : BaseFragment() {
+class SearchFragment @Inject constructor() : BaseFragment() {
 
     val browseViewModel by lazyAndroid { ViewModelProviders.of(activity).get(BrowseViewModel::class.java) }
 
     val itemWidth = getDisplayWidth() / 3
-    val searchAdapter by lazyAndroid { SearchAdapter(this) }
-    val layoutManager by lazyAndroid { GridAutofitLayoutManager(itemWidth.toDouble()) }
+    val searchAdapter by lazyAndroid { SearchAdapter(this, itemWidth) }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
             = inflater?.inflate(R.layout.fragment_search, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        searchRecyclerView.layoutManager = layoutManager
+        searchRecyclerView.layoutManager = GridAutofitLayoutManager(itemWidth.toDouble())
         searchRecyclerView.adapter = searchAdapter
+        popularRecyclerView()
+    }
+
+    fun popularRecyclerView() {
+        searchAdapter.items.addAll(browseViewModel.getPopularCartoonsRaw())
+        searchAdapter.notifyDataSetChanged()
+    }
+
+    fun dispatchSearch(s: CharSequence) {
+       ifAdded {
+           
+       }
     }
 
     override fun onRVItemClicked(item: RVItem, imageView: ImageView) {

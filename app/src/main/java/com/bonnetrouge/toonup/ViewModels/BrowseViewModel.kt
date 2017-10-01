@@ -3,6 +3,7 @@ package com.bonnetrouge.toonup.ViewModels
 import android.arch.lifecycle.ViewModel
 import com.bonnetrouge.toonup.Commons.Ext.dog
 import com.bonnetrouge.toonup.Commons.Ext.resString
+import com.bonnetrouge.toonup.Commons.Ext.with
 import com.bonnetrouge.toonup.Data.VideoRepository
 import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
@@ -12,6 +13,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository): ViewModel() {
@@ -45,7 +47,40 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		})
 	}
 
-	fun getAllCartoons(videoGenres: VideoGenres) =
+	fun getPopularCartoonsRaw(): MutableList<BasicSeriesInfo> {
+		val rawCartoons = mutableListOf<BasicSeriesInfo>()
+		cartoons?.forEach {
+			if (it.title == resString(R.string.popular)) {
+				it.dataList.forEach { rawCartoons.add(it as BasicSeriesInfo) }
+			}
+		}
+		return rawCartoons
+	}
+
+	fun getFilteredCartoons(s: CharSequence): MutableList<BasicSeriesInfo> {
+		val lazySearchRegexBuilder = StringBuilder()
+		lazySearchRegexBuilder.append("^(")
+		s.forEach {
+			lazySearchRegexBuilder.append(it)
+			lazySearchRegexBuilder.append(".*")
+		}
+		lazySearchRegexBuilder.append(")")
+		val lazySearchPattern = Pattern.compile(lazySearchRegexBuilder.toString(), Pattern.CASE_INSENSITIVE)
+		val rawCartoons = mutableListOf<BasicSeriesInfo>()
+		cartoons?.forEach {
+			it.dataList.forEach {
+				(it as BasicSeriesInfo).with {
+					val lazySearchMatcher = lazySearchPattern.matcher(this.name)
+					if (lazySearchMatcher.find()) {
+						rawCartoons.add(it)
+					}
+				}
+			}
+		}
+		return rawCartoons
+	}
+
+	private fun getAllCartoons(videoGenres: VideoGenres) =
 			videoRepository.getAllCartoons()
 					.retry(3)
 					.map {
@@ -60,7 +95,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 
-	fun getPopularCartoons() =
+	private fun getPopularCartoons() =
 			videoRepository.getPopularCartoons()
 					.retry(3)
 					.map {
@@ -93,7 +128,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		})
 	}
 
-	fun getAllMovies(videoGenres: VideoGenres) =
+	private fun getAllMovies(videoGenres: VideoGenres) =
 			videoRepository.getAllMovies()
 					.retry(3)
 					.map {
@@ -108,7 +143,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 
-	fun getPopularMovies() =
+	private fun getPopularMovies() =
 			videoRepository.getPopularMovies()
 					.retry(3)
 					.map {
@@ -141,7 +176,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		})
 	}
 
-	fun getAllAnime(videoGenres: VideoGenres) =
+	private fun getAllAnime(videoGenres: VideoGenres) =
 			videoRepository.getAllMovies()
 					.retry(3)
 					.map {
@@ -156,7 +191,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 
-	fun getPopularAnime() =
+	private fun getPopularAnime() =
 			videoRepository.getPopularAnime()
 					.retry(3)
 					.map {
@@ -166,7 +201,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 					.observeOn(AndroidSchedulers.mainThread())
 	//endregion
 
-	fun ensureGenresNotNull(onSuccess: (VideoGenres) -> Unit, onFailure: () -> Unit) {
+	private fun ensureGenresNotNull(onSuccess: (VideoGenres) -> Unit, onFailure: () -> Unit) {
 		if (genres != null) onSuccess(genres!!)
 		else videoRepository.getGenres()
 				.subscribeOn(Schedulers.io())

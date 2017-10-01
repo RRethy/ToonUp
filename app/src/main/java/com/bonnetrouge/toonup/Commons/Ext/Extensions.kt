@@ -3,15 +3,17 @@ package com.bonnetrouge.toonup.Commons.Ext
 import android.content.Context
 import android.graphics.Rect
 import android.os.Handler
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.util.Log
 import android.view.View
 import com.bonnetrouge.toonup.ToonUpApp
 import com.bonnetrouge.toonup.Activities.BaseActivity
-import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.util.DisplayMetrics
+
+
 
 
 val app: ToonUpApp
@@ -32,14 +34,16 @@ inline fun String.notEmpty(action: String.() -> Unit) {
 	if (this.isNotEmpty()) this.action()
 }
 
-fun convertToPixels(sizeInDp: Double): Int {
-    val scale = app.resources.displayMetrics.density
-    return (sizeInDp * scale + 0.5f).toInt()
+fun convertToPixels(sizeInDp: Double): Double {
+    val resources = app.getResources()
+    val metrics = resources.getDisplayMetrics()
+    return sizeInDp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
 }
 
 fun convertToDp(sizeInPixels: Int): Float {
-    val densityDpi = app.resources.displayMetrics.densityDpi
-    return sizeInPixels / (densityDpi / 160f)
+    val resources = app.getResources()
+    val metrics = resources.getDisplayMetrics()
+    return sizeInPixels / (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
 }
 
 fun getDisplayWidth(): Int = app.resources.displayMetrics.widthPixels
@@ -90,3 +94,7 @@ fun EditText.showKeyboard() {
 }
 
 fun <T> lazyAndroid(initializer: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE, initializer)
+
+fun Fragment.ifAdded(action: () -> Unit) {
+    if (isAdded) action()
+}
