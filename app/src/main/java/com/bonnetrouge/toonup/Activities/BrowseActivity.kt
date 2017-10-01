@@ -121,13 +121,17 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
         searchTextContainer.with {
 			visibility = View.VISIBLE
 			pivotX = getDisplayWidth().toFloat() * 0.75f
-			animate().scaleX(1f).setDuration(300).withEndAction { searchEditText.showKeyboard() }.start()
+			animate().scaleX(1f).setDuration(300).withEndAction {
+				searchEditText.showKeyboard()
+				searchEditText.setHint(R.string.search_hint)
+			}.start()
 		}
 	}
 
 	fun hideSearchToolbar() {
-        searchEditText.with {
+		searchEditText.with {
 			setText("")
+			hint = ""
 			isFocusableInTouchMode = false
 			isFocusable = false
 			isFocusableInTouchMode = true
@@ -154,7 +158,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseTvFragment)
 		}
-        showBackButton()
+		showBackButton()
 		showSearchIcon()
 	}
 
@@ -163,7 +167,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseMoviesFragment)
 		}
-        showBackButton()
+		showBackButton()
 		showSearchIcon()
 	}
 
