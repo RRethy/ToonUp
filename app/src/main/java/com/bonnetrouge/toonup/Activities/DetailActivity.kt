@@ -11,10 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import com.bonnetrouge.toonup.Commons.Ext.DTAG
-import com.bonnetrouge.toonup.Commons.Ext.app
-import com.bonnetrouge.toonup.Commons.Ext.dog
-import com.bonnetrouge.toonup.Commons.Ext.postDelayed
+import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.DetailActivityModule
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.*
@@ -35,7 +32,7 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 	@Inject lateinit var detailViewModelFactory: DetailViewModelFactory
 	lateinit var detailViewModel: DetailViewModel
 
-	val detailAdapter by lazy { DetailsAdapter(this) }
+	val detailAdapter by lazyAndroid { DetailsAdapter(this) }
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)

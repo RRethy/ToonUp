@@ -34,7 +34,7 @@ class BrowseActivity : BaseActivity() {
 	@Inject lateinit var browseViewModelFactory: BrowseViewModelFactory
 	lateinit var browseViewModel: BrowseViewModel
 
-	val backgroundAnimation by lazy { rootBackground.background as AnimationDrawable }
+	val backgroundAnimation by lazyAndroid { rootBackground.background as AnimationDrawable }
 
 	lateinit var searchItem: MenuItem
 

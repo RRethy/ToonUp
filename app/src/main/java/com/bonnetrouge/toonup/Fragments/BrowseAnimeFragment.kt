@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Activities.BrowseActivity
+import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
 import com.bonnetrouge.toonup.Commons.Ext.resString
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BannerModel
@@ -26,8 +27,8 @@ import javax.inject.Inject
 
 class BrowseAnimeFragment @Inject constructor(): BaseFragment() {
 
-    val browseViewModel by lazy { ViewModelProviders.of(activity).get(BrowseViewModel::class.java) }
-    val bannerListAdapter by lazy { BannerListAdapter(this) }
+    val browseViewModel by lazyAndroid { ViewModelProviders.of(activity).get(BrowseViewModel::class.java) }
+    val bannerListAdapter by lazyAndroid { BannerListAdapter(this) }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
             = inflater?.inflate(R.layout.fragment_browse_anime, container, false)
