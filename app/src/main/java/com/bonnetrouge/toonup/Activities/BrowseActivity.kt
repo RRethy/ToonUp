@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.text.Editable
 import android.view.Menu
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Commons.Ext.*
@@ -22,9 +21,10 @@ import javax.inject.Inject
 import com.bonnetrouge.toonup.Fragments.BrowseMoviesFragment
 import android.view.MenuItem
 import android.view.View
+import com.bonnetrouge.toonup.Listeners.DebounceTextWatcher
 
 
-class BrowseActivity : BaseActivity() {
+class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
 	@Inject lateinit var categoryChooserFragment: CategoryChooserFragment
 	@Inject lateinit var browseTvFragment: BrowseTvFragment
@@ -35,6 +35,7 @@ class BrowseActivity : BaseActivity() {
 	lateinit var browseViewModel: BrowseViewModel
 
 	val backgroundAnimation by lazyAndroid { rootBackground.background as AnimationDrawable }
+	val debounceTextWatcher by lazyAndroid { DebounceTextWatcher(this) }
 
 	lateinit var searchItem: MenuItem
 
@@ -60,6 +61,7 @@ class BrowseActivity : BaseActivity() {
 			setEnterFadeDuration(1000)
 			setExitFadeDuration(4000)
 		}
+        setupSearchTextWatcher()
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -86,7 +88,7 @@ class BrowseActivity : BaseActivity() {
 	}
 
 	override fun onBackPressed() {
-		if (searchEditText.visibility == View.VISIBLE) {
+		if (searchTextContainer.visibility == View.VISIBLE) {
 			hideSearchToolbar()
 		} else {
 			super.onBackPressed()
@@ -95,12 +97,31 @@ class BrowseActivity : BaseActivity() {
 		}
 	}
 
+	override fun onDebounced(s: CharSequence) {
+		runOnUiThread({
+
+		})
+	}
+
+	override fun onPreDebounce(s: CharSequence) {
+		if (s.isEmpty()) {
+			clearIcon.visibility = View.INVISIBLE
+		} else {
+			clearIcon.visibility = View.VISIBLE
+		}
+	}
+
+	fun setupSearchTextWatcher() {
+        searchEditText.addTextChangedListener(debounceTextWatcher)
+		clearIcon.setOnClickListener { searchEditText.setText("") }
+	}
+
 	fun showSearchToolbar(searchItem: MenuItem) {
-        searchEditText.with {
-			searchItem.isVisible = false
+		searchItem.isVisible = false
+        searchTextContainer.with {
 			visibility = View.VISIBLE
 			pivotX = getDisplayWidth().toFloat() * 0.75f
-			animate().scaleX(1f).setDuration(250).withEndAction { showKeyboard() }.start()
+			animate().scaleX(1f).setDuration(300).withEndAction { searchEditText.showKeyboard() }.start()
 		}
 	}
 
@@ -111,8 +132,10 @@ class BrowseActivity : BaseActivity() {
 			isFocusable = false
 			isFocusableInTouchMode = true
 			isFocusable = true
-			animate().scaleX(0f).setDuration(250).withEndAction {
-				searchEditText.visibility = View.GONE
+		}
+		searchTextContainer.with {
+			animate().scaleX(0f).setDuration(300).withEndAction {
+				visibility = View.GONE
 				searchItem.isVisible = true
 			}.start()
 		}
