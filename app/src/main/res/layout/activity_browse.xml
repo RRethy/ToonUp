@@ -10,7 +10,15 @@
 		android:id="@+id/toolbar"
 		android:background="@color/dark_transparent"
 		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize"/>
+		android:layout_height="?attr/actionBarSize">
+		<EditText
+			android:id="@+id/searchEditText"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:visibility="gone"
+			android:scaleX="0"
+			android:layout_marginEnd="8dp"/>
+	</android.support.v7.widget.Toolbar>
 	<FrameLayout
 		android:id="@+id/browseFragmentContainer"
 		android:layout_width="match_parent"

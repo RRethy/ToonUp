@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.view.Menu
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
@@ -18,6 +19,8 @@ import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.BrowseViewModelFacto
 import kotlinx.android.synthetic.main.activity_browse.*
 import javax.inject.Inject
 import com.bonnetrouge.toonup.Fragments.BrowseMoviesFragment
+import android.view.MenuInflater
+import android.view.View
 
 
 class BrowseActivity : BaseActivity() {
@@ -51,6 +54,22 @@ class BrowseActivity : BaseActivity() {
 			setEnterFadeDuration(1000)
 			setExitFadeDuration(4000)
 		}
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+		val inflater = menuInflater
+		inflater.inflate(R.menu.browse_menu_options, menu)
+        val searchItem = menu?.findItem(R.id.search_item)
+		searchItem?.setOnMenuItemClickListener {
+			searchItem.isVisible = false
+			searchEditText.visibility = View.VISIBLE
+			searchEditText.pivotX = getDisplayWidth().toFloat()
+            searchEditText.animate().scaleX(1f).setDuration(500).start()
+
+            true
+		}
+
+		return true
 	}
 
 	override fun onResume() {
