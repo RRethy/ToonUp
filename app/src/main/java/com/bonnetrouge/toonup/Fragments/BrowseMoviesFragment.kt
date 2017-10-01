@@ -34,7 +34,6 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		(activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
 		browseMoviesRecyclerView.adapter = bannerListAdapter
 		browseMoviesRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 		swipeRefreshLayout.setOnRefreshListener { refreshBanners() }

@@ -34,7 +34,6 @@ class BrowseAnimeFragment @Inject constructor(): BaseFragment() {
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         animeRecyclerView.adapter = bannerListAdapter
         animeRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         swipeRefreshLayout.setOnRefreshListener { refreshBanners() }
