@@ -1,4 +1,4 @@
-package com.bonnetrouge.toonup.UI
+package com.bonnetrouge.toonup.Adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -12,6 +12,9 @@ import com.bonnetrouge.toonup.Commons.bindView
 import com.bonnetrouge.toonup.Model.Episode
 import com.bonnetrouge.toonup.Model.ExtendedEpisodeInfo
 import com.bonnetrouge.toonup.R
+import com.bonnetrouge.toonup.UI.LoadingViewHolder
+import com.bonnetrouge.toonup.UI.RVItem
+import com.bonnetrouge.toonup.UI.RVItemViewTypes
 import java.lang.ref.WeakReference
 
 class DetailsAdapter(detailActivity: DetailActivity) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -24,7 +27,7 @@ class DetailsAdapter(detailActivity: DetailActivity) : RecyclerView.Adapter<Recy
 			RVItemViewTypes.EPISODE -> return DetailItemViewHolder(LayoutInflater.from(parent?.context)
 					.inflate(R.layout.view_holder_detail, parent, false))
 			RVItemViewTypes.LOADING -> return LoadingViewHolder(LayoutInflater.from(parent?.context)
-					.inflate(R.layout.view_holder_loading, parent, false))
+                    .inflate(R.layout.view_holder_loading, parent, false))
 			RVItemViewTypes.EXTENDED_EPISODE -> return ExtendedDetailItemViewHolder(LayoutInflater.from(parent?.context)
 					.inflate(R.layout.view_holder_descriptive_episode, parent, false))
 		}

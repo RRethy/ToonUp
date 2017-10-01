@@ -1,4 +1,4 @@
-package com.bonnetrouge.toonup.UI
+package com.bonnetrouge.toonup.Adapters
 
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -10,6 +10,8 @@ import com.bonnetrouge.toonup.Commons.bindView
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
+import com.bonnetrouge.toonup.UI.RVItem
+import com.bonnetrouge.toonup.UI.RVItemViewTypes
 import com.bumptech.glide.Glide
 import java.lang.ref.WeakReference
 

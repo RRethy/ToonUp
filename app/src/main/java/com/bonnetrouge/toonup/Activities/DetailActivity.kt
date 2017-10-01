@@ -15,7 +15,7 @@ import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.DetailActivityModule
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.*
-import com.bonnetrouge.toonup.UI.DetailsAdapter
+import com.bonnetrouge.toonup.Adapters.DetailsAdapter
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.DetailViewModel
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.DetailViewModelFactory

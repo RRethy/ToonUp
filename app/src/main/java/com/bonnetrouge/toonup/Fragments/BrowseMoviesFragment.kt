@@ -2,7 +2,6 @@ package com.bonnetrouge.toonup.Fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -10,18 +9,12 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Activities.BrowseActivity
 import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
-import com.bonnetrouge.toonup.Commons.Ext.resString
 import com.bonnetrouge.toonup.Fragment.BaseFragment
-import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
-import com.bonnetrouge.toonup.Model.VideoGenres
 import com.bonnetrouge.toonup.R
-import com.bonnetrouge.toonup.UI.BannerListAdapter
+import com.bonnetrouge.toonup.Adapters.BannerListAdapter
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_browse_movies.*
 import javax.inject.Inject
 

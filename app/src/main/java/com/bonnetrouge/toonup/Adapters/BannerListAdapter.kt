@@ -1,21 +1,17 @@
-package com.bonnetrouge.toonup.UI
+package com.bonnetrouge.toonup.Adapters
 
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.LinearSnapHelper
 import android.support.v7.widget.RecyclerView
-import android.support.v7.widget.SnapHelper
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
 import android.widget.TextView
 import com.bonnetrouge.toonup.Commons.Ext.app
-import com.bonnetrouge.toonup.Commons.GravitySnapHelper
 import com.bonnetrouge.toonup.Commons.bindView
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.R
+import com.bonnetrouge.toonup.UI.RVItemViewTypes
 import java.lang.ref.WeakReference
 
 class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
