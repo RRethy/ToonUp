@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.text.Editable
 import android.view.Menu
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Commons.Ext.*
@@ -95,17 +96,26 @@ class BrowseActivity : BaseActivity() {
 	}
 
 	fun showSearchToolbar(searchItem: MenuItem) {
-		searchItem.isVisible = false
-		searchEditText.visibility = View.VISIBLE
-		searchEditText.pivotX = getDisplayWidth().toFloat() * 0.75f
-		searchEditText.animate().scaleX(1f).setDuration(500).start()
+        searchEditText.with {
+			searchItem.isVisible = false
+			visibility = View.VISIBLE
+			pivotX = getDisplayWidth().toFloat() * 0.75f
+			animate().scaleX(1f).setDuration(250).withEndAction { showKeyboard() }.start()
+		}
 	}
 
 	fun hideSearchToolbar() {
-		searchEditText.animate().scaleX(0f).setDuration(500).withEndAction {
-			searchEditText.visibility = View.GONE
-			searchItem.isVisible = true
-		}.start()
+        searchEditText.with {
+			setText("")
+			isFocusableInTouchMode = false
+			isFocusable = false
+			isFocusableInTouchMode = true
+			isFocusable = true
+			animate().scaleX(0f).setDuration(250).withEndAction {
+				searchEditText.visibility = View.GONE
+				searchItem.isVisible = true
+			}.start()
+		}
 	}
 
 	fun showSearchIcon() {
@@ -121,7 +131,7 @@ class BrowseActivity : BaseActivity() {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseTvFragment)
 		}
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        showBackButton()
 		showSearchIcon()
 	}
 
@@ -130,7 +140,7 @@ class BrowseActivity : BaseActivity() {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseMoviesFragment)
 		}
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        showBackButton()
 		showSearchIcon()
 	}
 
@@ -139,7 +149,7 @@ class BrowseActivity : BaseActivity() {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseAnimeFragment)
 		}
-		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+		showBackButton()
 		showSearchIcon()
 	}
 

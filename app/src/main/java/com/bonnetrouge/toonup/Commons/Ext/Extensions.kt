@@ -1,5 +1,6 @@
 package com.bonnetrouge.toonup.Commons.Ext
 
+import android.content.Context
 import android.graphics.Rect
 import android.os.Handler
 import android.support.v4.app.FragmentTransaction
@@ -7,6 +8,11 @@ import android.util.Log
 import android.view.View
 import com.bonnetrouge.toonup.ToonUpApp
 import com.bonnetrouge.toonup.Activities.BaseActivity
+import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+
 
 val app: ToonUpApp
     get() = ToonUpApp.app
@@ -69,10 +75,16 @@ fun postDelayed(milliDelay: Long, action: () -> Unit) {
 }
 
 fun isInViewBounds(view: View, x: Int, y: Int): Boolean {
-    var outRect = Rect()
-    var location = IntArray(2)
+    val outRect = Rect()
+    val location = IntArray(2)
     view.getDrawingRect(outRect)
     view.getLocationOnScreen(location)
     outRect.offset(location[0], location[1])
     return outRect.contains(x, y)
+}
+
+fun EditText.showKeyboard() {
+    this.requestFocus()
+    val imm = app.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
 }
