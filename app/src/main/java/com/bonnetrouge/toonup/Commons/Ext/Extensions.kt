@@ -70,6 +70,13 @@ fun <T> T?.ifNull(action: () -> Unit) {
     if (this == null) action()
 }
 
+fun <T> T?.ifNullElse(nullAction: () -> Unit, notNullAction: () -> Unit) {
+    if (this == null) nullAction()
+    else {
+        notNullAction()
+    }
+}
+
 fun resString(resId: Int) = app.getString(resId)
 
 fun postDelayed(milliDelay: Long, action: () -> Unit) {

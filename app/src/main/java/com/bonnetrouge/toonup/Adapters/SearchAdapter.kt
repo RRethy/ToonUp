@@ -47,6 +47,7 @@ class SearchAdapter(baseFragment: BaseFragment, val itemWidth: Int) : RecyclerVi
                 width = itemWidth
                 height = Math.floor(itemWidth * 1.2).toInt()
             }
+            image.setOnClickListener { fragmentWeakRef.get()?.onRVItemClicked(items[adapterPosition], image) }
         }
 
         fun bind(basicSeriesInfo: BasicSeriesInfo) {

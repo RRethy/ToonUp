@@ -11,6 +11,7 @@ import com.bonnetrouge.toonup.Adapters.SearchAdapter
 import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
 import com.bonnetrouge.toonup.Commons.Ext.ifAdded
 import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
+import com.bonnetrouge.toonup.Commons.Ext.notEmpty
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
@@ -38,13 +39,20 @@ class SearchFragment @Inject constructor() : BaseFragment() {
     }
 
     fun popularRecyclerView() {
+        searchAdapter.items.clear()
         searchAdapter.items.addAll(browseViewModel.getPopularCartoonsRaw())
         searchAdapter.notifyDataSetChanged()
     }
 
     fun dispatchSearch(s: CharSequence) {
        ifAdded {
-           
+           searchAdapter.items.clear()
+           if (s.isEmpty()) {
+               searchAdapter.items.addAll(browseViewModel.getPopularCartoonsRaw())
+           } else {
+               searchAdapter.items.addAll(browseViewModel.getFilteredCartoons(s))
+           }
+           searchAdapter.notifyDataSetChanged()
        }
     }
 

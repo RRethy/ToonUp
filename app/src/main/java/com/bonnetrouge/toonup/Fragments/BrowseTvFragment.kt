@@ -31,7 +31,9 @@ class BrowseTvFragment @Inject constructor(): BaseFragment() {
 		tvRecyclerView.adapter = bannerListAdapter
 		tvRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 		swipeRefreshLayout.setOnRefreshListener { refreshBanners() }
-		refreshBanners()
+        if (bannerListAdapter.banners.size == 0) {
+			refreshBanners()
+		}
 	}
 
 	fun refreshBanners() {

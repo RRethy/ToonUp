@@ -19,6 +19,7 @@ import javax.inject.Inject
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository): ViewModel() {
 
 	private var cartoons: MutableList<BannerModel>? = null
+	private var rawCartoons: MutableList<BasicSeriesInfo>? = null
 	private var movies: MutableList<BannerModel>? = null
     private var animes: MutableList<BannerModel>? = null
 
@@ -66,23 +67,20 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		}
 		lazySearchRegexBuilder.append(")")
 		val lazySearchPattern = Pattern.compile(lazySearchRegexBuilder.toString(), Pattern.CASE_INSENSITIVE)
-		val rawCartoons = mutableListOf<BasicSeriesInfo>()
-		cartoons?.forEach {
-			it.dataList.forEach {
-				(it as BasicSeriesInfo).with {
-					val lazySearchMatcher = lazySearchPattern.matcher(this.name)
-					if (lazySearchMatcher.find()) {
-						rawCartoons.add(it)
-					}
-				}
+		val filteredRawCartoons = mutableListOf<BasicSeriesInfo>()
+        rawCartoons?.forEach {
+			val lazySearchMatcher = lazySearchPattern.matcher(it.name)
+			if (lazySearchMatcher.find()) {
+				filteredRawCartoons.add(it)
 			}
 		}
-		return rawCartoons
+		return filteredRawCartoons
 	}
 
 	private fun getAllCartoons(videoGenres: VideoGenres) =
 			videoRepository.getAllCartoons()
 					.retry(3)
+					.doOnNext { rawCartoons = it.toMutableList() }
 					.map {
 						val seriesByGenre = mutableListOf<BannerModel>()
 						for (videoGenre in videoGenres.genres) {

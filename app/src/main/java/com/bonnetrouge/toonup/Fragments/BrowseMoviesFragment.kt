@@ -31,7 +31,9 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 		browseMoviesRecyclerView.adapter = bannerListAdapter
 		browseMoviesRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
 		swipeRefreshLayout.setOnRefreshListener { refreshBanners() }
-		refreshBanners()
+		if (bannerListAdapter.banners.size == 0) {
+			refreshBanners()
+		}
 	}
 
 	fun refreshBanners() {

@@ -12,14 +12,14 @@ import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
-import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.BrowseViewModelFactory
 import kotlinx.android.synthetic.main.activity_browse.*
 import javax.inject.Inject
 import android.view.MenuItem
 import android.view.View
 import com.bonnetrouge.toonup.Fragments.*
 import com.bonnetrouge.toonup.Listeners.DebounceTextWatcher
-
+import com.bonnetrouge.toonup.UI.UnitedStates
+import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.BrowseViewModelFactory
 
 class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
@@ -28,6 +28,8 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	@Inject lateinit var browseMoviesFragment: BrowseMoviesFragment
 	@Inject lateinit var browseAnimeFragment: BrowseAnimeFragment
 	@Inject lateinit var searchFragment: SearchFragment
+
+    @Inject lateinit var stateMachine: UnitedStates
 
 	@Inject lateinit var browseViewModelFactory: BrowseViewModelFactory
 	lateinit var browseViewModel: BrowseViewModel
@@ -51,15 +53,25 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 		browseViewModel = ViewModelProviders.of(this, browseViewModelFactory).get(BrowseViewModel::class.java)
 		browseViewModel.prefetchGenres()
 		setSupportActionBar(toolbar)
-		savedInstanceState.ifNull {
+		savedInstanceState.ifNullElse({
 			supportActionBar?.setDisplayHomeAsUpEnabled(false)
 			fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) }
-		}
+            stateMachine.intializeBaseState()
+		}, {
+			savedInstanceState?.let {
+				stateMachine.updateState(savedInstanceState.getInt(UnitedStates.CURRENT_BROWSE_STATE))
+			}
+		})
 		with(backgroundAnimation) {
 			setEnterFadeDuration(1000)
 			setExitFadeDuration(4000)
 		}
-        setupSearchTextWatcher()
+		setupSearchTextWatcher()
+	}
+
+	override fun onSaveInstanceState(outState: Bundle?) {
+		outState?.putInt(UnitedStates.CURRENT_BROWSE_STATE, stateMachine.state)
+		super.onSaveInstanceState(outState)
 	}
 
 	override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -68,6 +80,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 		searchItem = menu.findItem(R.id.search_item)
 		searchItem.setOnMenuItemClickListener {
 			showSearchToolbar(searchItem)
+			navigateSearch()
 			true
 		}
 		hideSearchIcon()
@@ -86,18 +99,20 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	}
 
 	override fun onBackPressed() {
-		if (searchTextContainer.visibility == View.VISIBLE) {
+		if (stateMachine.isSearching()) {
 			hideSearchToolbar()
+            stateMachine.returnFromSearch()
 		} else {
-			super.onBackPressed()
 			hideSearchIcon()
 			supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            stateMachine.returnToChooser()
 		}
+		super.onBackPressed()
 	}
 
 	override fun onDebounced(s: CharSequence) {
 		runOnUiThread({
-
+            if (stateMachine.isSearching()) searchFragment.dispatchSearch(s)
 		})
 	}
 
@@ -110,13 +125,13 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	}
 
 	fun setupSearchTextWatcher() {
-        searchEditText.addTextChangedListener(debounceTextWatcher)
+		searchEditText.addTextChangedListener(debounceTextWatcher)
 		clearIcon.setOnClickListener { searchEditText.setText("") }
 	}
 
 	fun showSearchToolbar(searchItem: MenuItem) {
 		searchItem.isVisible = false
-        searchTextContainer.with {
+		searchTextContainer.with {
 			visibility = View.VISIBLE
 			pivotX = getDisplayWidth().toFloat() * 0.75f
 			animate().scaleX(1f).setDuration(300).withEndAction {
@@ -124,7 +139,6 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 				searchEditText.setHint(R.string.search_hint)
 			}.start()
 		}
-		fragmentTransaction { replace(browseFragmentContainer.id, searchFragment) }
 	}
 
 	fun hideSearchToolbar() {
@@ -157,6 +171,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseTvFragment)
 		}
+		stateMachine.updateState(UnitedStates.BROWSE_TV_STATE)
 		showBackButton()
 		showSearchIcon()
 	}
@@ -166,6 +181,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseMoviesFragment)
 		}
+		stateMachine.updateState(UnitedStates.BROWSE_MOVIES_STATE)
 		showBackButton()
 		showSearchIcon()
 	}
@@ -175,8 +191,17 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseAnimeFragment)
 		}
+		stateMachine.updateState(UnitedStates.BROWSE_ANIME_STATE)
 		showBackButton()
 		showSearchIcon()
+	}
+
+	fun navigateSearch() {
+		fragmentTransaction {
+            setCustomAnimations(R.anim.my_fade_in, R.anim.my_fade_out, R.anim.my_fade_in, R.anim.my_fade_out)
+			replace(browseFragmentContainer.id, searchFragment)
+		}
+		stateMachine.state = UnitedStates.SEARCH_TV_STATE
 	}
 
 	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo, imageView: ImageView) {
