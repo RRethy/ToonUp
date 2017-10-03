@@ -8,6 +8,7 @@ class UnitedStates @Inject constructor() {
 
     companion object {
         val CURRENT_BROWSE_STATE = "CURRENT BROWSING STATE"
+        val IS_SEARCH_ICON_SHOWING = "IS SEARCH ICON SHOWING"
         val NO_STATE = -1
         val CATEGORY_CHOOSER_STATE = 0
         val BROWSE_TV_STATE = 1

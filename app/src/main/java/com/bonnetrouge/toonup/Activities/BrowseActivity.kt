@@ -37,7 +37,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	val backgroundAnimation by lazyAndroid { rootBackground.background as AnimationDrawable }
 	val debounceTextWatcher by lazyAndroid { DebounceTextWatcher(this) }
 
-	lateinit var searchItem: MenuItem
+    var searchItem: MenuItem? = null
 
 	companion object {
 		fun navigate(context: Context) {
@@ -60,6 +60,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 		}, {
 			savedInstanceState?.let {
 				stateMachine.updateState(savedInstanceState.getInt(UnitedStates.CURRENT_BROWSE_STATE))
+				intent.putExtra(UnitedStates.IS_SEARCH_ICON_SHOWING, savedInstanceState.getBoolean(UnitedStates.IS_SEARCH_ICON_SHOWING))
 			}
 		})
 		with(backgroundAnimation) {
@@ -71,6 +72,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
 	override fun onSaveInstanceState(outState: Bundle?) {
 		outState?.putInt(UnitedStates.CURRENT_BROWSE_STATE, stateMachine.state)
+		outState?.putBoolean(UnitedStates.IS_SEARCH_ICON_SHOWING, searchItem.safeBool { isVisible })
 		super.onSaveInstanceState(outState)
 	}
 
@@ -78,12 +80,16 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 		val inflater = menuInflater
 		inflater.inflate(R.menu.browse_menu_options, menu)
 		searchItem = menu.findItem(R.id.search_item)
-		searchItem.setOnMenuItemClickListener {
-			showSearchToolbar(searchItem)
+		searchItem?.setOnMenuItemClickListener {
+			showSearchToolbar(searchItem!!)
 			navigateSearch()
 			true
 		}
-		hideSearchIcon()
+		if (intent.getBooleanExtra(UnitedStates.IS_SEARCH_ICON_SHOWING, false)) {
+			showSearchIcon()
+		} else {
+			hideSearchIcon()
+		}
 
 		return true
 	}
@@ -154,17 +160,17 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 		searchTextContainer.with {
 			animate().scaleX(0f).setDuration(300).withEndAction {
 				visibility = View.GONE
-				searchItem.isVisible = true
+				searchItem?.isVisible = true
 			}.start()
 		}
 	}
 
 	fun showSearchIcon() {
-		searchItem.isVisible = true
+		searchItem?.isVisible = true
 	}
 
 	fun hideSearchIcon() {
-		searchItem.isVisible = false
+		searchItem?.isVisible = false
 	}
 
 	fun navigateTvShows() {
@@ -174,7 +180,6 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 		}
 		stateMachine.updateState(UnitedStates.BROWSE_TV_STATE)
 		showBackButton()
-		showSearchIcon()
 	}
 
 	fun navigateMovies() {
@@ -184,7 +189,6 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 		}
 		stateMachine.updateState(UnitedStates.BROWSE_MOVIES_STATE)
 		showBackButton()
-		showSearchIcon()
 	}
 
 	fun navigateAnime() {
@@ -194,7 +198,6 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 		}
 		stateMachine.updateState(UnitedStates.BROWSE_ANIME_STATE)
 		showBackButton()
-		showSearchIcon()
 	}
 
 	fun navigateSearch() {

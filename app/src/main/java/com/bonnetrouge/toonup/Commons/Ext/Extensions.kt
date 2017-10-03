@@ -110,3 +110,8 @@ fun <T> lazyAndroid(initializer: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.N
 fun Fragment.ifAdded(action: () -> Unit) {
     if (isAdded) action()
 }
+
+fun <T> T?.safeBool(defaultValue: Boolean = false, predicate: T.() -> Boolean): Boolean {
+    return if (this != null) this.predicate()
+    else defaultValue
+}
