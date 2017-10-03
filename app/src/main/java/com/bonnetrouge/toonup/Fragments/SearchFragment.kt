@@ -2,6 +2,7 @@ package com.bonnetrouge.toonup.Fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -46,13 +47,25 @@ class SearchFragment @Inject constructor() : BaseFragment() {
 
     fun dispatchSearch(s: CharSequence) {
        ifAdded {
-           searchAdapter.items.clear()
+           val newItems: MutableList<BasicSeriesInfo>
            if (s.isEmpty()) {
-               searchAdapter.items.addAll(browseViewModel.getPopularCartoonsRaw())
+               newItems = browseViewModel.getPopularCartoonsRaw()
            } else {
-               searchAdapter.items.addAll(browseViewModel.getFilteredCartoons(s))
+               newItems = browseViewModel.getFilteredCartoons(s)
            }
-           searchAdapter.notifyDataSetChanged()
+           val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+               override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                       newItems[newItemPosition] == searchAdapter.items[oldItemPosition]
+
+               override fun getOldListSize() = searchAdapter.items.size
+
+               override fun getNewListSize() = newItems.size
+
+               override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
+           })
+           searchAdapter.items.clear()
+           searchAdapter.items.addAll(newItems)
+           diffResult.dispatchUpdatesTo(searchAdapter)
        }
     }
 

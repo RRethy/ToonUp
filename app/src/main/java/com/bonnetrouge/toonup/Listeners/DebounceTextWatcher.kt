@@ -7,7 +7,7 @@ import java.util.*
 class DebounceTextWatcher(val onDebouncedListener: OnDebouncedListener) : TextWatcher {
 
     private var timer = Timer()
-    private val DELAY: Long = 250 // milliseconds
+    private val DELAY: Long = 200 // milliseconds
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { }
 
@@ -17,12 +17,11 @@ class DebounceTextWatcher(val onDebouncedListener: OnDebouncedListener) : TextWa
         onDebouncedListener.onPreDebounce(s)
         timer.cancel()
         timer = Timer()
-        timer.schedule(
-                object : TimerTask() {
-                    override fun run() {
-                        onDebouncedListener.onDebounced(s)
-                    }
-                },
+        timer.schedule( object : TimerTask() {
+            override fun run() {
+                onDebouncedListener.onDebounced(s)
+            }
+        },
                 DELAY
         )
     }

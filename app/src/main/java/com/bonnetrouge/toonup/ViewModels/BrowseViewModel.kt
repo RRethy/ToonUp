@@ -21,7 +21,9 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 	private var cartoons: MutableList<BannerModel>? = null
 	private var rawCartoons: MutableList<BasicSeriesInfo>? = null
 	private var movies: MutableList<BannerModel>? = null
+	private var rawMovies: MutableList<BasicSeriesInfo>? = null
     private var animes: MutableList<BannerModel>? = null
+	private var rawAnime: MutableList<BasicSeriesInfo>? = null
 
 	var genres: VideoGenres? = null
 
