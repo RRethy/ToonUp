@@ -143,6 +143,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
 	fun hideSearchToolbar() {
 		searchEditText.with {
+            hideKeyboard()
 			setText("")
 			hint = ""
 			isFocusableInTouchMode = false
