@@ -232,7 +232,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 
 	private fun getPopularAnimeRaw(): MutableList<BasicSeriesInfo> {
 		val rawAnime = mutableListOf<BasicSeriesInfo>()
-		movies?.forEach {
+		animes?.forEach {
 			if (it.title == resString(R.string.popular)) {
 				it.dataList.forEach { rawAnime.add(it as BasicSeriesInfo) }
 			}
@@ -260,8 +260,9 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 	}
 
 	private fun getAllAnime(videoGenres: VideoGenres) =
-			videoRepository.getAllMovies()
+			videoRepository.getAllAnime()
 					.retry(3)
+					.doOnNext { rawAnime = it.toMutableList() }
 					.map {
 						val animeByGenre = mutableListOf<BannerModel>()
 						for (videoGenre in videoGenres.genres) {

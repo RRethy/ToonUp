@@ -29,7 +29,7 @@ class SearchFragment @Inject constructor() : BaseFragment() {
     val itemWidth = getDisplayWidth() / 3
     val searchAdapter by lazyAndroid { SearchAdapter(this, itemWidth) }
 
-    lateinit var searchDelegate: SearchDelegate
+    var searchDelegate: SearchDelegate? = null
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
             = inflater?.inflate(R.layout.fragment_search, container, false)
@@ -42,7 +42,7 @@ class SearchFragment @Inject constructor() : BaseFragment() {
     }
 
     fun popularRecyclerView() {
-        searchDelegate.getFilteredSearchResults("", browseViewModel) {
+        searchDelegate?.getFilteredSearchResults("", browseViewModel) {
             searchAdapter.items.clear()
             searchAdapter.items.addAll(it)
             searchAdapter.notifyDataSetChanged()
@@ -51,7 +51,7 @@ class SearchFragment @Inject constructor() : BaseFragment() {
 
     fun dispatchSearch(s: CharSequence) {
         ifAdded {
-            searchDelegate.getFilteredSearchResults(s, browseViewModel) {
+            searchDelegate?.getFilteredSearchResults(s, browseViewModel) {
                 val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
                             it[newItemPosition] == searchAdapter.items[oldItemPosition]

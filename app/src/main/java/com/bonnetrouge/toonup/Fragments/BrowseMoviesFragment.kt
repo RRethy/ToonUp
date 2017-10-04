@@ -13,6 +13,7 @@ import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.Adapters.BannerListAdapter
+import com.bonnetrouge.toonup.Commons.Ext.ifAdded
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import kotlinx.android.synthetic.main.fragment_browse_movies.*
@@ -33,6 +34,8 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 		swipeRefreshLayout.setOnRefreshListener { refreshBanners() }
 		if (bannerListAdapter.banners.size == 0) {
 			refreshBanners()
+		} else {
+			showSearchIcon()
 		}
 	}
 
@@ -61,6 +64,7 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 
 	fun showErroMsg() {
 		errorMessage?.visibility = View.VISIBLE
+		hideSearchIcon()
 	}
 
 	fun hideErrorMsg() {
@@ -69,10 +73,20 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 
 	fun showLoading() {
 		swipeRefreshLayout?.isRefreshing = true
+		hideSearchIcon()
 	}
 
 	fun hideLoading() {
 		swipeRefreshLayout?.isRefreshing = false
+		showSearchIcon()
+	}
+
+	fun showSearchIcon() {
+		ifAdded { (activity as BrowseActivity).showSearchIcon() }
+	}
+
+	fun hideSearchIcon() {
+		ifAdded { (activity as BrowseActivity).hideSearchIcon() }
 	}
 
 	override fun onRVItemClicked(item: RVItem, imageView: ImageView) {

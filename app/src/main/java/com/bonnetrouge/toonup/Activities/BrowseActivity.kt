@@ -174,39 +174,39 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	}
 
 	fun navigateTvShows() {
+		stateMachine.updateState(UnitedStates.BROWSE_TV_STATE)
+		showBackButton()
 		fragmentTransaction {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseTvFragment)
 		}
-		stateMachine.updateState(UnitedStates.BROWSE_TV_STATE)
-		showBackButton()
 	}
 
 	fun navigateMovies() {
+		stateMachine.updateState(UnitedStates.BROWSE_MOVIES_STATE)
+		showBackButton()
 		fragmentTransaction {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseMoviesFragment)
 		}
-		stateMachine.updateState(UnitedStates.BROWSE_MOVIES_STATE)
-		showBackButton()
 	}
 
 	fun navigateAnime() {
+		stateMachine.updateState(UnitedStates.BROWSE_ANIME_STATE)
+		showBackButton()
 		fragmentTransaction {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseAnimeFragment)
 		}
-		stateMachine.updateState(UnitedStates.BROWSE_ANIME_STATE)
-		showBackButton()
 	}
 
 	fun navigateSearch() {
+		searchFragment.searchDelegate = stateMachine.getStateSafeSearchDelegate()
+		stateMachine.goToSearch()
 		fragmentTransaction {
             setCustomAnimations(R.anim.my_fade_in, R.anim.my_fade_out, R.anim.my_fade_in, R.anim.my_fade_out)
 			replace(browseFragmentContainer.id, searchFragment)
 		}
-        searchFragment.searchDelegate = stateMachine.getStateSafeSearchDelegate()
-        stateMachine.goToSearch()
 	}
 
 	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo, imageView: ImageView) {
