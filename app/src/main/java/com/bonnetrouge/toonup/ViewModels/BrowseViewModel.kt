@@ -70,7 +70,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 
 	private fun filterForCartoons(s: CharSequence): MutableList<BasicSeriesInfo> {
 		val lazySearchRegexBuilder = StringBuilder()
-		lazySearchRegexBuilder.append("(")
+		lazySearchRegexBuilder.append("^(")
 		s.forEach {
 			lazySearchRegexBuilder.append(it)
 			lazySearchRegexBuilder.append(".*")
@@ -156,7 +156,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 
 	fun filterForMovies(s: CharSequence): MutableList<BasicSeriesInfo> {
 		val lazySearchRegexBuilder = StringBuilder()
-		lazySearchRegexBuilder.append("(")
+		lazySearchRegexBuilder.append("^(")
 		s.forEach {
 			lazySearchRegexBuilder.append(it)
 			lazySearchRegexBuilder.append(".*")
@@ -242,7 +242,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 
 	private fun filterForAnime(s: CharSequence): MutableList<BasicSeriesInfo> {
 		val lazySearchRegexBuilder = StringBuilder()
-		lazySearchRegexBuilder.append("(")
+		lazySearchRegexBuilder.append("^(")
 		s.forEach {
 			lazySearchRegexBuilder.append(it)
 			lazySearchRegexBuilder.append(".*")
