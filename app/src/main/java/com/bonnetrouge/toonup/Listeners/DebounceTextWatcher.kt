@@ -7,7 +7,7 @@ import java.util.*
 class DebounceTextWatcher(val onDebouncedListener: OnDebouncedListener) : TextWatcher {
 
     private var timer = Timer()
-    private val DELAY: Long = 200 // milliseconds
+    private val DELAY: Long = 300 // milliseconds
 
     override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { }
 
