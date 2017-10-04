@@ -12,7 +12,7 @@ import com.bonnetrouge.toonup.Adapters.SearchAdapter
 import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
 import com.bonnetrouge.toonup.Commons.Ext.ifAdded
 import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
-import com.bonnetrouge.toonup.Commons.Ext.notEmpty
+import com.bonnetrouge.toonup.Delegates.SearchDelegate
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
@@ -29,6 +29,8 @@ class SearchFragment @Inject constructor() : BaseFragment() {
     val itemWidth = getDisplayWidth() / 3
     val searchAdapter by lazyAndroid { SearchAdapter(this, itemWidth) }
 
+    lateinit var searchDelegate: SearchDelegate
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
             = inflater?.inflate(R.layout.fragment_search, container, false)
 
@@ -40,33 +42,31 @@ class SearchFragment @Inject constructor() : BaseFragment() {
     }
 
     fun popularRecyclerView() {
-        searchAdapter.items.clear()
-        searchAdapter.items.addAll(browseViewModel.getPopularCartoonsRaw())
-        searchAdapter.notifyDataSetChanged()
+        searchDelegate.getFilteredSearchResults("", browseViewModel) {
+            searchAdapter.items.clear()
+            searchAdapter.items.addAll(it)
+            searchAdapter.notifyDataSetChanged()
+        }
     }
 
     fun dispatchSearch(s: CharSequence) {
-       ifAdded {
-           val newItems: MutableList<BasicSeriesInfo>
-           if (s.isEmpty()) {
-               newItems = browseViewModel.getPopularCartoonsRaw()
-           } else {
-               newItems = browseViewModel.getFilteredCartoons(s)
-           }
-           val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-               override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                       newItems[newItemPosition] == searchAdapter.items[oldItemPosition]
+        ifAdded {
+            searchDelegate.getFilteredSearchResults(s, browseViewModel) {
+                val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                            it[newItemPosition] == searchAdapter.items[oldItemPosition]
 
-               override fun getOldListSize() = searchAdapter.items.size
+                    override fun getOldListSize() = searchAdapter.items.size
 
-               override fun getNewListSize() = newItems.size
+                    override fun getNewListSize() = it.size
 
-               override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
-           })
-           searchAdapter.items.clear()
-           searchAdapter.items.addAll(newItems)
-           diffResult.dispatchUpdatesTo(searchAdapter)
-       }
+                    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
+                })
+                searchAdapter.items.clear()
+                searchAdapter.items.addAll(it)
+                diffResult.dispatchUpdatesTo(searchAdapter)
+            }
+        }
     }
 
     override fun onRVItemClicked(item: RVItem, imageView: ImageView) {

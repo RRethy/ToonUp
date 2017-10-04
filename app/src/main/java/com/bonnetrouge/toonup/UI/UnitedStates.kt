@@ -1,5 +1,10 @@
 package com.bonnetrouge.toonup.UI
 
+import com.bonnetrouge.toonup.Delegates.AnimeSearchDelegate
+import com.bonnetrouge.toonup.Delegates.CartoonSearchDelegate
+import com.bonnetrouge.toonup.Delegates.MoviesSearchDelegate
+import com.bonnetrouge.toonup.Delegates.SearchDelegate
+import com.bonnetrouge.toonup.Fragments.BrowseMoviesFragment
 import javax.inject.Inject
 
 class UnitedStates @Inject constructor() {
@@ -31,6 +36,14 @@ class UnitedStates @Inject constructor() {
         }
     }
 
+    fun goToSearch() {
+        when (state) {
+            BROWSE_TV_STATE -> state = SEARCH_TV_STATE
+            BROWSE_MOVIES_STATE -> state = SEARCH_MOVIES_STATE
+            BROWSE_ANIME_STATE -> state = SEARCH_ANIME_STATES
+        }
+    }
+
     fun returnToChooser() {
         state = CATEGORY_CHOOSER_STATE
     }
@@ -41,5 +54,11 @@ class UnitedStates @Inject constructor() {
 
     fun updateState(currentState: Int) {
         state = currentState
+    }
+
+    fun getStateSafeSearchDelegate() = when (state) {
+        BROWSE_TV_STATE -> CartoonSearchDelegate()
+        BROWSE_MOVIES_STATE -> MoviesSearchDelegate()
+        else -> AnimeSearchDelegate()
     }
 }

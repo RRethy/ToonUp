@@ -205,7 +205,8 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
             setCustomAnimations(R.anim.my_fade_in, R.anim.my_fade_out, R.anim.my_fade_in, R.anim.my_fade_out)
 			replace(browseFragmentContainer.id, searchFragment)
 		}
-		stateMachine.state = UnitedStates.SEARCH_TV_STATE
+        searchFragment.searchDelegate = stateMachine.getStateSafeSearchDelegate()
+        stateMachine.goToSearch()
 	}
 
 	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo, imageView: ImageView) {
