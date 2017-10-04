@@ -3,8 +3,6 @@ package com.bonnetrouge.toonup.UI
 import com.bonnetrouge.toonup.Delegates.AnimeSearchDelegate
 import com.bonnetrouge.toonup.Delegates.CartoonSearchDelegate
 import com.bonnetrouge.toonup.Delegates.MoviesSearchDelegate
-import com.bonnetrouge.toonup.Delegates.SearchDelegate
-import com.bonnetrouge.toonup.Fragments.BrowseMoviesFragment
 import javax.inject.Inject
 
 class UnitedStates @Inject constructor() {
