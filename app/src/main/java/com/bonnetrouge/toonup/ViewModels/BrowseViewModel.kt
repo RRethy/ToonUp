@@ -3,6 +3,7 @@ package com.bonnetrouge.toonup.ViewModels
 import android.arch.lifecycle.ViewModel
 import com.bonnetrouge.toonup.Commons.Ext.dog
 import com.bonnetrouge.toonup.Commons.Ext.resString
+import com.bonnetrouge.toonup.Commons.Ext.with
 import com.bonnetrouge.toonup.Data.VideoRepository
 import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
@@ -12,13 +13,17 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
+import java.util.regex.Pattern
 import javax.inject.Inject
 
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository): ViewModel() {
 
 	private var cartoons: MutableList<BannerModel>? = null
+	private var rawCartoons: MutableList<BasicSeriesInfo>? = null
 	private var movies: MutableList<BannerModel>? = null
+	private var rawMovies: MutableList<BasicSeriesInfo>? = null
     private var animes: MutableList<BannerModel>? = null
+	private var rawAnime: MutableList<BasicSeriesInfo>? = null
 
 	var genres: VideoGenres? = null
 
@@ -45,9 +50,47 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		})
 	}
 
-	fun getAllCartoons(videoGenres: VideoGenres) =
+    fun getCartoonSearchResults(s: CharSequence): MutableList<BasicSeriesInfo> {
+		return if (s.isEmpty()) {
+			getPopularCartoonsRaw()
+		} else {
+			filterForCartoons(s)
+		}
+	}
+
+	private fun getPopularCartoonsRaw(): MutableList<BasicSeriesInfo> {
+		val rawCartoons = mutableListOf<BasicSeriesInfo>()
+		cartoons?.forEach {
+			if (it.title == resString(R.string.popular)) {
+				it.dataList.forEach { rawCartoons.add(it as BasicSeriesInfo) }
+			}
+		}
+		return rawCartoons
+	}
+
+	private fun filterForCartoons(s: CharSequence): MutableList<BasicSeriesInfo> {
+		val lazySearchRegexBuilder = StringBuilder()
+		lazySearchRegexBuilder.append("^(")
+		s.forEach {
+			lazySearchRegexBuilder.append(it)
+			lazySearchRegexBuilder.append(".*")
+		}
+		lazySearchRegexBuilder.append(")")
+		val lazySearchPattern = Pattern.compile(lazySearchRegexBuilder.toString(), Pattern.CASE_INSENSITIVE)
+		val filteredRawCartoons = mutableListOf<BasicSeriesInfo>()
+        rawCartoons?.forEach {
+			val lazySearchMatcher = lazySearchPattern.matcher(it.name)
+			if (lazySearchMatcher.find()) {
+				filteredRawCartoons.add(it)
+			}
+		}
+		return filteredRawCartoons
+	}
+
+	private fun getAllCartoons(videoGenres: VideoGenres) =
 			videoRepository.getAllCartoons()
 					.retry(3)
+					.doOnNext { rawCartoons = it.toMutableList() }
 					.map {
 						val seriesByGenre = mutableListOf<BannerModel>()
 						for (videoGenre in videoGenres.genres) {
@@ -60,7 +103,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 
-	fun getPopularCartoons() =
+	private fun getPopularCartoons() =
 			videoRepository.getPopularCartoons()
 					.retry(3)
 					.map {
@@ -93,9 +136,47 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		})
 	}
 
-	fun getAllMovies(videoGenres: VideoGenres) =
+	fun getMoviesSearchResults(s: CharSequence): MutableList<BasicSeriesInfo> {
+		return if (s.isEmpty()) {
+			getPopularMoviesRaw()
+		} else {
+			filterForMovies(s)
+		}
+	}
+
+	fun getPopularMoviesRaw(): MutableList<BasicSeriesInfo> {
+		val rawMovies = mutableListOf<BasicSeriesInfo>()
+		movies?.forEach {
+			if (it.title == resString(R.string.popular)) {
+				it.dataList.forEach { rawMovies.add(it as BasicSeriesInfo) }
+			}
+		}
+		return rawMovies
+	}
+
+	fun filterForMovies(s: CharSequence): MutableList<BasicSeriesInfo> {
+		val lazySearchRegexBuilder = StringBuilder()
+		lazySearchRegexBuilder.append("^(")
+		s.forEach {
+			lazySearchRegexBuilder.append(it)
+			lazySearchRegexBuilder.append(".*")
+		}
+		lazySearchRegexBuilder.append(")")
+		val lazySearchPattern = Pattern.compile(lazySearchRegexBuilder.toString(), Pattern.CASE_INSENSITIVE)
+		val filteredRawMovies = mutableListOf<BasicSeriesInfo>()
+		rawMovies?.forEach {
+			val lazySearchMatcher = lazySearchPattern.matcher(it.name)
+			if (lazySearchMatcher.find()) {
+				filteredRawMovies.add(it)
+			}
+		}
+		return filteredRawMovies
+	}
+
+	private fun getAllMovies(videoGenres: VideoGenres) =
 			videoRepository.getAllMovies()
 					.retry(3)
+					.doOnNext { rawMovies = it.toMutableList() }
 					.map {
 						val moviesByGenre = mutableListOf<BannerModel>()
 						for (videoGenre in videoGenres.genres) {
@@ -108,7 +189,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 
-	fun getPopularMovies() =
+	private fun getPopularMovies() =
 			videoRepository.getPopularMovies()
 					.retry(3)
 					.map {
@@ -141,9 +222,47 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 		})
 	}
 
-	fun getAllAnime(videoGenres: VideoGenres) =
-			videoRepository.getAllMovies()
+	fun getAnimeSearchResult(s: CharSequence): MutableList<BasicSeriesInfo> {
+		return if (s.isEmpty()) {
+            getPopularAnimeRaw()
+		} else {
+			filterForAnime(s)
+		}
+	}
+
+	private fun getPopularAnimeRaw(): MutableList<BasicSeriesInfo> {
+		val rawAnime = mutableListOf<BasicSeriesInfo>()
+		animes?.forEach {
+			if (it.title == resString(R.string.popular)) {
+				it.dataList.forEach { rawAnime.add(it as BasicSeriesInfo) }
+			}
+		}
+		return rawAnime
+	}
+
+	private fun filterForAnime(s: CharSequence): MutableList<BasicSeriesInfo> {
+		val lazySearchRegexBuilder = StringBuilder()
+		lazySearchRegexBuilder.append("^(")
+		s.forEach {
+			lazySearchRegexBuilder.append(it)
+			lazySearchRegexBuilder.append(".*")
+		}
+		lazySearchRegexBuilder.append(")")
+		val lazySearchPattern = Pattern.compile(lazySearchRegexBuilder.toString(), Pattern.CASE_INSENSITIVE)
+		val filteredRawAnime = mutableListOf<BasicSeriesInfo>()
+		rawAnime?.forEach {
+			val lazySearchMatcher = lazySearchPattern.matcher(it.name)
+			if (lazySearchMatcher.find()) {
+				filteredRawAnime.add(it)
+			}
+		}
+		return filteredRawAnime
+	}
+
+	private fun getAllAnime(videoGenres: VideoGenres) =
+			videoRepository.getAllAnime()
 					.retry(3)
+					.doOnNext { rawAnime = it.toMutableList() }
 					.map {
 						val animeByGenre = mutableListOf<BannerModel>()
 						for (videoGenre in videoGenres.genres) {
@@ -156,7 +275,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 					.subscribeOn(Schedulers.io())
 					.observeOn(AndroidSchedulers.mainThread())
 
-	fun getPopularAnime() =
+	private fun getPopularAnime() =
 			videoRepository.getPopularAnime()
 					.retry(3)
 					.map {
@@ -166,7 +285,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
 					.observeOn(AndroidSchedulers.mainThread())
 	//endregion
 
-	fun ensureGenresNotNull(onSuccess: (VideoGenres) -> Unit, onFailure: () -> Unit) {
+	private fun ensureGenresNotNull(onSuccess: (VideoGenres) -> Unit, onFailure: () -> Unit) {
 		if (genres != null) onSuccess(genres!!)
 		else videoRepository.getGenres()
 				.subscribeOn(Schedulers.io())

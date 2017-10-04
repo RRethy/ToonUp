@@ -1,12 +1,20 @@
 package com.bonnetrouge.toonup.Commons.Ext
 
+import android.content.Context
 import android.graphics.Rect
 import android.os.Handler
+import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
 import android.util.Log
 import android.view.View
 import com.bonnetrouge.toonup.ToonUpApp
 import com.bonnetrouge.toonup.Activities.BaseActivity
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
+import android.util.DisplayMetrics
+
+
+
 
 val app: ToonUpApp
     get() = ToonUpApp.app
@@ -26,14 +34,16 @@ inline fun String.notEmpty(action: String.() -> Unit) {
 	if (this.isNotEmpty()) this.action()
 }
 
-fun convertToPixels(sizeInDp: Double): Int {
-    val scale = app.resources.displayMetrics.density
-    return (sizeInDp * scale + 0.5f).toInt()
+fun convertToPixels(sizeInDp: Double): Double {
+    val resources = app.getResources()
+    val metrics = resources.getDisplayMetrics()
+    return sizeInDp * (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
 }
 
 fun convertToDp(sizeInPixels: Int): Float {
-    val densityDpi = app.resources.displayMetrics.densityDpi
-    return sizeInPixels / (densityDpi / 160f)
+    val resources = app.getResources()
+    val metrics = resources.getDisplayMetrics()
+    return sizeInPixels / (metrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
 }
 
 fun getDisplayWidth(): Int = app.resources.displayMetrics.widthPixels
@@ -60,6 +70,13 @@ fun <T> T?.ifNull(action: () -> Unit) {
     if (this == null) action()
 }
 
+fun <T> T?.ifNullElse(nullAction: () -> Unit, notNullAction: () -> Unit) {
+    if (this == null) nullAction()
+    else {
+        notNullAction()
+    }
+}
+
 fun resString(resId: Int) = app.getString(resId)
 
 fun postDelayed(milliDelay: Long, action: () -> Unit) {
@@ -69,10 +86,32 @@ fun postDelayed(milliDelay: Long, action: () -> Unit) {
 }
 
 fun isInViewBounds(view: View, x: Int, y: Int): Boolean {
-    var outRect = Rect()
-    var location = IntArray(2)
+    val outRect = Rect()
+    val location = IntArray(2)
     view.getDrawingRect(outRect)
     view.getLocationOnScreen(location)
     outRect.offset(location[0], location[1])
     return outRect.contains(x, y)
+}
+
+fun EditText.showKeyboard() {
+    this.requestFocus()
+    val imm = app.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+}
+
+fun EditText.hideKeyboard() {
+    val imm = app.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.hideSoftInputFromWindow(this.windowToken, 0)
+}
+
+fun <T> lazyAndroid(initializer: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE, initializer)
+
+fun Fragment.ifAdded(action: () -> Unit) {
+    if (isAdded) action()
+}
+
+fun <T> T?.safeBool(defaultValue: Boolean = false, predicate: T.() -> Boolean): Boolean {
+    return if (this != null) this.predicate()
+    else defaultValue
 }

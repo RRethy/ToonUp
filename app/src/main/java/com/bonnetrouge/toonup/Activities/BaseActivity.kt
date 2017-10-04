@@ -7,4 +7,12 @@ open class BaseActivity: AppCompatActivity() {
 		onBackPressed()
 		return true
 	}
+
+	fun showBackButton() {
+		supportActionBar?.setDisplayHomeAsUpEnabled(true)
+	}
+
+	fun hideBackButton() {
+		supportActionBar?.setDisplayHomeAsUpEnabled(false)
+	}
 }

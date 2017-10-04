@@ -2,6 +2,7 @@ package com.bonnetrouge.toonup
 
 import android.app.Application
 import com.bonnetrouge.toonup.API.StreamingApiService
+import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
 import com.bonnetrouge.toonup.DI.Components.DaggerToonUpAppComponent
 import com.bonnetrouge.toonup.DI.Components.ToonUpAppComponent
 import com.bonnetrouge.toonup.DI.Modules.ToonUpAppModule
@@ -15,7 +16,7 @@ class ToonUpApp: Application() {
             private set
     }
 
-    val component: ToonUpAppComponent by lazy {
+    val component: ToonUpAppComponent by lazyAndroid {
         DaggerToonUpAppComponent
                 .builder()
                 .toonUpAppModule(ToonUpAppModule(this))

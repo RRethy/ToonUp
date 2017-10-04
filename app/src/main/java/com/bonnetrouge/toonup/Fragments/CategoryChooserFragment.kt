@@ -20,7 +20,6 @@ class CategoryChooserFragment @Inject constructor(): Fragment() {
 
 	override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
-		(activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(false)
 		attachClickAnimation(tvShowsChooserContainer) { (activity as BrowseActivity).navigateTvShows() }
 		attachClickAnimation(moviesChooserContainer) { (activity as BrowseActivity).navigateMovies() }
 		attachClickAnimation(animeChooserContainer) { (activity as BrowseActivity).navigateAnime() }
