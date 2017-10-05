@@ -37,6 +37,7 @@ class BrowseMoviesFragment @Inject constructor(): BaseFragment() {
 		} else {
 			showSearchIcon()
 		}
+		(activity as BrowseActivity).showBackButton()
 	}
 
 	fun refreshBanners() {

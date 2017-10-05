@@ -16,8 +16,10 @@ import kotlinx.android.synthetic.main.activity_browse.*
 import javax.inject.Inject
 import android.view.MenuItem
 import android.view.View
+import com.bonnetrouge.toonup.Delegates.SearchDelegate
 import com.bonnetrouge.toonup.Fragments.*
 import com.bonnetrouge.toonup.Listeners.DebounceTextWatcher
+import com.bonnetrouge.toonup.Listeners.OnSearchDebounceListener
 import com.bonnetrouge.toonup.UI.UnitedStates
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.BrowseViewModelFactory
 
@@ -38,6 +40,8 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	val debounceTextWatcher by lazyAndroid { DebounceTextWatcher(this) }
 
     var searchItem: MenuItem? = null
+
+	var searchListener: OnSearchDebounceListener? = null
 
 	companion object {
 		fun navigate(context: Context) {
@@ -81,7 +85,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 		inflater.inflate(R.menu.browse_menu_options, menu)
 		searchItem = menu.findItem(R.id.search_item)
 		searchItem?.setOnMenuItemClickListener {
-			showSearchToolbar(searchItem!!)
+			showSearchToolbar()
 			navigateSearch()
 			true
 		}
@@ -118,7 +122,9 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
 	override fun onDebounced(s: CharSequence) {
 		runOnUiThread({
-            if (stateMachine.isSearching()) searchFragment.dispatchSearch(s)
+            if (stateMachine.isSearching()) {
+                searchListener?.onSearchDebounce(s)
+			}
 		})
 	}
 
@@ -135,8 +141,8 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 		clearIcon.setOnClickListener { searchEditText.setText("") }
 	}
 
-	fun showSearchToolbar(searchItem: MenuItem) {
-		searchItem.isVisible = false
+	fun showSearchToolbar() {
+		searchItem?.isVisible = false
 		searchTextContainer.with {
 			visibility = View.VISIBLE
 			pivotX = getDisplayWidth().toFloat() * 0.75f
@@ -165,6 +171,8 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 		}
 	}
 
+	fun getCurrentSearchDelegate() = stateMachine.getStateSafeSearchDelegate()
+
 	fun showSearchIcon() {
 		searchItem?.isVisible = true
 	}
@@ -175,7 +183,6 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
 	fun navigateTvShows() {
 		stateMachine.updateState(UnitedStates.BROWSE_TV_STATE)
-		showBackButton()
 		fragmentTransaction {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseTvFragment)
@@ -184,7 +191,6 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
 	fun navigateMovies() {
 		stateMachine.updateState(UnitedStates.BROWSE_MOVIES_STATE)
-		showBackButton()
 		fragmentTransaction {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseMoviesFragment)
@@ -193,7 +199,6 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
 	fun navigateAnime() {
 		stateMachine.updateState(UnitedStates.BROWSE_ANIME_STATE)
-		showBackButton()
 		fragmentTransaction {
 			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom, R.anim.fade_slide_in_bottom, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseAnimeFragment)
@@ -201,7 +206,6 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	}
 
 	fun navigateSearch() {
-		searchFragment.searchDelegate = stateMachine.getStateSafeSearchDelegate()
 		stateMachine.goToSearch()
 		fragmentTransaction {
             setCustomAnimations(R.anim.my_fade_in, R.anim.my_fade_out, R.anim.my_fade_in, R.anim.my_fade_out)

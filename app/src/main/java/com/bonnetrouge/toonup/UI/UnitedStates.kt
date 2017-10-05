@@ -55,8 +55,8 @@ class UnitedStates @Inject constructor() {
     }
 
     fun getStateSafeSearchDelegate() = when (state) {
-        BROWSE_TV_STATE -> CartoonSearchDelegate()
-        BROWSE_MOVIES_STATE -> MoviesSearchDelegate()
+        SEARCH_TV_STATE -> CartoonSearchDelegate()
+        SEARCH_MOVIES_STATE -> MoviesSearchDelegate()
         else -> AnimeSearchDelegate()
     }
 }

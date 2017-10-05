@@ -37,6 +37,7 @@ class BrowseTvFragment @Inject constructor(): BaseFragment() {
 		} else {
             showSearchIcon()
 		}
+		(activity as BrowseActivity).showBackButton()
 	}
 
 	fun refreshBanners() {

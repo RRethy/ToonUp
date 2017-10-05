@@ -23,6 +23,7 @@ class CategoryChooserFragment @Inject constructor(): Fragment() {
 		attachClickAnimation(tvShowsChooserContainer) { (activity as BrowseActivity).navigateTvShows() }
 		attachClickAnimation(moviesChooserContainer) { (activity as BrowseActivity).navigateMovies() }
 		attachClickAnimation(animeChooserContainer) { (activity as BrowseActivity).navigateAnime() }
+		(activity as BrowseActivity).hideBackButton()
 	}
 
 	fun attachClickAnimation(view: View?, onUp: () -> Unit) {
