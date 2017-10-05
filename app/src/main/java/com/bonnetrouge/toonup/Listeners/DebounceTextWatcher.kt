@@ -17,11 +17,12 @@ class DebounceTextWatcher(val onDebouncedListener: OnDebouncedListener) : TextWa
         onDebouncedListener.onPreDebounce(s)
         timer.cancel()
         timer = Timer()
-        timer.schedule( object : TimerTask() {
-            override fun run() {
-                onDebouncedListener.onDebounced(s)
-            }
-        },
+        timer.schedule(
+                object : TimerTask() {
+                    override fun run() {
+                        onDebouncedListener.onDebounced(s)
+                    }
+                },
                 DELAY
         )
     }
