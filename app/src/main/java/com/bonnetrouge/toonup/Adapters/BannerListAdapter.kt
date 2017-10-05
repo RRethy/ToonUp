@@ -18,14 +18,12 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
 
 	private val fragmentWeakRef = WeakReference<BaseFragment>(fragment)
 	val banners = mutableListOf<BannerModel>()
-    val viewPool = RecyclerView.RecycledViewPool()
 
 	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
 		when (viewType) {
 			RVItemViewTypes.BANNER -> {
 				val holder = BannerViewHolder(LayoutInflater.from(parent?.context)
 						.inflate(R.layout.view_holder_banner, parent, false))
-                holder.bannerRecyclerView.recycledViewPool = viewPool
 				return holder
 			}
 		}
