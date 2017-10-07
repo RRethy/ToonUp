@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.activity_browse.*
 import javax.inject.Inject
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
 import com.bonnetrouge.toonup.Fragments.*
 import com.bonnetrouge.toonup.Listeners.DebounceTextWatcher
 import com.bonnetrouge.toonup.Listeners.OnSearchDebounceListener
