@@ -68,8 +68,8 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 			}
 		})
 		with(backgroundAnimation) {
-			setEnterFadeDuration(2000)
-			setExitFadeDuration(3000)
+			setEnterFadeDuration(5000)
+			setExitFadeDuration(5000)
 		}
 		setupSearchTextWatcher()
 	}

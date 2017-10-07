@@ -2,11 +2,20 @@
 <animation-list xmlns:android="http://schemas.android.com/apk/res/android">
 	<item
 		android:drawable="@drawable/dark_blue_red_gradient"
-		android:duration="4000" />
+		android:duration="5000" />
 	<item
-		android:drawable="@drawable/purple_orange_gradient"
-		android:duration="4000" />
+		android:drawable="@drawable/red_tint_red_gradient"
+		android:duration="5000" />
 	<item
-		android:drawable="@drawable/purple_peach_gradient"
-		android:duration="4000" />
+		android:drawable="@drawable/red_tint_pink_gradient"
+		android:duration="5000" />
+	<item
+		android:drawable="@drawable/pink_pint_tint_gradient"
+		android:duration="5000" />
+	<item
+		android:drawable="@drawable/pink_dark_blue_gradient"
+		android:duration="5000" />
+	<item
+		android:drawable="@drawable/blue_dark_blue_gradient"
+		android:duration="5000" />
 </animation-list>
