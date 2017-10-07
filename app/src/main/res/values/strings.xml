@@ -16,6 +16,8 @@
 	<string name="search_hint_tv">Search Tv Shows</string>
 	<string name="search_hint_movies">Search Movies</string>
 	<string name="search_hint_anime">Search Anime</string>
+	<string name="no_search_found">The show you searched for is too weird for this app</string>
 	<string name="episode">E</string>
 	<string name="season">S</string>
+	<string name="connectivity_toast_msg">I once heard of a legend that you had internet. The legend was wrong</string>
 </resources>

@@ -1,7 +1,10 @@
 package com.bonnetrouge.toonup.Commons.Ext
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Rect
+import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
@@ -12,8 +15,7 @@ import com.bonnetrouge.toonup.Activities.BaseActivity
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.util.DisplayMetrics
-
-
+import android.widget.Toast
 
 
 val app: ToonUpApp
@@ -114,4 +116,27 @@ fun Fragment.ifAdded(action: () -> Unit) {
 fun <T> T?.safeBool(defaultValue: Boolean = false, predicate: T.() -> Boolean): Boolean {
     return if (this != null) this.predicate()
     else defaultValue
+}
+
+fun Context.isConnected(): Boolean {
+    val connectivityManager = this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+    val activeNetwork = connectivityManager.activeNetworkInfo
+    return activeNetwork != null &&
+            activeNetwork.isConnectedOrConnecting();
+}
+
+fun Context.longToast(msg: String) {
+    Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+}
+
+fun Context.longToast(msgId: Int) {
+    Toast.makeText(this, resString(msgId), Toast.LENGTH_LONG).show()
+}
+
+fun Context.shortToast(msg: String) {
+    Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+}
+
+fun Context.shortToast(msgId: Int) {
+    Toast.makeText(this, resString(msgId), Toast.LENGTH_SHORT).show()
 }

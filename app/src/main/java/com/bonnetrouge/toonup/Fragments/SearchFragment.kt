@@ -61,29 +61,49 @@ class SearchFragment @Inject constructor() : BaseFragment(), OnSearchDebounceLis
     fun popularRecyclerView() {
         searchDelegate.getFilteredSearchResults("", browseViewModel) {
             searchAdapter.with {
-                items.clear()
-                items.addAll(it)
-                notifyDataSetChanged()
+                if (it.isNotEmpty()) {
+                    hideNoSearchResultsMsg()
+                    items.clear()
+                    items.addAll(it)
+                    notifyDataSetChanged()
+                } else {
+                    showNoSearchResultsMsg()
+                }
             }
         }
     }
 
     fun dispatchSearch(s: CharSequence) {
         searchDelegate.getFilteredSearchResults(s, browseViewModel) {
-            val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
-                override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
-                        it[newItemPosition] == searchAdapter.items[oldItemPosition]
+            if (it.isNotEmpty()) {
+                hideNoSearchResultsMsg()
+                val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
+                    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
+                            it[newItemPosition] == searchAdapter.items[oldItemPosition]
 
-                override fun getOldListSize() = searchAdapter.items.size
+                    override fun getOldListSize() = searchAdapter.items.size
 
-                override fun getNewListSize() = it.size
+                    override fun getNewListSize() = it.size
 
-                override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
-            })
-            searchAdapter.items.clear()
-            searchAdapter.items.addAll(it)
-            diffResult.dispatchUpdatesTo(searchAdapter)
+                    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int) = true
+                })
+                searchAdapter.items.clear()
+                searchAdapter.items.addAll(it)
+                diffResult.dispatchUpdatesTo(searchAdapter)
+            } else {
+                showNoSearchResultsMsg()
+            }
         }
+    }
+
+    fun showNoSearchResultsMsg() {
+        searchAdapter.items.clear()
+        searchAdapter.notifyDataSetChanged()
+        no_search_found_msg_container.visibility = View.VISIBLE
+    }
+
+    fun hideNoSearchResultsMsg() {
+        no_search_found_msg_container.visibility = View.INVISIBLE
     }
 
     override fun onSearchDebounce(s: CharSequence) {

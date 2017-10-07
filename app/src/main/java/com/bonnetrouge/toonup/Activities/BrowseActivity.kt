@@ -16,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_browse.*
 import javax.inject.Inject
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.bonnetrouge.toonup.Fragments.*
 import com.bonnetrouge.toonup.Listeners.DebounceTextWatcher
 import com.bonnetrouge.toonup.Listeners.OnSearchDebounceListener
@@ -213,6 +214,10 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	}
 
 	fun navigateDetail(basicSeriesInfo: BasicSeriesInfo, imageView: ImageView) {
-		DetailActivity.navigate(this, basicSeriesInfo, imageView)
+		if (isConnected()) {
+			DetailActivity.navigate(this, basicSeriesInfo, imageView)
+		} else {
+            longToast(R.string.connectivity_toast_msg)
+		}
 	}
 }
