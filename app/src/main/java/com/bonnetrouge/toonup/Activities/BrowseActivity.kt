@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.activity_browse.*
 import javax.inject.Inject
 import android.view.MenuItem
 import android.view.View
-import com.bonnetrouge.toonup.Delegates.SearchDelegate
 import com.bonnetrouge.toonup.Fragments.*
 import com.bonnetrouge.toonup.Listeners.DebounceTextWatcher
 import com.bonnetrouge.toonup.Listeners.OnSearchDebounceListener
@@ -184,7 +183,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	fun navigateTvShows() {
 		stateMachine.updateState(UnitedStates.BROWSE_TV_STATE)
 		fragmentTransaction {
-			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.my_fade_out, R.anim.my_fade_in, R.anim.fade_slide_out_bottom)
+			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.my_fade_out, R.anim.my_400_fade_in, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseTvFragment)
 		}
 	}
@@ -192,7 +191,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	fun navigateMovies() {
 		stateMachine.updateState(UnitedStates.BROWSE_MOVIES_STATE)
 		fragmentTransaction {
-			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.my_fade_out, R.anim.my_fade_in, R.anim.fade_slide_out_bottom)
+			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.my_fade_out, R.anim.my_400_fade_in, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseMoviesFragment)
 		}
 	}
@@ -200,7 +199,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	fun navigateAnime() {
 		stateMachine.updateState(UnitedStates.BROWSE_ANIME_STATE)
 		fragmentTransaction {
-			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.my_fade_out, R.anim.my_fade_in, R.anim.fade_slide_out_bottom)
+			setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.my_fade_out, R.anim.my_400_fade_in, R.anim.fade_slide_out_bottom)
 			replace(browseFragmentContainer.id, browseAnimeFragment)
 		}
 	}
@@ -208,7 +207,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 	fun navigateSearch() {
 		stateMachine.goToSearch()
 		fragmentTransaction {
-            setCustomAnimations(R.anim.my_fade_in, R.anim.my_fade_out, R.anim.my_fade_in, R.anim.my_fade_out)
+            setCustomAnimations(R.anim.my_300_fade_in, R.anim.my_fade_out, R.anim.my_300_fade_in, R.anim.my_fade_out)
 			replace(browseFragmentContainer.id, searchFragment)
 		}
 	}
