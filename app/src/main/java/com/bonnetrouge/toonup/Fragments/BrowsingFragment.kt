@@ -2,6 +2,7 @@ package com.bonnetrouge.toonup.Fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -11,26 +12,31 @@ import com.bonnetrouge.toonup.Activities.BrowseActivity
 import com.bonnetrouge.toonup.Adapters.BannerListAdapter
 import com.bonnetrouge.toonup.Commons.Ext.ifAdded
 import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
-import com.bonnetrouge.toonup.Fragment.BaseFragment
+import com.bonnetrouge.toonup.Delegates.CartoonFetchingDelegate
+import com.bonnetrouge.toonup.Delegates.DataFetchingDelegate
+import com.bonnetrouge.toonup.Listeners.OnRVTransitionItemClicked
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
-import kotlinx.android.synthetic.main.fragment_browse_movies.*
+import kotlinx.android.synthetic.main.fragment_browsing.*
 import javax.inject.Inject
 
-class BrowseMoviesFragment @Inject constructor() : BaseFragment() {
+class BrowsingFragment @Inject constructor() : Fragment(), OnRVTransitionItemClicked {
 
     val browseViewModel by lazyAndroid { ViewModelProviders.of(activity).get(BrowseViewModel::class.java) }
     val bannerListAdapter by lazyAndroid { BannerListAdapter(this) }
 
+    var dataFetchingDelegate: DataFetchingDelegate = CartoonFetchingDelegate()
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
-            = inflater?.inflate(R.layout.fragment_browse_movies, container, false)
+            = inflater?.inflate(R.layout.fragment_browsing, container, false)
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        browseMoviesRecyclerView.adapter = bannerListAdapter
-        browseMoviesRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        browsingRecyclerView.adapter = bannerListAdapter
+        browsingRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        dataFetchingDelegate = (activity as BrowseActivity).stateMachine.getStateSafeBrowseDelegate()
         swipeRefreshLayout.setOnRefreshListener { refreshBanners() }
         if (bannerListAdapter.banners.size == 0) {
             refreshBanners()
@@ -41,8 +47,7 @@ class BrowseMoviesFragment @Inject constructor() : BaseFragment() {
     }
 
     fun refreshBanners() {
-        showLoading()
-        browseViewModel.fetchMovies({
+        dataFetchingDelegate.fetchBrowsingData({ showLoading() }, browseViewModel, {
             this.subscribe({
                 hideLoading()
                 hideErrorMsg()
@@ -64,12 +69,12 @@ class BrowseMoviesFragment @Inject constructor() : BaseFragment() {
     }
 
     fun showErroMsg() {
-        errorMessage?.visibility = View.VISIBLE
+        browsingErrorMessage?.visibility = View.VISIBLE
         hideSearchIcon()
     }
 
     fun hideErrorMsg() {
-        errorMessage?.visibility = View.INVISIBLE
+        browsingErrorMessage?.visibility = View.INVISIBLE
     }
 
     fun showLoading() {

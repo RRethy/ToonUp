@@ -3,6 +3,7 @@ package com.bonnetrouge.toonup.Fragments
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import android.support.v7.util.DiffUtil
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,7 @@ import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
 import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
 import com.bonnetrouge.toonup.Commons.Ext.with
 import com.bonnetrouge.toonup.Delegates.SearchDelegate
-import com.bonnetrouge.toonup.Fragment.BaseFragment
+import com.bonnetrouge.toonup.Listeners.OnRVTransitionItemClicked
 import com.bonnetrouge.toonup.Listeners.OnSearchDebounceListener
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
@@ -24,7 +25,7 @@ import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import kotlinx.android.synthetic.main.fragment_search.*
 import javax.inject.Inject
 
-class SearchFragment @Inject constructor() : BaseFragment(), OnSearchDebounceListener {
+class SearchFragment @Inject constructor() : Fragment(), OnRVTransitionItemClicked, OnSearchDebounceListener {
 
     val browseViewModel by lazyAndroid { ViewModelProviders.of(activity).get(BrowseViewModel::class.java) }
 
@@ -99,11 +100,11 @@ class SearchFragment @Inject constructor() : BaseFragment(), OnSearchDebounceLis
     fun showNoSearchResultsMsg() {
         searchAdapter.items.clear()
         searchAdapter.notifyDataSetChanged()
-        no_search_found_msg_container.visibility = View.VISIBLE
+        no_search_found_msg_container?.visibility = View.VISIBLE
     }
 
     fun hideNoSearchResultsMsg() {
-        no_search_found_msg_container.visibility = View.INVISIBLE
+        no_search_found_msg_container?.visibility = View.INVISIBLE
     }
 
     override fun onSearchDebounce(s: CharSequence) {

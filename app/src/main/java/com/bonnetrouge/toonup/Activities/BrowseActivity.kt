@@ -10,6 +10,9 @@ import android.view.MenuItem
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
+import com.bonnetrouge.toonup.Delegates.AnimeFetchingDelegate
+import com.bonnetrouge.toonup.Delegates.CartoonFetchingDelegate
+import com.bonnetrouge.toonup.Delegates.MovieFetchingDelegate
 import com.bonnetrouge.toonup.Fragments.*
 import com.bonnetrouge.toonup.Listeners.DebounceTextWatcher
 import com.bonnetrouge.toonup.Listeners.OnSearchDebounceListener
@@ -24,9 +27,7 @@ import javax.inject.Inject
 class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
     @Inject lateinit var categoryChooserFragment: CategoryChooserFragment
-    @Inject lateinit var browseTvFragment: BrowseTvFragment
-    @Inject lateinit var browseMoviesFragment: BrowseMoviesFragment
-    @Inject lateinit var browseAnimeFragment: BrowseAnimeFragment
+    @Inject lateinit var browsingFragment: BrowsingFragment
     @Inject lateinit var searchFragment: SearchFragment
 
     @Inject lateinit var stateMachine: UnitedStates
@@ -201,25 +202,28 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
     fun navigateTvShows() {
         stateMachine.updateState(UnitedStates.BROWSE_TV_STATE)
+        browsingFragment.bannerListAdapter.banners.clear()
         fragmentTransaction {
             setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.my_fade_out, R.anim.my_400_fade_in, R.anim.fade_slide_out_bottom)
-            replace(browseFragmentContainer.id, browseTvFragment)
+            replace(browseFragmentContainer.id, browsingFragment)
         }
     }
 
     fun navigateMovies() {
         stateMachine.updateState(UnitedStates.BROWSE_MOVIES_STATE)
+        browsingFragment.bannerListAdapter.banners.clear()
         fragmentTransaction {
             setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.my_fade_out, R.anim.my_400_fade_in, R.anim.fade_slide_out_bottom)
-            replace(browseFragmentContainer.id, browseMoviesFragment)
+            replace(browseFragmentContainer.id, browsingFragment)
         }
     }
 
     fun navigateAnime() {
         stateMachine.updateState(UnitedStates.BROWSE_ANIME_STATE)
+        browsingFragment.bannerListAdapter.banners.clear()
         fragmentTransaction {
             setCustomAnimations(R.anim.fade_slide_in_bottom, R.anim.my_fade_out, R.anim.my_400_fade_in, R.anim.fade_slide_out_bottom)
-            replace(browseFragmentContainer.id, browseAnimeFragment)
+            replace(browseFragmentContainer.id, browsingFragment)
         }
     }
 

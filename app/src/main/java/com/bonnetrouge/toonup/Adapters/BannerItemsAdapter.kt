@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.bonnetrouge.toonup.Commons.bindView
-import com.bonnetrouge.toonup.Fragment.BaseFragment
+import com.bonnetrouge.toonup.Fragments.BrowsingFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.RVItem
@@ -15,8 +15,8 @@ import com.bonnetrouge.toonup.UI.RVItemViewTypes
 import com.bumptech.glide.Glide
 import java.lang.ref.WeakReference
 
-class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-    private val fragmentWeakRef = WeakReference<BaseFragment>(fragment)
+class BannerItemsAdapter(fragment: BrowsingFragment?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    private val fragmentWeakRef = WeakReference<BrowsingFragment>(fragment)
     val items = mutableListOf<RVItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {

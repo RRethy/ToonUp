@@ -1,8 +1,6 @@
 package com.bonnetrouge.toonup.UI
 
-import com.bonnetrouge.toonup.Delegates.AnimeSearchDelegate
-import com.bonnetrouge.toonup.Delegates.CartoonSearchDelegate
-import com.bonnetrouge.toonup.Delegates.MoviesSearchDelegate
+import com.bonnetrouge.toonup.Delegates.*
 import javax.inject.Inject
 
 class UnitedStates @Inject constructor() {
@@ -54,7 +52,13 @@ class UnitedStates @Inject constructor() {
         state = currentState
     }
 
-    fun getStateSafeSearchDelegate() = when (state) {
+    fun getStateSafeBrowseDelegate() = when(state) {
+        BROWSE_TV_STATE -> CartoonFetchingDelegate()
+        BROWSE_MOVIES_STATE -> MovieFetchingDelegate()
+        else -> AnimeFetchingDelegate()
+    }
+
+    fun getStateSafeSearchDelegate() = when(state) {
         SEARCH_TV_STATE -> CartoonSearchDelegate()
         SEARCH_MOVIES_STATE -> MoviesSearchDelegate()
         else -> AnimeSearchDelegate()

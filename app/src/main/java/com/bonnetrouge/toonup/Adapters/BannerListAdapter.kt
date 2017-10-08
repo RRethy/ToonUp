@@ -8,15 +8,15 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.bindView
-import com.bonnetrouge.toonup.Fragment.BaseFragment
+import com.bonnetrouge.toonup.Fragments.BrowsingFragment
 import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.RVItemViewTypes
 import java.lang.ref.WeakReference
 
-class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class BannerListAdapter(fragment: BrowsingFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private val fragmentWeakRef = WeakReference<BaseFragment>(fragment)
+    private val fragmentWeakRef = WeakReference<BrowsingFragment>(fragment)
     val banners = mutableListOf<BannerModel>()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
@@ -61,7 +61,7 @@ class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerV
             bannerTitle.text = bannerModel.title
             bannerItemsAdapter.items.clear()
             bannerItemsAdapter.items.addAll(bannerModel.dataList)
-            bannerItemsAdapter.notifyDataSetChanged()//TODO: Don't use notifyDataSetChanged()
+            bannerItemsAdapter.notifyDataSetChanged()
         }
     }
 }

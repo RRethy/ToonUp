@@ -27,7 +27,12 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
     var genres: VideoGenres? = null
 
     //region Cartoons
-    fun fetchCartoons(subscription: Observable<MutableList<BannerModel>>.() -> Unit, error: () -> Unit) {
+    fun fetchCartoons(showLoading: () -> Unit,
+                      subscription: Observable<MutableList<BannerModel>>.() -> Unit,
+                      error: () -> Unit) {
+        if (cartoons == null && cartoons == null) {
+            showLoading()
+        }
         ensureGenresNotNull({
             if (cartoons != null) {
                 Observable.just(cartoons!!).subscription()
@@ -113,7 +118,12 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
     //endregion
 
     //region Movies
-    fun fetchMovies(subscription: Observable<MutableList<BannerModel>>.() -> Unit, error: () -> Unit) {
+    fun fetchMovies(showLoading: () -> Unit,
+                      subscription: Observable<MutableList<BannerModel>>.() -> Unit,
+                      error: () -> Unit) {
+        if (movies == null && movies == null) {
+            showLoading()
+        }
         ensureGenresNotNull({
             if (movies != null) {
                 Observable.just(movies!!).subscription()
@@ -199,7 +209,12 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
     //endregion
 
     //region Anime
-    fun fetchAnime(subscription: Observable<MutableList<BannerModel>>.() -> Unit, error: () -> Unit) {
+    fun fetchAnime(showLoading: () -> Unit,
+                      subscription: Observable<MutableList<BannerModel>>.() -> Unit,
+                      error: () -> Unit) {
+        if (animes == null && animes == null) {
+            showLoading()
+        }
         ensureGenresNotNull({
             if (animes != null) {
                 Observable.just(animes!!).subscription()

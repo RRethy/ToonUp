@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Commons.Ext.with
 import com.bonnetrouge.toonup.Commons.bindView
-import com.bonnetrouge.toonup.Fragment.BaseFragment
+import com.bonnetrouge.toonup.Fragments.SearchFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.RVItem
@@ -15,9 +15,9 @@ import com.bonnetrouge.toonup.UI.RVItemViewTypes
 import com.bumptech.glide.Glide
 import java.lang.ref.WeakReference
 
-class SearchAdapter(baseFragment: BaseFragment, val itemWidth: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SearchAdapter(searchFragment: SearchFragment, val itemWidth: Int) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    val fragmentWeakRef = WeakReference<BaseFragment>(baseFragment)
+    val fragmentWeakRef = WeakReference<SearchFragment>(searchFragment)
     val items = mutableListOf<RVItem>()
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
