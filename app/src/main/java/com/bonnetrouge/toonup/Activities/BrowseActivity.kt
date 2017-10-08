@@ -7,7 +7,6 @@ import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
@@ -49,6 +48,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
         }
     }
 
+    //region Activity methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_browse)
@@ -57,19 +57,11 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
         browseViewModel.prefetchGenres()
         setSupportActionBar(toolbar)
         savedInstanceState.ifNullElse({
-            supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) }
-            stateMachine.intializeBaseState()
+            initBaseUI()
         }, {
-            savedInstanceState?.let {
-                stateMachine.updateState(savedInstanceState.getInt(UnitedStates.CURRENT_BROWSE_STATE))
-                intent.putExtra(UnitedStates.IS_SEARCH_ICON_SHOWING, savedInstanceState.getBoolean(UnitedStates.IS_SEARCH_ICON_SHOWING))
-            }
+            onPostRotation(savedInstanceState!!)
         })
-        with(backgroundAnimation) {
-            setEnterFadeDuration(5000)
-            setExitFadeDuration(5000)
-        }
+        setupSickBackgroundGradients()
         setupSearchTextWatcher()
     }
 
@@ -80,20 +72,14 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.browse_menu_options, menu)
+        menuInflater.inflate(R.menu.browse_menu_options, menu)
         searchItem = menu.findItem(R.id.search_item)
         searchItem?.setOnMenuItemClickListener {
             showSearchToolbar()
             navigateSearch()
             true
         }
-        if (intent.getBooleanExtra(UnitedStates.IS_SEARCH_ICON_SHOWING, false)) {
-            showSearchIcon()
-        } else {
-            hideSearchIcon()
-        }
-
+        updateSearchIconVisibility()
         return true
     }
 
@@ -118,20 +104,38 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
         }
         super.onBackPressed()
     }
+    //endregion
 
+    //region Debounce callbacks
     override fun onDebounced(s: CharSequence) {
-        runOnUiThread({
-            if (stateMachine.isSearching()) {
-                searchListener?.onSearchDebounce(s)
-            }
-        })
+        runOnUiThread {
+            searchListener?.onSearchDebounce(s)
+        }
     }
 
     override fun onPreDebounce(s: CharSequence) {
         if (s.isEmpty()) {
-            clearIcon.visibility = View.INVISIBLE
+            clearIcon.visibilityInvisible()
         } else {
-            clearIcon.visibility = View.VISIBLE
+            clearIcon.visibilityVisible()
+        }
+    }
+    //endregion
+
+    //region UI Initialization
+    fun initBaseUI() {
+        hideBackButton()
+        navigateCategoryChooser()
+    }
+
+    fun onPostRotation(savedInstanceState: Bundle) {
+        stateMachine.updateState(savedInstanceState.getInt(UnitedStates.CURRENT_BROWSE_STATE))
+    }
+
+    fun setupSickBackgroundGradients() {
+        backgroundAnimation.with {
+            setEnterFadeDuration(5000)
+            setExitFadeDuration(5000)
         }
     }
 
@@ -140,10 +144,20 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
         clearIcon.setOnClickListener { searchEditText.setText("") }
     }
 
+    fun updateSearchIconVisibility() {
+        if (stateMachine.isBrowsing()) {
+            showSearchIcon()
+        } else {
+            hideSearchIcon()
+        }
+    }
+    //endregion
+
+    //region UI Convenience Methods
     fun showSearchToolbar() {
         searchItem?.isVisible = false
         searchTextContainer.with {
-            visibility = View.VISIBLE
+            visibilityVisible()
             pivotX = getDisplayWidth().toFloat() * 0.75f
             animate().scaleX(1f).setDuration(300).withEndAction {
                 searchEditText.showKeyboard()
@@ -164,13 +178,11 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
         }
         searchTextContainer.with {
             animate().scaleX(0f).setDuration(300).withEndAction {
-                visibility = View.GONE
-                searchItem?.isVisible = true
+                visibilityGone()
+                showSearchIcon()
             }.start()
         }
     }
-
-    fun getCurrentSearchDelegate() = stateMachine.getStateSafeSearchDelegate()
 
     fun showSearchIcon() {
         searchItem?.isVisible = true
@@ -178,6 +190,13 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
     fun hideSearchIcon() {
         searchItem?.isVisible = false
+    }
+    //endregion
+
+    //region Fragment/Activity Navigation
+    fun navigateCategoryChooser() {
+        stateMachine.intializeBaseState()
+        fragmentTransaction(false) { replace(browseFragmentContainer.id, categoryChooserFragment) }
     }
 
     fun navigateTvShows() {
@@ -219,4 +238,5 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
             longToast(R.string.connectivity_toast_msg)
         }
     }
+    //endregion
 }

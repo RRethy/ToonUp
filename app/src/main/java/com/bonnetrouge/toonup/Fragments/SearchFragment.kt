@@ -41,7 +41,7 @@ class SearchFragment @Inject constructor() : BaseFragment(), OnSearchDebounceLis
         searchRecyclerView.layoutManager = GridAutofitLayoutManager(itemWidth.toDouble())
         searchRecyclerView.adapter = searchAdapter
         (activity as BrowseActivity).with {
-            searchDelegate = getCurrentSearchDelegate()
+            searchDelegate = stateMachine.getStateSafeSearchDelegate()
             showSearchToolbar()
             showBackButton()
         }

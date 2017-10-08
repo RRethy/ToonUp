@@ -22,9 +22,12 @@ fun <T> T?.ifNull(action: () -> Unit) {
 
 fun <T> T?.ifNullElse(nullAction: () -> Unit, notNullAction: () -> Unit) {
     if (this == null) nullAction()
-    else {
-        notNullAction()
-    }
+    else notNullAction()
+}
+
+fun <T> T?.ifNotNullElse(notNullAction: () -> Unit, nullAction: () -> Unit) {
+    if (this != null) notNullAction()
+    else nullAction()
 }
 
 fun <T> T?.safeBool(defaultValue: Boolean = false, predicate: T.() -> Boolean): Boolean {

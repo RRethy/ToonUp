@@ -7,12 +7,12 @@ import javax.inject.Inject
 
 class UnitedStates @Inject constructor() {
 
-    var state: Int = NO_STATE
+    var state: Int = MODERN_CONFEDERACY
 
     companion object {
         val CURRENT_BROWSE_STATE = "CURRENT BROWSING STATE"
         val IS_SEARCH_ICON_SHOWING = "IS SEARCH ICON SHOWING"
-        val NO_STATE = -1
+        val MODERN_CONFEDERACY = -1
         val CATEGORY_CHOOSER_STATE = 0
         val BROWSE_TV_STATE = 1
         val BROWSE_MOVIES_STATE = 2
