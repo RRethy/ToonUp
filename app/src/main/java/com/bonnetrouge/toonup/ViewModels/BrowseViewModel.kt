@@ -15,6 +15,11 @@ import io.reactivex.schedulers.Schedulers
 import java.util.regex.Pattern
 import javax.inject.Inject
 
+/**
+ * TODO: Figure out best way to condense this down
+ *       Delegate pattern would be anti-pattern IMO for this
+ *       Maybe try using an enum to decide which which var to pull data from
+ */
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository) : ViewModel() {
 
     private var cartoons: MutableList<BannerModel>? = null

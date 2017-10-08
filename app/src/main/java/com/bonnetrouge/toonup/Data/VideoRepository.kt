@@ -1,32 +1,38 @@
 package com.bonnetrouge.toonup.Data
 
-import com.bonnetrouge.toonup.API.StreamingApiService
-import com.bonnetrouge.toonup.API.TvMazeApiService
+import com.bonnetrouge.toonup.Model.*
+import io.reactivex.Observable
 
-class VideoRepository(private val streamingApiService: StreamingApiService, private val tvInfoApiService: TvMazeApiService) {
+interface VideoRepository {
+    fun getGenres(): Observable<VideoGenres>
 
-    fun getGenres() = streamingApiService.getGenres()
+    fun getPopularCartoons(): Observable<List<BasicSeriesInfo>>
 
-    fun getPopularCartoons() = streamingApiService.getPopularCartoons()
+    fun getPopularAnime(): Observable<List<BasicSeriesInfo>>
 
-    fun getAllCartoons() = streamingApiService.getAllCartoons()
+    fun getPopularMovies(): Observable<List<BasicSeriesInfo>>
 
-    fun getPopularMovies() = streamingApiService.getPopularMovies()
+    fun getAllCartoons(): Observable<List<BasicSeriesInfo>>
 
-    fun getAllMovies() = streamingApiService.getAllMovies()
+    fun getAllAnime(): Observable<List<BasicSeriesInfo>>
 
-    fun getPopularAnime() = streamingApiService.getPopularAnime()
+    fun getAllMovies(): Observable<List<BasicSeriesInfo>>
 
-    fun getAllAnime() = streamingApiService.getAllAnime()
+    fun getNewCartoons(): Observable<List<BasicSeriesInfo>>
 
-    fun getDetails(seriesId: String) = streamingApiService.getDetails(seriesId)
+    fun getNewAnime(): Observable<List<BasicSeriesInfo>>
 
-    fun getFullStreamingUrls(episodeId: String) = streamingApiService.getDescriptiveStreamingUrls(episodeId)
+    fun getNewMovies(): Observable<List<BasicSeriesInfo>>
 
-    fun getRawStreamingUrls(episodeId: String) = streamingApiService.getRawStreamingUrls(episodeId)
+    fun getNewEpisodes(): Observable<NewEpisodes>
 
+    fun getDetails(id: String): Observable<Series>
 
-    fun getExtendedSeriesInfo(seriesName: String) = tvInfoApiService.getExtendedSeriesInfo(seriesName)
+    fun getDescriptiveStreamingUrls(id: String): Observable<List<List<DescriptiveStreamingUrl>>>
 
-    fun getExtendedEpisodesInfo(seriesName: String) = tvInfoApiService.getExtendedEpisodesInfo(seriesName)
+    fun getRawStreamingUrls(id: String): Observable<List<List<String>>>
+
+    fun getExtendedSeriesInfo(seriesName: String): Observable<SeriesExtendedInfo>
+
+    fun getExtendedEpisodesInfo(seriesName: String): Observable<FullSeriesInfo>
 }

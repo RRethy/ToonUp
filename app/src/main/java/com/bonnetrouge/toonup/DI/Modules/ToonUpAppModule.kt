@@ -4,6 +4,7 @@ import com.bonnetrouge.toonup.API.StreamingApiService
 import com.bonnetrouge.toonup.API.TvMazeApiService
 import com.bonnetrouge.toonup.Commons.WackClasses.UrbanFitGenerator
 import com.bonnetrouge.toonup.Data.VideoRepository
+import com.bonnetrouge.toonup.Data.VideoRepositoryImpl
 import com.bonnetrouge.toonup.ToonUpApp
 import dagger.Module
 import dagger.Provides
@@ -24,8 +25,9 @@ class ToonUpAppModule(val app: ToonUpApp) {
 
     @Provides
     @Singleton
-    fun provideVideoRepository(streamingApiService: StreamingApiService, tvInfoApiService: TvMazeApiService)
-            = VideoRepository(streamingApiService, tvInfoApiService)
+    fun provideVideoRepository(streamingApiService: StreamingApiService, tvInfoApiService: TvMazeApiService): VideoRepository {
+        return VideoRepositoryImpl(streamingApiService, tvInfoApiService)
+    }
 
     @Provides
     @Singleton
