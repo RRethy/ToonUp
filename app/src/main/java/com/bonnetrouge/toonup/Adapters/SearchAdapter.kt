@@ -23,7 +23,7 @@ class SearchAdapter(baseFragment: BaseFragment, val itemWidth: Int) : RecyclerVi
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
         when (viewType) {
             RVItemViewTypes.BASIC_SERIES -> return SearchItemViewHolder(LayoutInflater.from(parent?.context)
-						.inflate(R.layout.view_holder_search_item, parent, false))
+                    .inflate(R.layout.view_holder_search_item, parent, false))
         }
         return null
     }

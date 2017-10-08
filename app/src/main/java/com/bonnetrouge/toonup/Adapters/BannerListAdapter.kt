@@ -16,52 +16,52 @@ import java.lang.ref.WeakReference
 
 class BannerListAdapter(fragment: BaseFragment) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-	private val fragmentWeakRef = WeakReference<BaseFragment>(fragment)
-	val banners = mutableListOf<BannerModel>()
+    private val fragmentWeakRef = WeakReference<BaseFragment>(fragment)
+    val banners = mutableListOf<BannerModel>()
 
-	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
-		when (viewType) {
-			RVItemViewTypes.BANNER -> {
-				val holder = BannerViewHolder(LayoutInflater.from(parent?.context)
-						.inflate(R.layout.view_holder_banner, parent, false))
-				return holder
-			}
-		}
-		return null
-	}
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
+        when (viewType) {
+            RVItemViewTypes.BANNER -> {
+                val holder = BannerViewHolder(LayoutInflater.from(parent?.context)
+                        .inflate(R.layout.view_holder_banner, parent, false))
+                return holder
+            }
+        }
+        return null
+    }
 
-	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-		when (getItemViewType(position)) {
-			RVItemViewTypes.BANNER -> (holder as BannerViewHolder).bind(banners[position])
-		}
-	}
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (getItemViewType(position)) {
+            RVItemViewTypes.BANNER -> (holder as BannerViewHolder).bind(banners[position])
+        }
+    }
 
-	override fun getItemViewType(position: Int) = banners[position].getItemViewType()
+    override fun getItemViewType(position: Int) = banners[position].getItemViewType()
 
-	override fun getItemCount() = banners.size
+    override fun getItemCount() = banners.size
 
-	inner class BannerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class BannerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-		val layoutManager = LinearLayoutManager(app.applicationContext,
-				LinearLayoutManager.HORIZONTAL,
-				false)
-		val bannerItemsAdapter = BannerItemsAdapter(fragmentWeakRef.get())
-		//val snapHelper = GravitySnapHelper(Gravity.START)
+        val layoutManager = LinearLayoutManager(app.applicationContext,
+                LinearLayoutManager.HORIZONTAL,
+                false)
+        val bannerItemsAdapter = BannerItemsAdapter(fragmentWeakRef.get())
+        //val snapHelper = GravitySnapHelper(Gravity.START)
 
-		val bannerRecyclerView: RecyclerView by bindView(R.id.bannerRecyclerView)
-		val bannerTitle: TextView by bindView(R.id.bannerTitle)
+        val bannerRecyclerView: RecyclerView by bindView(R.id.bannerRecyclerView)
+        val bannerTitle: TextView by bindView(R.id.bannerTitle)
 
-		init {
-			bannerRecyclerView.layoutManager = layoutManager
-			bannerRecyclerView.adapter = bannerItemsAdapter
-			//snapHelper.attachToRecyclerView(bannerRecyclerView)
-		}
+        init {
+            bannerRecyclerView.layoutManager = layoutManager
+            bannerRecyclerView.adapter = bannerItemsAdapter
+            //snapHelper.attachToRecyclerView(bannerRecyclerView)
+        }
 
-		fun bind(bannerModel: BannerModel) {
-			bannerTitle.text = bannerModel.title
-			bannerItemsAdapter.items.clear()
-			bannerItemsAdapter.items.addAll(bannerModel.dataList)
-			bannerItemsAdapter.notifyDataSetChanged()//TODO: Don't use notifyDataSetChanged()
-		}
-	}
+        fun bind(bannerModel: BannerModel) {
+            bannerTitle.text = bannerModel.title
+            bannerItemsAdapter.items.clear()
+            bannerItemsAdapter.items.addAll(bannerModel.dataList)
+            bannerItemsAdapter.notifyDataSetChanged()//TODO: Don't use notifyDataSetChanged()
+        }
+    }
 }

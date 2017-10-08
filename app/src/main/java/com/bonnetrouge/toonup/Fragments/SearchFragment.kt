@@ -10,7 +10,9 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Activities.BrowseActivity
 import com.bonnetrouge.toonup.Adapters.SearchAdapter
-import com.bonnetrouge.toonup.Commons.Ext.*
+import com.bonnetrouge.toonup.Commons.Ext.getDisplayWidth
+import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
+import com.bonnetrouge.toonup.Commons.Ext.with
 import com.bonnetrouge.toonup.Delegates.SearchDelegate
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Listeners.OnSearchDebounceListener
@@ -18,9 +20,7 @@ import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.GridAutofitLayoutManager
 import com.bonnetrouge.toonup.UI.RVItem
-import com.bonnetrouge.toonup.UI.UnitedStates
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
-import kotlinx.android.synthetic.main.activity_browse.*
 import kotlinx.android.synthetic.main.fragment_search.*
 import javax.inject.Inject
 

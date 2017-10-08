@@ -8,18 +8,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Activities.BrowseActivity
+import com.bonnetrouge.toonup.Adapters.BannerListAdapter
+import com.bonnetrouge.toonup.Commons.Ext.ifAdded
 import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
 import com.bonnetrouge.toonup.Fragment.BaseFragment
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
-import com.bonnetrouge.toonup.Adapters.BannerListAdapter
-import com.bonnetrouge.toonup.Commons.Ext.ifAdded
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import kotlinx.android.synthetic.main.fragment_browse_anime.*
 import javax.inject.Inject
 
-class BrowseAnimeFragment @Inject constructor(): BaseFragment() {
+class BrowseAnimeFragment @Inject constructor() : BaseFragment() {
 
     val browseViewModel by lazyAndroid { ViewModelProviders.of(activity).get(BrowseViewModel::class.java) }
     val bannerListAdapter by lazyAndroid { BannerListAdapter(this) }
@@ -89,6 +89,7 @@ class BrowseAnimeFragment @Inject constructor(): BaseFragment() {
     fun hideSearchIcon() {
         ifAdded { (activity as BrowseActivity).hideSearchIcon() }
     }
+
     override fun onRVItemClicked(item: RVItem, imageView: ImageView) {
         (activity as BrowseActivity).navigateDetail(item as BasicSeriesInfo, imageView)
     }

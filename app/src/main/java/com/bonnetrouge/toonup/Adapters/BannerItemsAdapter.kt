@@ -16,44 +16,44 @@ import com.bumptech.glide.Glide
 import java.lang.ref.WeakReference
 
 class BannerItemsAdapter(fragment: BaseFragment?) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
-	private val fragmentWeakRef = WeakReference<BaseFragment>(fragment)
-	val items = mutableListOf<RVItem>()
+    private val fragmentWeakRef = WeakReference<BaseFragment>(fragment)
+    val items = mutableListOf<RVItem>()
 
-	override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
-		when (viewType) {
-			RVItemViewTypes.BASIC_SERIES ->
-				return BannerItemViewHolder(LayoutInflater.from(parent?.context)
-						.inflate(R.layout.banner_item, parent, false))
-		}
-		return null
-	}
+    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): RecyclerView.ViewHolder? {
+        when (viewType) {
+            RVItemViewTypes.BASIC_SERIES ->
+                return BannerItemViewHolder(LayoutInflater.from(parent?.context)
+                        .inflate(R.layout.banner_item, parent, false))
+        }
+        return null
+    }
 
-	override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-		when (getItemViewType(position)) {
-			RVItemViewTypes.BASIC_SERIES -> (holder as BannerItemViewHolder).bind(items[position] as BasicSeriesInfo)
-		}
-	}
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        when (getItemViewType(position)) {
+            RVItemViewTypes.BASIC_SERIES -> (holder as BannerItemViewHolder).bind(items[position] as BasicSeriesInfo)
+        }
+    }
 
-	override fun getItemViewType(position: Int) = items[position].getItemViewType()
+    override fun getItemViewType(position: Int) = items[position].getItemViewType()
 
-	override fun getItemCount() = items.size
+    override fun getItemCount() = items.size
 
-	inner class BannerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    inner class BannerItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
-		val image: ImageView by bindView(R.id.bannerItemImage)
-		val title: TextView by bindView(R.id.bannerItemTitle)
+        val image: ImageView by bindView(R.id.bannerItemImage)
+        val title: TextView by bindView(R.id.bannerItemTitle)
 
-		init {
-			itemView.setOnClickListener {
-				fragmentWeakRef.get()?.onRVItemClicked(items[adapterPosition], image)
-			}
-		}
+        init {
+            itemView.setOnClickListener {
+                fragmentWeakRef.get()?.onRVItemClicked(items[adapterPosition], image)
+            }
+        }
 
-		fun bind(basicSeriesInfo: BasicSeriesInfo) {
-			title.text = basicSeriesInfo.name
-			Glide.with(fragmentWeakRef.get())
-					.load("http://www.animetoon.org/images/series/big/${basicSeriesInfo.id}.jpg")
-					.into(image)
-		}
-	}
+        fun bind(basicSeriesInfo: BasicSeriesInfo) {
+            title.text = basicSeriesInfo.name
+            Glide.with(fragmentWeakRef.get())
+                    .load("http://www.animetoon.org/images/series/big/${basicSeriesInfo.id}.jpg")
+                    .into(image)
+        }
+    }
 }

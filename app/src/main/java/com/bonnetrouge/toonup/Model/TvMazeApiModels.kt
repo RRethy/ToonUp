@@ -4,49 +4,49 @@ import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.UI.RVItemViewTypes
 
 data class FullSeriesInfo(val id: Long?,
-						  val type: String?,
-						  val language: String?,
-						  val genres: List<String>?,
-						  val premiered: String?,
-						  val officialSite: String?,
-						  val schedule: Schedule?,
-						  val rating: Rating?,
-						  val network: Network?,
-						  val externals: Externals?,
-						  val image: Image?,
-						  val summary: String?,
-						  val _embedded: Embedded?)
+                          val type: String?,
+                          val language: String?,
+                          val genres: List<String>?,
+                          val premiered: String?,
+                          val officialSite: String?,
+                          val schedule: Schedule?,
+                          val rating: Rating?,
+                          val network: Network?,
+                          val externals: Externals?,
+                          val image: Image?,
+                          val summary: String?,
+                          val _embedded: Embedded?)
 
 data class EpisodesExtendedInfo(val _embedded: Embedded?)
 
 data class Embedded(val episodes: MutableList<ExtendedEpisodeInfo>)
 
 data class ExtendedEpisodeInfo(var id: Long?,
-							   var url: String?,
-							   var name: String?,
-							   var season: Int?,
-							   var number: Int?,
-							   var airdate: String?,
-							   var airtime: String?,
-							   var airstamp: String?,
-							   var image: Image?,
-							   var summary: String?) : RVItem {
+                               var url: String?,
+                               var name: String?,
+                               var season: Int?,
+                               var number: Int?,
+                               var airdate: String?,
+                               var airtime: String?,
+                               var airstamp: String?,
+                               var image: Image?,
+                               var summary: String?) : RVItem {
 
-	override fun getItemViewType() = RVItemViewTypes.EXTENDED_EPISODE
+    override fun getItemViewType() = RVItemViewTypes.EXTENDED_EPISODE
 }
 
 data class SeriesExtendedInfo(val id: Int?,
-							  val type: String?,
-							  val language: String?,
-							  val genres: List<String>?,
-							  val premiered: String?,
-							  val officialSite: String?,
-							  val schedule: Schedule?,
-							  val rating: Rating?,
-							  val network: Network?,
-							  val externals: Externals?,
-							  val image: Image?,
-							  val summary: String?)
+                              val type: String?,
+                              val language: String?,
+                              val genres: List<String>?,
+                              val premiered: String?,
+                              val officialSite: String?,
+                              val schedule: Schedule?,
+                              val rating: Rating?,
+                              val network: Network?,
+                              val externals: Externals?,
+                              val image: Image?,
+                              val summary: String?)
 
 data class Schedule(val time: String?, val days: List<String>?)
 

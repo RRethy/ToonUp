@@ -2,4 +2,5 @@ package com.bonnetrouge.toonup.DI.Modules
 
 import dagger.Module
 
-@Module class BrowseActivityModule
+@Module
+class BrowseActivityModule

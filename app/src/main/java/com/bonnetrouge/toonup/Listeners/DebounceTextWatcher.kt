@@ -9,9 +9,9 @@ class DebounceTextWatcher(val onDebouncedListener: OnDebouncedListener) : TextWa
     private var timer = Timer()
     private val DELAY: Long = 300 // milliseconds
 
-    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) { }
+    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
 
-    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) { }
+    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
 
     override fun afterTextChanged(s: Editable) {
         onDebouncedListener.onPreDebounce(s)

@@ -4,5 +4,5 @@ import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.UI.RVItemViewTypes
 
 class Loading : RVItem {
-	override fun getItemViewType() = RVItemViewTypes.LOADING
+    override fun getItemViewType() = RVItemViewTypes.LOADING
 }

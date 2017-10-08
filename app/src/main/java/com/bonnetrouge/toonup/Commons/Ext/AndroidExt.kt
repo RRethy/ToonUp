@@ -1,22 +1,9 @@
 package com.bonnetrouge.toonup.Commons.Ext
 
-import android.app.Activity
-import android.content.Context
 import android.graphics.Rect
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.os.Handler
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
-import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.view.View
-import com.bonnetrouge.toonup.ToonUpApp
-import com.bonnetrouge.toonup.Activities.BaseActivity
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
 import android.util.DisplayMetrics
-import android.widget.Toast
+import android.view.View
 
 fun convertToPixels(sizeInDp: Double): Double {
     val resources = app.getResources()

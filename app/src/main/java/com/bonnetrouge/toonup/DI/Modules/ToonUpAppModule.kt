@@ -1,21 +1,18 @@
 package com.bonnetrouge.toonup.DI.Modules
 
-import android.util.Log
 import com.bonnetrouge.toonup.API.StreamingApiService
 import com.bonnetrouge.toonup.API.TvMazeApiService
-import com.bonnetrouge.toonup.Commons.Ext.dog
 import com.bonnetrouge.toonup.Commons.WackClasses.UrbanFitGenerator
 import com.bonnetrouge.toonup.Data.VideoRepository
 import com.bonnetrouge.toonup.ToonUpApp
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
-import okhttp3.logging.HttpLoggingInterceptor
-
 
 
 @Module
@@ -28,7 +25,7 @@ class ToonUpAppModule(val app: ToonUpApp) {
     @Provides
     @Singleton
     fun provideVideoRepository(streamingApiService: StreamingApiService, tvInfoApiService: TvMazeApiService)
-			= VideoRepository(streamingApiService, tvInfoApiService)
+            = VideoRepository(streamingApiService, tvInfoApiService)
 
     @Provides
     @Singleton
@@ -44,20 +41,20 @@ class ToonUpAppModule(val app: ToonUpApp) {
         return retrofit.create(StreamingApiService::class.java)
     }
 
-	@Provides
+    @Provides
     @Singleton
     fun provideTvMazeApiService(): TvMazeApiService {
-		val logging = HttpLoggingInterceptor()
-		logging.level = HttpLoggingInterceptor.Level.BODY
-		val okHttpClient = OkHttpClient.Builder()
-				.addInterceptor(logging)
-				.build()
-		val retrofit = Retrofit.Builder()
-				.baseUrl("http://api.tvmaze.com")
-				.client(okHttpClient)
-				.addConverterFactory(MoshiConverterFactory.create())
-				.addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-				.build()
-		return retrofit.create(TvMazeApiService::class.java)
-	}
+        val logging = HttpLoggingInterceptor()
+        logging.level = HttpLoggingInterceptor.Level.BODY
+        val okHttpClient = OkHttpClient.Builder()
+                .addInterceptor(logging)
+                .build()
+        val retrofit = Retrofit.Builder()
+                .baseUrl("http://api.tvmaze.com")
+                .client(okHttpClient)
+                .addConverterFactory(MoshiConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .build()
+        return retrofit.create(TvMazeApiService::class.java)
+    }
 }

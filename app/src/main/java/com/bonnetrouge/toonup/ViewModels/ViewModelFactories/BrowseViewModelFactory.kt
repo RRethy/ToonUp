@@ -6,7 +6,7 @@ import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
 import javax.inject.Inject
 
 
-class BrowseViewModelFactory @Inject constructor(val browseViewModel: BrowseViewModel): ViewModelProvider.Factory {
+class BrowseViewModelFactory @Inject constructor(val browseViewModel: BrowseViewModel) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>?): T {
         modelClass?.let {

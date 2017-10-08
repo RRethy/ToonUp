@@ -8,9 +8,9 @@ import retrofit2.http.Query
 
 interface TvMazeApiService {
 
-	@GET("/singlesearch/shows")
-	fun getExtendedSeriesInfo(@Query("q") seriesName: String): Observable<SeriesExtendedInfo>
+    @GET("/singlesearch/shows")
+    fun getExtendedSeriesInfo(@Query("q") seriesName: String): Observable<SeriesExtendedInfo>
 
-	@GET("/singlesearch/shows?embed=episodes")
-	fun getExtendedEpisodesInfo(@Query("q") seriesName: String): Observable<FullSeriesInfo>
+    @GET("/singlesearch/shows?embed=episodes")
+    fun getExtendedEpisodesInfo(@Query("q") seriesName: String): Observable<FullSeriesInfo>
 }

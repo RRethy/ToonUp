@@ -8,5 +8,5 @@ import dagger.Subcomponent
 @ActivityScope
 @Subcomponent(modules = arrayOf(PlayerActivityModule::class))
 interface PlayerActivitySubcomponent {
-	fun inject(activity: PlayerActivity)
+    fun inject(activity: PlayerActivity)
 }

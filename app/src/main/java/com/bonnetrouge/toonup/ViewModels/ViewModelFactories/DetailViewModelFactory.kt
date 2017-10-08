@@ -6,15 +6,15 @@ import com.bonnetrouge.toonup.ViewModels.DetailViewModel
 import javax.inject.Inject
 
 
-class DetailViewModelFactory @Inject constructor(val detailViewModel: DetailViewModel): ViewModelProvider.Factory {
+class DetailViewModelFactory @Inject constructor(val detailViewModel: DetailViewModel) : ViewModelProvider.Factory {
 
-	override fun <T : ViewModel?> create(modelClass: Class<T>?): T {
-		modelClass?.let {
-			if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
-				return detailViewModel as? T ?: throw IllegalArgumentException("Unknown model class type!")
-			}
+    override fun <T : ViewModel?> create(modelClass: Class<T>?): T {
+        modelClass?.let {
+            if (modelClass.isAssignableFrom(DetailViewModel::class.java)) {
+                return detailViewModel as? T ?: throw IllegalArgumentException("Unknown model class type!")
+            }
 
-		}
-		throw IllegalArgumentException("Null model class!")
-	}
+        }
+        throw IllegalArgumentException("Null model class!")
+    }
 }
