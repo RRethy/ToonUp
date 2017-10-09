@@ -47,20 +47,24 @@ class BrowsingFragment @Inject constructor() : Fragment(), OnRVTransitionItemCli
     }
 
     fun refreshBanners() {
-        dataFetchingDelegate.fetchBrowsingData({ showLoading() }, browseViewModel, {
-            this.subscribe({
-                hideLoading()
-                hideErrorMsg()
-                swipeRefreshLayout.postDelayed({
-                    bannerListAdapter.banners.addAll(it)
-                    bannerListAdapter.notifyDataSetChanged()
-                }, 150)
+        if (bannerListAdapter.banners.size == 0) {
+            dataFetchingDelegate.fetchBrowsingData({ showLoading() }, browseViewModel, {
+                this.subscribe({
+                    hideLoading()
+                    hideErrorMsg()
+                    swipeRefreshLayout.postDelayed({
+                        bannerListAdapter.banners.addAll(it)
+                        bannerListAdapter.notifyDataSetChanged()
+                    }, 150)
+                }, {
+                    onNetworkError()
+                })
             }, {
                 onNetworkError()
             })
-        }, {
-            onNetworkError()
-        })
+        } else {
+            hideLoading()
+        }
     }
 
     fun onNetworkError() {
