@@ -3,24 +3,25 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/rootBackground"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:fitsSystemWindows="true"
+	android:background="@drawable/gradient_animation_list"
 	tools:context="com.bonnetrouge.toonup.Activities.DetailActivity">
 
 	<android.support.design.widget.AppBarLayout
 		android:id="@+id/appBar"
 		android:layout_width="match_parent"
 		android:layout_height="360dp"
-		android:fitsSystemWindows="true"
-		android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+		android:fitsSystemWindows="true">
 
 		<android.support.design.widget.CollapsingToolbarLayout
 			android:id="@+id/collapsibleToolbar"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:fitsSystemWindows="true"
-			app:contentScrim="?attr/colorPrimary"
+			app:contentScrim="@drawable/dark_blue_red_gradient"
 			app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 			<ImageView

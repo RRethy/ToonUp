@@ -2,6 +2,7 @@ package com.bonnetrouge.toonup.Activities
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.app.AppCompatActivity
@@ -27,14 +28,13 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_detail.*
 import javax.inject.Inject
 
-//TODO: Clean this shit up
 class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
-
 
     @Inject lateinit var detailViewModelFactory: DetailViewModelFactory
     lateinit var detailViewModel: DetailViewModel
 
     val detailAdapter by lazyAndroid { DetailsAdapter(this) }
+    val backgroundAnimation by lazyAndroid { rootBackground.background as AnimationDrawable }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,6 +43,20 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
         detailViewModel = ViewModelProviders.of(this, detailViewModelFactory).get(DetailViewModel::class.java)
         setupToolbar()
         setupRecyclerView()
+        backgroundAnimation.with {
+            setEnterFadeDuration(5000)
+            setExitFadeDuration(5000)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        backgroundAnimation.start()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        backgroundAnimation.stop()
     }
 
     override fun onEnterAnimationComplete() {
