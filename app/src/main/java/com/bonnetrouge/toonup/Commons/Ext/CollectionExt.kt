@@ -3,10 +3,10 @@ package com.bonnetrouge.toonup.Commons.Ext
 import java.util.regex.Pattern
 
 /**
- * Returns a list containing only elements where an elements [filterProperty] fuzzy matches [stringMatch]
+ * Returns a list containing only elements where an elements [filterProperty] fuzzy matches [match]
  */
-inline fun <T> Iterable<T>.fuzzyFilter(fuzziness: Int = 1, stringMatch: CharSequence, filterProperty: T.() -> String): List<T> {
-    val lazySearchPattern = getFuzzinessPattern(fuzziness, stringMatch)
+inline fun <T> Iterable<T>.fuzzyFilter(fuzziness: Int = 1, match: CharSequence, filterProperty: T.() -> String): List<T> {
+    val lazySearchPattern = getFuzzinessPattern(fuzziness, match)
     val filteredList = mutableListOf<T>()
     this.forEach {
         val lazySearchMatcher = lazySearchPattern.matcher(it.filterProperty())

@@ -5,6 +5,7 @@ import com.bonnetrouge.toonup.Commons.Ext.dog
 import com.bonnetrouge.toonup.Commons.Ext.fuzzyFilter
 import com.bonnetrouge.toonup.Commons.Ext.resString
 import com.bonnetrouge.toonup.Data.VideoRepository
+import com.bonnetrouge.toonup.Delegates.*
 import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.Model.VideoGenres
@@ -13,78 +14,65 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.BiFunction
 import io.reactivex.schedulers.Schedulers
-import java.util.regex.Pattern
 import javax.inject.Inject
 
-/**
- * TODO: Figure out best way to condense this down
- *       Delegate pattern would be anti-pattern IMO for this
- *       Maybe try using an enum to decide which which var to pull data from
- */
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository) : ViewModel() {
 
-    private var cartoons: MutableList<BannerModel>? = null
-    private var rawCartoons: MutableList<BasicSeriesInfo>? = null
-    private var movies: MutableList<BannerModel>? = null
-    private var rawMovies: MutableList<BasicSeriesInfo>? = null
-    private var animes: MutableList<BannerModel>? = null
-    private var rawAnime: MutableList<BasicSeriesInfo>? = null
+    val dataHolder = BrowseVMDataHolder()
 
-    var genres: VideoGenres? = null
-
-    //region Cartoons
-    fun fetchCartoons(showLoading: () -> Unit,
-                      subscription: Observable<MutableList<BannerModel>>.() -> Unit,
-                      error: () -> Unit) {
-        if (cartoons == null && cartoons == null) {
+    fun getFormattedMedia(delegate: VMDelegate,
+                          showLoading: () -> Unit,
+                          subscription: Observable<MutableList<BannerModel>>.() -> Unit,
+                          error: () -> Unit) {
+        if (delegate.isDataEmpty(dataHolder)) {
             showLoading()
         }
         ensureGenresNotNull({
-            if (cartoons != null) {
-                Observable.just(cartoons!!).subscription()
+            if (!delegate.isDataEmpty(dataHolder)) {
+                Observable.just(delegate.formattedData(dataHolder)!!).subscription()
             } else {
                 val observable = Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
-                        getAllCartoons(it),
-                        getPopularCartoons(),
-                        BiFunction { allSeries, popularCartoons ->
+                        requestAllMedia(delegate.requestAllMedia(videoRepository), delegate, it),
+                        requestPopularMedia(delegate.requestPopularMedia(videoRepository)),
+                        BiFunction { allMedia, popularMedia ->
                             val list = mutableListOf<BannerModel>()
-                            list.add(popularCartoons)
-                            list.addAll(allSeries)
+                            list.add(popularMedia)
+                            list.addAll(allMedia)
                             list
                         }
-                ).doOnNext { cartoons = it }
+                ).doOnNext { dataHolder.cacheFormattedData(delegate, it) }
                 observable.subscription()
             }
-        }, {
-            error()
-        })
+        }, { error() } )
     }
 
-    fun getCartoonSearchResults(s: CharSequence): MutableList<BasicSeriesInfo>? {
+    fun getSearchResults(delegate: VMDelegate, s: CharSequence): MutableList<BasicSeriesInfo>? {
         return if (s.isEmpty()) {
-            getPopularCartoonsRaw()
+            getRawPopularMedia(delegate)
         } else {
-            filterForCartoons(s)
+            filterMedia(delegate, s)
         }
     }
 
-    private fun getPopularCartoonsRaw(): MutableList<BasicSeriesInfo> {
-        val rawCartoons = mutableListOf<BasicSeriesInfo>()
-        cartoons?.forEach {
+    private fun getRawPopularMedia(delegate: VMDelegate): MutableList<BasicSeriesInfo> {
+        val rawPopularMedia = mutableListOf<BasicSeriesInfo>()
+        delegate.formattedData(dataHolder)?.forEach {
             if (it.title == resString(R.string.popular)) {
-                it.dataList.forEach { rawCartoons.add(it as BasicSeriesInfo) }
+                it.dataList.forEach { rawPopularMedia.add(it as BasicSeriesInfo) }
             }
         }
-        return rawCartoons
+        return rawPopularMedia
     }
 
-    private fun filterForCartoons(s: CharSequence) =
-            rawCartoons?.fuzzyFilter(stringMatch = s){ this.name }?.toMutableList()
+    private fun filterMedia(delegate: VMDelegate, s: CharSequence) =
+            delegate.rawData(dataHolder)?.fuzzyFilter(match = s){ this.name }?.toMutableList()
 
-    private fun getAllCartoons(videoGenres: VideoGenres) =
-            videoRepository.getAllCartoons()
+    private fun requestAllMedia(observable: Observable<List<BasicSeriesInfo>>,
+                                delegate: VMDelegate,
+                                videoGenres: VideoGenres) =
+            observable
                     .retry(3)
-                    .doOnNext { rawCartoons = it.toMutableList() }
+                    .doOnNext { dataHolder.cacheRawData(delegate, it.toMutableList()) }
                     .map {
                         val seriesByGenre = mutableListOf<BannerModel>()
                         for (videoGenre in videoGenres.genres) {
@@ -97,174 +85,23 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
 
-    private fun getPopularCartoons() =
-            videoRepository.getPopularCartoons()
+    private fun requestPopularMedia(observable: Observable<List<BasicSeriesInfo>>) =
+            observable
                     .retry(3)
                     .map {
                         BannerModel(resString(R.string.popular), it)
                     }
                     .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-    //endregion
-
-    //region Movies
-    fun fetchMovies(showLoading: () -> Unit,
-                      subscription: Observable<MutableList<BannerModel>>.() -> Unit,
-                      error: () -> Unit) {
-        if (movies == null && movies == null) {
-            showLoading()
-        }
-        ensureGenresNotNull({
-            if (movies != null) {
-                Observable.just(movies!!).subscription()
-            } else {
-                val observable = Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
-                        getAllMovies(it),
-                        getPopularMovies(),
-                        BiFunction { allMovies, popularMovies ->
-                            val list = mutableListOf<BannerModel>()
-                            list.add(popularMovies)
-                            list.addAll(allMovies)
-                            list
-                        }
-                ).doOnNext { movies = it }
-                observable.subscription()
-            }
-        }, {
-            error()
-        })
-    }
-
-    fun getMoviesSearchResults(s: CharSequence): MutableList<BasicSeriesInfo>? {
-        return if (s.isEmpty()) {
-            getPopularMoviesRaw()
-        } else {
-            filterForMovies(s)
-        }
-    }
-
-    fun getPopularMoviesRaw(): MutableList<BasicSeriesInfo> {
-        val rawMovies = mutableListOf<BasicSeriesInfo>()
-        movies?.forEach {
-            if (it.title == resString(R.string.popular)) {
-                it.dataList.forEach { rawMovies.add(it as BasicSeriesInfo) }
-            }
-        }
-        return rawMovies
-    }
-
-    fun filterForMovies(s: CharSequence) =
-            rawMovies?.fuzzyFilter(stringMatch = s){ this.name }?.toMutableList()
-
-    private fun getAllMovies(videoGenres: VideoGenres) =
-            videoRepository.getAllMovies()
-                    .retry(3)
-                    .doOnNext { rawMovies = it.toMutableList() }
-                    .map {
-                        val moviesByGenre = mutableListOf<BannerModel>()
-                        for (videoGenre in videoGenres.genres) {
-                            val moviesList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
-                            moviesList.sortByDescending { it.rating }
-                            if (moviesList.size > 0) moviesByGenre.add(BannerModel(videoGenre, moviesList))
-                        }
-                        moviesByGenre
-                    }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-
-    private fun getPopularMovies() =
-            videoRepository.getPopularMovies()
-                    .retry(3)
-                    .map {
-                        BannerModel(resString(R.string.popular), it)
-                    }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-    //endregion
-
-    //region Anime
-    fun fetchAnime(showLoading: () -> Unit,
-                   subscription: Observable<MutableList<BannerModel>>.() -> Unit,
-                   error: () -> Unit) {
-        if (animes == null && animes == null) {
-            showLoading()
-        }
-        ensureGenresNotNull({
-            if (animes != null) {
-                Observable.just(animes!!).subscription()
-            } else {
-                val observable = Observable.zip<MutableList<BannerModel>, BannerModel, MutableList<BannerModel>>(
-                        getAllAnime(it),
-                        getPopularAnime(),
-                        BiFunction { allAnime, popularAnime ->
-                            val list = mutableListOf<BannerModel>()
-                            list.add(popularAnime)
-                            list.addAll(allAnime)
-                            list
-                        }
-                ).doOnNext { animes = it }
-                observable.subscription()
-            }
-        }, {
-            error()
-        })
-    }
-
-    fun getAnimeSearchResult(s: CharSequence): MutableList<BasicSeriesInfo>? {
-        return if (s.isEmpty()) {
-            getPopularAnimeRaw()
-        } else {
-            filterForAnime(s)
-        }
-    }
-
-    private fun getPopularAnimeRaw(): MutableList<BasicSeriesInfo> {
-        val rawAnime = mutableListOf<BasicSeriesInfo>()
-        animes?.forEach {
-            if (it.title == resString(R.string.popular)) {
-                it.dataList.forEach { rawAnime.add(it as BasicSeriesInfo) }
-            }
-        }
-        return rawAnime
-    }
-
-    private fun filterForAnime(s: CharSequence) =
-            rawAnime?.fuzzyFilter(stringMatch = s){ this.name }?.toMutableList()
-
-    private fun getAllAnime(videoGenres: VideoGenres) =
-            videoRepository.getAllAnime()
-                    .retry(3)
-                    .doOnNext { rawAnime = it.toMutableList() }
-                    .map {
-                        val animeByGenre = mutableListOf<BannerModel>()
-                        for (videoGenre in videoGenres.genres) {
-                            val animeList = it.filter({ it.genres.contains(videoGenre) }).toMutableList()
-                            animeList.sortByDescending { it.rating }
-                            if (animeList.size > 0) animeByGenre.add(BannerModel(videoGenre, animeList))
-                        }
-                        animeByGenre
-                    }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-
-    private fun getPopularAnime() =
-            videoRepository.getPopularAnime()
-                    .retry(3)
-                    .map {
-                        BannerModel(resString(R.string.popular), it)
-                    }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
     //endregion
 
     private fun ensureGenresNotNull(onSuccess: (VideoGenres) -> Unit, onFailure: () -> Unit) {
-        if (genres != null) onSuccess(genres!!)
+        if (dataHolder.genres != null) onSuccess(dataHolder.genres!!)
         else videoRepository.getGenres()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .retry(3)
                 .subscribe({
-                    genres = it
+                    dataHolder.genres = it
                     onSuccess(it)
                 }, {
                     onFailure()
@@ -272,9 +109,37 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
     }
 
     fun prefetchGenres() {
-        if (genres == null) videoRepository.getGenres()
+        if (dataHolder.genres == null) videoRepository.getGenres()
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .subscribe({ genres = it }, { dog("Prefetch Genres failed!") })
+                .subscribe({ dataHolder.genres = it }, { dog("Prefetch Genres failed!") })
+    }
+}
+
+class BrowseVMDataHolder {
+
+    var cartoons: MutableList<BannerModel>? = null
+    var rawCartoons: MutableList<BasicSeriesInfo>? = null
+    var movies: MutableList<BannerModel>? = null
+    var rawMovies: MutableList<BasicSeriesInfo>? = null
+    var anime: MutableList<BannerModel>? = null
+    var rawAnime: MutableList<BasicSeriesInfo>? = null
+
+    var genres: VideoGenres? = null
+
+    fun cacheFormattedData(delegate: VMDelegate, data: MutableList<BannerModel>) {
+        when (delegate) {
+            is CartoonsVMDelegate -> cartoons = data
+            is MoviesVMDelegate -> movies = data
+            is AnimeVMDelegate -> anime = data
+        }
+    }
+
+    fun cacheRawData(delegate: VMDelegate, data: MutableList<BasicSeriesInfo>) {
+        when (delegate) {
+            is CartoonsVMDelegate -> rawCartoons = data
+            is MoviesVMDelegate -> rawMovies = data
+            is AnimeVMDelegate -> rawAnime = data
+        }
     }
 }

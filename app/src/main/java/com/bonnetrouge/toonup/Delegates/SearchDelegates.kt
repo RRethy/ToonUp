@@ -9,18 +9,18 @@ sealed class SearchDelegate {
 
 class CartoonSearchDelegate : SearchDelegate() {
     override fun getFilteredSearchResults(s: CharSequence, viewModel: BrowseViewModel, onResult: (MutableList<BasicSeriesInfo>?) -> Unit) {
-        onResult(viewModel.getCartoonSearchResults(s))
+        onResult(viewModel.getSearchResults(CartoonsVMDelegate(), s))
     }
 }
 
 class MoviesSearchDelegate : SearchDelegate() {
     override fun getFilteredSearchResults(s: CharSequence, viewModel: BrowseViewModel, onResult: (MutableList<BasicSeriesInfo>?) -> Unit) {
-        onResult(viewModel.getMoviesSearchResults(s))
+        onResult(viewModel.getSearchResults(MoviesVMDelegate(), s))
     }
 }
 
 class AnimeSearchDelegate : SearchDelegate() {
     override fun getFilteredSearchResults(s: CharSequence, viewModel: BrowseViewModel, onResult: (MutableList<BasicSeriesInfo>?) -> Unit) {
-        onResult(viewModel.getAnimeSearchResult(s))
+        onResult(viewModel.getSearchResults(AnimeVMDelegate(), s))
     }
 }

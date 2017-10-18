@@ -15,6 +15,7 @@ import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
 import com.bonnetrouge.toonup.Delegates.CartoonFetchingDelegate
 import com.bonnetrouge.toonup.Delegates.DataFetchingDelegate
 import com.bonnetrouge.toonup.Listeners.OnRVTransitionItemClicked
+import com.bonnetrouge.toonup.Model.BannerModel
 import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.RVItem
@@ -46,6 +47,7 @@ class BrowsingFragment @Inject constructor() : Fragment(), OnRVTransitionItemCli
         (activity as BrowseActivity).showBackButton()
     }
 
+    //TODO: Use coroutines with this so it's cancellable to avoid the switcher bug
     fun refreshBanners() {
         if (bannerListAdapter.banners.size == 0) {
             dataFetchingDelegate.fetchBrowsingData({ showLoading() }, browseViewModel, {
@@ -53,8 +55,7 @@ class BrowsingFragment @Inject constructor() : Fragment(), OnRVTransitionItemCli
                     hideLoading()
                     hideErrorMsg()
                     swipeRefreshLayout.postDelayed({
-                        bannerListAdapter.banners.addAll(it)
-                        bannerListAdapter.notifyDataSetChanged()
+                        updateBanners(it)
                     }, 150)
                 }, {
                     onNetworkError()
@@ -65,6 +66,11 @@ class BrowsingFragment @Inject constructor() : Fragment(), OnRVTransitionItemCli
         } else {
             hideLoading()
         }
+    }
+
+    fun updateBanners(banners: MutableList<BannerModel>) {
+        bannerListAdapter.banners.addAll(banners)
+        bannerListAdapter.notifyDataSetChanged()
     }
 
     fun onNetworkError() {
