@@ -62,7 +62,7 @@ class SearchFragment @Inject constructor() : Fragment(), OnRVTransitionItemClick
     fun popularRecyclerView() {
         searchDelegate.getFilteredSearchResults("", browseViewModel) {
             searchAdapter.with {
-                if (it.isNotEmpty()) {
+                if (it != null && it.isNotEmpty()) {
                     hideNoSearchResultsMsg()
                     items.clear()
                     items.addAll(it)
@@ -76,7 +76,7 @@ class SearchFragment @Inject constructor() : Fragment(), OnRVTransitionItemClick
 
     fun dispatchSearch(s: CharSequence) {
         searchDelegate.getFilteredSearchResults(s, browseViewModel) {
-            if (it.isNotEmpty()) {
+            if (it != null && it.isNotEmpty()) {
                 hideNoSearchResultsMsg()
                 val diffResult = DiffUtil.calculateDiff(object : DiffUtil.Callback() {
                     override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int) =
