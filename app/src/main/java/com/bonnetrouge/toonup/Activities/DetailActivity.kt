@@ -44,7 +44,7 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
             setEnterFadeDuration(5000)
             setExitFadeDuration(5000)
         }
-        postDelayed(200) { popularRecyclerView() }
+        popularRecyclerView()
     }
 
     override fun onResume() {
@@ -85,10 +85,12 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
     fun popularRecyclerView() {
         detailViewModel.getMediaInfo()
                 .subscribe({
-                    hideError()
-                    detailAdapter.items.clear()
-                    detailAdapter.items.addAll(it)
-                    detailAdapter.notifyDataSetChanged()
+                    postDelayed(200) {
+                        hideError()
+                        detailAdapter.items.clear()
+                        detailAdapter.items.addAll(it)
+                        detailAdapter.notifyDataSetChanged()
+                    }
                 }, {
                     detailsRecyclerView.invisible()
                     showError()
@@ -104,7 +106,11 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
     }
 
     override fun onRecyclerViewItemClicked(item: RVItem) {
-        PlayerActivity.navigate(this, (item as Episode).id)
+        if (isConnected()) {
+            PlayerActivity.navigate(this, (item as Episode).id)
+        } else {
+            longToast(R.string.connectivity_toast_msg)
+        }
     }
 
     companion object {
