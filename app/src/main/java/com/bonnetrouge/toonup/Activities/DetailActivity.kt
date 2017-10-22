@@ -8,7 +8,6 @@ import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
-import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import com.bonnetrouge.toonup.Adapters.DetailsAdapter
@@ -83,24 +82,25 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
         detailsRecyclerView.adapter = detailAdapter
     }
 
-    //TODO: Use coroutines instead of wack ass logic
     fun popularRecyclerView() {
         detailViewModel.getMediaInfo()
                 .subscribe({
+                    hideError()
                     detailAdapter.items.clear()
                     detailAdapter.items.addAll(it)
                     detailAdapter.notifyDataSetChanged()
                 }, {
-                    //TODO: network failure handling
+                    detailsRecyclerView.invisible()
+                    showError()
                 })
     }
 
     fun hideError() {
-        errorMessage.visibility = View.VISIBLE
+        errorMessage.invisible()
     }
 
     fun showError() {
-        errorMessage.visibility = View.GONE
+        errorMessage.visible()
     }
 
     override fun onRecyclerViewItemClicked(item: RVItem) {

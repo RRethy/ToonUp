@@ -2,14 +2,14 @@ package com.bonnetrouge.toonup.Commons.Ext
 
 import android.view.View
 
-fun View.visibilityGone() {
+fun View.gone() {
     this.visibility = View.GONE
 }
 
-fun View.visibilityInvisible() {
+fun View.invisible() {
     this.visibility = View.INVISIBLE
 }
 
-fun View.visibilityVisible() {
+fun View.visible() {
     this.visibility = View.VISIBLE
 }

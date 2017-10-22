@@ -23,7 +23,7 @@ class BannerItemsAdapter(fragment: BrowsingFragment?) : RecyclerView.Adapter<Rec
         when (viewType) {
             RVItemViewTypes.BASIC_SERIES ->
                 return BannerItemViewHolder(LayoutInflater.from(parent?.context)
-                        .inflate(R.layout.banner_item, parent, false))
+                        .inflate(R.layout.view_holder_banner_item, parent, false))
         }
         return null
     }

@@ -22,7 +22,7 @@
 			android:layout_height="0dp"
 			android:layout_weight="1"
 			android:ellipsize="end"
-			android:fontFamily="serif"
+			android:fontFamily="serif-monospace"
 			android:gravity="center"
 			android:maxLines="2"
 			android:background="@color/dark_transparent"

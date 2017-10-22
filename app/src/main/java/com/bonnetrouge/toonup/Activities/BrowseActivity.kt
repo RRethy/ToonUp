@@ -10,9 +10,6 @@ import android.view.MenuItem
 import android.widget.ImageView
 import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.BrowseActivityModule
-import com.bonnetrouge.toonup.Delegates.AnimeFetchingDelegate
-import com.bonnetrouge.toonup.Delegates.CartoonFetchingDelegate
-import com.bonnetrouge.toonup.Delegates.MovieFetchingDelegate
 import com.bonnetrouge.toonup.Fragments.*
 import com.bonnetrouge.toonup.Listeners.DebounceTextWatcher
 import com.bonnetrouge.toonup.Listeners.OnSearchDebounceListener
@@ -116,9 +113,9 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
     override fun onPreDebounce(s: CharSequence) {
         if (s.isEmpty()) {
-            clearIcon.visibilityInvisible()
+            clearIcon.invisible()
         } else {
-            clearIcon.visibilityVisible()
+            clearIcon.visible()
         }
     }
     //endregion
@@ -158,7 +155,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
     fun showSearchToolbar() {
         searchItem?.isVisible = false
         searchTextContainer.with {
-            visibilityVisible()
+            visible()
             pivotX = getDisplayWidth().toFloat() * 0.75f
             animate().scaleX(1f).setDuration(300).withEndAction {
                 searchEditText.showKeyboard()
@@ -179,7 +176,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
         }
         searchTextContainer.with {
             animate().scaleX(0f).setDuration(300).withEndAction {
-                visibilityGone()
+                gone()
                 showSearchIcon()
             }.start()
         }

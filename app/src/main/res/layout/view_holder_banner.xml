@@ -9,16 +9,18 @@
 		android:layout_width="match_parent"
 		android:layout_height="25dp"
 		android:gravity="center_horizontal"
-		android:layout_marginTop="20dp"
+		android:layout_marginTop="30dp"
+		android:layout_marginBottom="10dp"
+		android:fontFamily="serif-monospace"
 		android:textAllCaps="true"
 		android:textSize="20sp"/>
-	<!--	<View
+		<View
 			android:layout_width="match_parent"
 			android:layout_height="1dp"
-			android:layout_marginRight="24dp"
-			android:layout_marginLeft="24dp"
+			android:layout_marginRight="48dp"
+			android:layout_marginLeft="48dp"
 			android:layout_below="@id/bannerTitle"
-			android:background="@android:color/white"/>-->
+			android:background="@android:color/white"/>
 	<android.support.v7.widget.RecyclerView
 		android:id="@+id/bannerRecyclerView"
 		android:layout_marginTop="8dp"
