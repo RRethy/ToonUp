@@ -43,6 +43,7 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
             setEnterFadeDuration(5000)
             setExitFadeDuration(5000)
         }
+        postDelayed(200) { popularRecyclerView() }
     }
 
     override fun onResume() {
@@ -53,13 +54,6 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
     override fun onPause() {
         super.onPause()
         backgroundAnimation.stop()
-    }
-
-    override fun onEnterAnimationComplete() {
-        postDelayed(200) {
-            popularRecyclerView()
-            // toolbar.title = intent.getStringExtra(DetailActivity.TITLE)
-        }
     }
 
     fun cacheIntentData() {
@@ -88,12 +82,15 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 
     //TODO: Use coroutines instead of wack ass logic
     fun popularRecyclerView() {
+        dog("1")
         detailViewModel.getMediaInfo()
                 .subscribe({
+                    dog("qumansub1")
                     detailAdapter.items.clear()
                     detailAdapter.items.addAll(it)
                     detailAdapter.notifyDataSetChanged()
                 }, {
+                    dog("qumanqumanfail")
                     //TODO: network failure handling
                 })
     }
