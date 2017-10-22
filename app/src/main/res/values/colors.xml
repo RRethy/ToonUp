@@ -8,7 +8,7 @@
     <color name="thumbnailLoadingColour">#50000000</color>
     <color name="transparent">#00ffffff</color>
     <color name="dark_transparent">#3c000000</color>
-    <color name="darker_transparent">#65000000</color>
+    <color name="darker_transparent">#bb000000</color>
     <color name="black_tint">#4c000000</color>
     <color name="low_alpha_white">#7cffffff</color>
 </resources>

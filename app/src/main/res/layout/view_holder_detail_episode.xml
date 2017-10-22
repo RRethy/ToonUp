@@ -3,7 +3,9 @@
 			  xmlns:app="http://schemas.android.com/apk/res-auto"
 			  android:orientation="horizontal"
 			  android:layout_width="match_parent"
-			  android:layout_height="wrap_content">
+			  android:layout_height="wrap_content"
+			  android:layout_marginTop="4dp"
+			  android:layout_marginBottom="4dp">
 	<ImageView
 		android:id="@+id/playButton"
 		android:layout_width="42dp"
@@ -20,14 +22,18 @@
 			android:id="@+id/episodeDate"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
+			android:fontFamily="serif-monospace"
 			android:textColor="@color/low_alpha_white"
 			android:textSize="12sp"/>
 		<TextView
 			android:id="@+id/episodeName"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
+			android:layout_height="0dp"
+			android:layout_weight="1"
+			android:gravity="center_vertical"
 			android:maxLines="1"
 			android:ellipsize="end"
+			android:fontFamily="serif-monospace"
 			android:textColor="@android:color/white"
 			android:textSize="16sp"/>
 	</LinearLayout>

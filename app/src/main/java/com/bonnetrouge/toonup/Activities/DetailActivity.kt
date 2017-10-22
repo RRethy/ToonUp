@@ -6,9 +6,11 @@ import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.widget.ImageView
+import android.widget.LinearLayout
 import com.bonnetrouge.toonup.Adapters.DetailsAdapter
 import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.DetailActivityModule
@@ -76,21 +78,19 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
     }
 
     fun setupRecyclerView() {
+        detailsRecyclerView.addItemDecoration(DividerItemDecoration(app, LinearLayout.VERTICAL))
         detailsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         detailsRecyclerView.adapter = detailAdapter
     }
 
     //TODO: Use coroutines instead of wack ass logic
     fun popularRecyclerView() {
-        dog("1")
         detailViewModel.getMediaInfo()
                 .subscribe({
-                    dog("qumansub1")
                     detailAdapter.items.clear()
                     detailAdapter.items.addAll(it)
                     detailAdapter.notifyDataSetChanged()
                 }, {
-                    dog("qumanqumanfail")
                     //TODO: network failure handling
                 })
     }

@@ -8,33 +8,42 @@
 		android:id="@+id/seriesTitle"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginStart="16dp"
+		android:layout_marginStart="8dp"
 		android:layout_marginTop="8dp"
 		android:textSize="30sp"
+		android:fontFamily="serif-monospace"
 		android:textColor="@android:color/white"/>
-	<TextView
-		android:id="@+id/additionInfo"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_marginStart="8dp"
-		android:textSize="16sp"
-		android:textColor="@color/low_alpha_white"/>
-
 	<!--TODO: RecyclerView for genres-->
 	<TextView
 		android:id="@+id/genres"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="8dp"
-		android:textSize="16sp"
+		android:layout_marginBottom="4dp"
+		android:layout_marginTop="4dp"
+		android:textSize="14sp"
 		android:textColor="@color/low_alpha_white"
+		android:fontFamily="serif-monospace"
 		android:background="@drawable/low_alpha_border"/>
+	<TextView
+		android:id="@+id/additionInfo"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginStart="8dp"
+		android:layout_marginBottom="4dp"
+		android:layout_marginTop="4dp"
+		android:textSize="14sp"
+		android:fontFamily="serif-monospace"
+		android:textColor="@color/low_alpha_white"/>
 	<TextView
 		android:id="@+id/seriesDescription"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginStart="8dp"
 		android:layout_marginEnd="8dp"
-		android:textSize="18sp"
+		android:layout_marginBottom="8dp"
+		android:layout_marginTop="4dp"
+		android:textSize="13sp"
+		android:fontFamily="serif-monospace"
 		android:textColor="@android:color/white"/>
 </LinearLayout>

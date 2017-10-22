@@ -44,3 +44,16 @@ fun isInViewBounds(view: View, x: Int, y: Int): Boolean {
  */
 fun <T> lazyAndroid(initializer: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE, initializer)
 
+inline fun sdkAbove(sdkVerson: Int, action: () -> Unit) {
+    if (android.os.Build.VERSION.SDK_INT >= sdkVerson){
+        action()
+    }
+}
+
+inline fun sdkAbove(sdkVerson: Int, action: () -> Unit, actionIfBelow: () -> Unit) {
+    if (android.os.Build.VERSION.SDK_INT >= sdkVerson){
+        action()
+    } else{
+        actionIfBelow()
+    }
+}
