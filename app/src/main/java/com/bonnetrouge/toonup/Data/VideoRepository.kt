@@ -31,8 +31,4 @@ interface VideoRepository {
     fun getDescriptiveStreamingUrls(id: String): Observable<List<List<DescriptiveStreamingUrl>>>
 
     fun getRawStreamingUrls(id: String): Observable<List<List<String>>>
-
-    fun getExtendedSeriesInfo(seriesName: String): Observable<SeriesExtendedInfo>
-
-    fun getExtendedEpisodesInfo(seriesName: String): Observable<FullSeriesInfo>
 }

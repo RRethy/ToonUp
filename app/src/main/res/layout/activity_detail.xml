@@ -21,7 +21,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			android:fitsSystemWindows="true"
-			app:contentScrim="@drawable/dark_blue_red_gradient"
+			app:contentScrim="@color/darker_transparent"
 			app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
 			<ImageView
@@ -47,8 +47,6 @@
 		android:id="@+id/detailsRecyclerView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:clipToPadding="false"
-		android:paddingTop="8dp"
 		app:layout_behavior="@string/appbar_scrolling_view_behavior"
 		tools:context="com.bonnetrouge.toonup.Activities.DetailActivity"
 		tools:showIn="@layout/activity_detail"/>

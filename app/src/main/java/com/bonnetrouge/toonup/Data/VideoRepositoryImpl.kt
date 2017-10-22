@@ -1,10 +1,8 @@
 package com.bonnetrouge.toonup.Data
 
 import com.bonnetrouge.toonup.API.StreamingApiService
-import com.bonnetrouge.toonup.API.TvMazeApiService
 
-class VideoRepositoryImpl(private val streamingApiService: StreamingApiService,
-                          private val tvInfoApiService: TvMazeApiService) : VideoRepository {
+class VideoRepositoryImpl(private val streamingApiService: StreamingApiService) : VideoRepository {
 
     override fun getGenres() = streamingApiService.getGenres()
 
@@ -33,8 +31,4 @@ class VideoRepositoryImpl(private val streamingApiService: StreamingApiService,
     override fun getDescriptiveStreamingUrls(id: String) = streamingApiService.getDescriptiveStreamingUrls(id)
 
     override fun getRawStreamingUrls(id: String) = streamingApiService.getRawStreamingUrls(id)
-
-    override fun getExtendedSeriesInfo(seriesName: String) = tvInfoApiService.getExtendedSeriesInfo(seriesName)
-
-    override fun getExtendedEpisodesInfo(seriesName: String) = tvInfoApiService.getExtendedEpisodesInfo(seriesName)
 }

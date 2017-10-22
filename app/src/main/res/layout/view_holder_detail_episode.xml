@@ -3,13 +3,12 @@
 			  xmlns:app="http://schemas.android.com/apk/res-auto"
 			  android:orientation="horizontal"
 			  android:layout_width="match_parent"
-			  android:layout_height="wrap_content"
-			  android:layout_marginBottom="8dp">
+			  android:layout_height="wrap_content">
 	<ImageView
-		android:id="@+id/episodeImage"
+		android:id="@+id/playButton"
 		android:layout_width="42dp"
 		android:layout_height="42dp"
-		android:layout_marginRight="8dp"
+		android:layout_marginEnd="8dp"
 		app:srcCompat="@drawable/ic_play_circle"/>
 	<LinearLayout
 		android:layout_width="0dp"
@@ -18,10 +17,10 @@
 		android:foregroundGravity="center_vertical"
 		android:layout_height="match_parent">
 		<TextView
-			android:id="@+id/seasonEpisodeNumber"
+			android:id="@+id/episodeDate"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:textColor="@color/series_position"
+			android:textColor="@color/low_alpha_white"
 			android:textSize="12sp"/>
 		<TextView
 			android:id="@+id/episodeName"
