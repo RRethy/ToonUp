@@ -8,17 +8,20 @@ import android.os.Bundle
 import android.view.View
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.Ext.dog
+import com.bonnetrouge.toonup.Commons.Ext.invisible
+import com.bonnetrouge.toonup.Commons.Ext.visible
 import com.bonnetrouge.toonup.DI.Modules.PlayerActivityModule
 import com.bonnetrouge.toonup.Model.DescriptiveStreamingUrl
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.PlayerViewModel
 import com.bonnetrouge.toonup.ViewModels.ViewModelFactories.PlayerViewModelFactory
-import com.google.android.exoplayer2.ExoPlayerFactory
-import com.google.android.exoplayer2.SimpleExoPlayer
+import com.google.android.exoplayer2.*
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory
 import com.google.android.exoplayer2.source.DynamicConcatenatingMediaSource
 import com.google.android.exoplayer2.source.ExtractorMediaSource
+import com.google.android.exoplayer2.source.TrackGroupArray
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory
 import com.google.android.exoplayer2.util.Util
 import io.reactivex.Observable
@@ -27,7 +30,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_player.*
 import javax.inject.Inject
 
-class PlayerActivity : BaseActivity() {
+class PlayerActivity : BaseActivity(), Player.EventListener {
 
     var player: SimpleExoPlayer? = null
     @Inject lateinit var playerViewModelFactory: PlayerViewModelFactory
@@ -36,17 +39,6 @@ class PlayerActivity : BaseActivity() {
     lateinit var dataSourceFactory: DefaultDataSourceFactory
     lateinit var extractorFactory: DefaultExtractorsFactory
     lateinit var dynamicMediaSource: DynamicConcatenatingMediaSource
-
-    companion object {
-
-        const val VIDEO_ID = "Video ID"
-
-        fun navigate(context: Context, id: String) {
-            val intent = Intent(context, PlayerActivity::class.java)
-            intent.putExtra(VIDEO_ID, id)
-            context.startActivity(intent)
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -72,6 +64,30 @@ class PlayerActivity : BaseActivity() {
         player?.release()
     }
 
+    override fun onLoadingChanged(isLoading: Boolean) {
+        if (isLoading) {
+            playerProgressBar.visible()
+        } else {
+            playerProgressBar.invisible()
+        }
+    }
+
+    override fun onPlayerError(error: ExoPlaybackException?) {
+        // TODO: Handle link failure
+    }
+
+    override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) { }
+
+    override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) { }
+
+    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) { }
+
+    override fun onPositionDiscontinuity() { }
+
+    override fun onRepeatModeChanged(repeatMode: Int) { }
+
+    override fun onTimelineChanged(timeline: Timeline?, manifest: Any?) { }
+
     fun makeFullscreen() {
         val decorView = window.decorView
         decorView.setSystemUiVisibility(
@@ -86,6 +102,7 @@ class PlayerActivity : BaseActivity() {
     fun setupVideoPlayer(streamingUrlsObservable: Observable<List<List<DescriptiveStreamingUrl>>>?) {
         trackSelector = DefaultTrackSelector()
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector)
+        player?.addListener(this)
         trackSelector.parameters
         exoPlayerView.player = player
         dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "ToonUp"))
@@ -119,5 +136,16 @@ class PlayerActivity : BaseActivity() {
         }
         player?.prepare(dynamicMediaSource)
         player?.playWhenReady = true
+    }
+
+    companion object {
+
+        const val VIDEO_ID = "Video ID"
+
+        fun navigate(context: Context, id: String) {
+            val intent = Intent(context, PlayerActivity::class.java)
+            intent.putExtra(VIDEO_ID, id)
+            context.startActivity(intent)
+        }
     }
 }

@@ -10,5 +10,10 @@
 		android:background="@android:color/black"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"/>
+	<ProgressBar
+		android:id="@+id/playerProgressBar"
+		android:layout_width="50dp"
+		android:layout_height="50dp"
+		android:layout_gravity="center"/>
 
 </FrameLayout>
