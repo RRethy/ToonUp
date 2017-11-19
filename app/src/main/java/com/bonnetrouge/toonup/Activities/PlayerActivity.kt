@@ -64,13 +64,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
         player?.release()
     }
 
-    override fun onLoadingChanged(isLoading: Boolean) {
-        if (isLoading) {
-            playerProgressBar.visible()
-        } else {
-            playerProgressBar.invisible()
-        }
-    }
+    override fun onLoadingChanged(isLoading: Boolean) { }
 
     override fun onPlayerError(error: ExoPlaybackException?) {
         // TODO: Handle link failure
@@ -80,7 +74,15 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
 
     override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) { }
 
-    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) { }
+    override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+        with (playerProgressBar) {
+            when (playbackState) {
+                Player.STATE_IDLE -> visible()
+                Player.STATE_BUFFERING -> visible()
+                Player.STATE_READY -> invisible()
+            }
+        }
+    }
 
     override fun onPositionDiscontinuity() { }
 
