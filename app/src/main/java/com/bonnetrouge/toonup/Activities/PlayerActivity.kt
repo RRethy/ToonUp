@@ -1,10 +1,12 @@
 package com.bonnetrouge.toonup.Activities
 
+import android.app.Dialog
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.view.View
 import com.bonnetrouge.toonup.Commons.Ext.app
 import com.bonnetrouge.toonup.Commons.Ext.dog
@@ -38,7 +40,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
     lateinit var trackSelector: DefaultTrackSelector
     lateinit var dataSourceFactory: DefaultDataSourceFactory
     lateinit var extractorFactory: DefaultExtractorsFactory
-    lateinit var dynamicMediaSource: DynamicConcatenatingMediaSource
+    lateinit var mediaSource: ExtractorMediaSource
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,25 +66,26 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
         player?.release()
     }
 
-    override fun onLoadingChanged(isLoading: Boolean) { }
-
-    override fun onPlayerError(error: ExoPlaybackException?) {
-        // TODO: Handle link failure
-    }
-
-    override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) { }
-
-    override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) { }
-
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
         with (playerProgressBar) {
             when (playbackState) {
                 Player.STATE_IDLE -> visible()
                 Player.STATE_BUFFERING -> visible()
                 Player.STATE_READY -> invisible()
+                Player.STATE_ENDED -> dog("Video Ended") // TODO
             }
         }
     }
+
+    override fun onLoadingChanged(isLoading: Boolean) { }
+
+    override fun onPlayerError(error: ExoPlaybackException?) {
+        dog("Player error!") // TODO: Handle link failure
+    }
+
+    override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) { }
+
+    override fun onTracksChanged(trackGroups: TrackGroupArray?, trackSelections: TrackSelectionArray?) { }
 
     override fun onPositionDiscontinuity() { }
 
@@ -121,23 +124,26 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
     }
 
     fun configExoplayer(streamingUrls: List<List<DescriptiveStreamingUrl>?>) {
-        dynamicMediaSource = DynamicConcatenatingMediaSource()
         for (streamingUrlObject in streamingUrls) {
             if (streamingUrlObject != null) {
-                val mediaSource = ExtractorMediaSource(
+                mediaSource = ExtractorMediaSource(
                         Uri.parse(streamingUrlObject[0].link),
                         dataSourceFactory,
                         extractorFactory,
                         null,
                         null
                 )
-                dynamicMediaSource.addMediaSource(mediaSource)
+                break
             } else {
                 dog("Api fuckup when getting streaming link")
             }
         }
-        player?.prepare(dynamicMediaSource)
+        player?.prepare(mediaSource)
         player?.playWhenReady = true
+    }
+
+    fun showBottomLinksSheet() {
+        val links = playerViewModel.fullStreamingUrls
     }
 
     companion object {

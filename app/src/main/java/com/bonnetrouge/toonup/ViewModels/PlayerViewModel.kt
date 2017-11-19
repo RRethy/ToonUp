@@ -9,8 +9,8 @@ import javax.inject.Inject
 
 class PlayerViewModel @Inject constructor(private val videoRepository: VideoRepository) : ViewModel() {
 
-    private var fullStreamingUrls: List<List<DescriptiveStreamingUrl>>? = null
-    private var rawStreamingUrls: List<List<String>>? = null
+    var fullStreamingUrls: List<List<DescriptiveStreamingUrl>>? = null
+    var rawStreamingUrls: List<List<String>>? = null
 
     fun getFullStreamingUrls(episodeId: String): Observable<List<List<DescriptiveStreamingUrl>>> {
         return if (fullStreamingUrls != null) Observable.just(fullStreamingUrls)
