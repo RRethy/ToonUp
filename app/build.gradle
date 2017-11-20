@@ -70,12 +70,4 @@ dependencies {
     // Video playing: Exoplayer
     compile "com.google.android.exoplayer:exoplayer-core:r$exoplayer_version"
     compile "com.google.android.exoplayer:exoplayer-ui:r$exoplayer_version"
-
-    // Best library ever: Kotlin Coroutines
-    compile "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines_version"
 }
-repositories {
-
-}
-
-
