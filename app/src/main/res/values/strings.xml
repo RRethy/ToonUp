@@ -20,4 +20,5 @@
 	<string name="episode">E</string>
 	<string name="season">S</string>
 	<string name="connectivity_toast_msg">I once heard of a legend that you had internet. The legend was wrong</string>
+	<string name="bad_link_msg">Oops! That link seems to be broken, try another one!</string>
 </resources>

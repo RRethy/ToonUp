@@ -18,4 +18,11 @@ data class DetailSeriesInfo(var title: String = "",
     override fun getItemViewType() = RVItemViewTypes.DETAIL_SERIES_INFO
 }
 
+data class LinkModelHolder(val linkTitle: String = "", val link: String = "") : RVItem {
+    override fun getItemViewType() = RVItemViewTypes.LINK
+}
 
+data class PartTitleModelHolder(val partTitle: String = "") : RVItem {
+    override fun getItemViewType() = RVItemViewTypes.PART_TITLE
+    override fun getSpanSize() = 4
+}

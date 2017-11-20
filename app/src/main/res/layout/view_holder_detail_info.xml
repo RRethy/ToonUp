@@ -13,7 +13,7 @@
 		android:textSize="30sp"
 		android:fontFamily="serif-monospace"
 		android:textColor="@android:color/white"/>
-	<!--TODO: RecyclerView for genres... maybe... currently looks fine i think, get second opinion-->
+	<!--TODO: RecyclerView for genres... maybe... currently looks fine I think, get second opinion-->
 	<TextView
 		android:id="@+id/genres"
 		android:layout_width="wrap_content"

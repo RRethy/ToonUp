@@ -2,6 +2,7 @@ package com.bonnetrouge.toonup.UI
 
 interface RVItem {
     fun getItemViewType(): Int
+    fun getSpanSize() = 1
 }
 
 object RVItemViewTypes {
@@ -14,4 +15,6 @@ object RVItemViewTypes {
     val EXTENDED_EPISODE = 5
     val DETAIL_SERIES_INFO = 6
     val DETAIL_EPISODE = 7
+    val LINK = 8
+    val PART_TITLE = 9
 }
