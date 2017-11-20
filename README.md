@@ -70,5 +70,6 @@ are not high priorities.
 failures and retry with the next link on its own. This would also need to be
 able to handle multiple possible links for muliple parts.
 * Save info to room/realm db for a nicer offline experience
+* Auto-play next episode when watching tv shows
 
 ## FAQ
