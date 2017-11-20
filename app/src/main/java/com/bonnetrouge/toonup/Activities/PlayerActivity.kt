@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.GridLayoutManager
 import android.view.View
+import android.view.WindowManager
 import com.bonnetrouge.toonup.Adapters.LinksAdapter
 import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.PlayerActivityModule
@@ -49,6 +50,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
         setFullscreen()
+        keepScreenOn()
         app.component.plus(PlayerActivityModule()).inject(this)
         playerViewModel = ViewModelProviders.of(this, playerViewModelFactory).get(PlayerViewModel::class.java)
         setupVideoPlayer(getStreamingUrls(intent.getStringExtra(VIDEO_ID)))
@@ -108,6 +110,10 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
                         or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         or View.SYSTEM_UI_FLAG_FULLSCREEN
                         or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
+    }
+
+    fun keepScreenOn() {
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
     fun setupVideoPlayer(streamingUrlsObservable: Observable<List<List<DescriptiveStreamingUrl>>>?) {
