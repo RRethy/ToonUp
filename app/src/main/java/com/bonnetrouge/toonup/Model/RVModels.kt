@@ -24,5 +24,4 @@ data class LinkModelHolder(val linkTitle: String = "", val link: String = "") : 
 
 data class PartTitleModelHolder(val partTitle: String = "") : RVItem {
     override fun getItemViewType() = RVItemViewTypes.PART_TITLE
-    override fun getSpanSize() = 4
 }

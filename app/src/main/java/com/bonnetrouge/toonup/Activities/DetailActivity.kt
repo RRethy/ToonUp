@@ -107,7 +107,7 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
 
     override fun onRecyclerViewItemClicked(item: RVItem) {
         if (isConnected()) {
-            PlayerActivity.navigate(this, (item as Episode).id)
+            PlayerActivity.navigate(this, (item as Episode).id, detailViewModel.basicSeriesDetails!!)
         } else {
             longToast(R.string.connectivity_toast_msg)
         }

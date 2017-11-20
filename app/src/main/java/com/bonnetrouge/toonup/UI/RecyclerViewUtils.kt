@@ -2,7 +2,6 @@ package com.bonnetrouge.toonup.UI
 
 interface RVItem {
     fun getItemViewType(): Int
-    fun getSpanSize() = 1
 }
 
 object RVItemViewTypes {

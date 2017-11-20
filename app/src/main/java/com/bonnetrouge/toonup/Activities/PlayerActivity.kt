@@ -7,6 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.WindowManager
 import com.bonnetrouge.toonup.Adapters.LinksAdapter
@@ -15,6 +16,7 @@ import com.bonnetrouge.toonup.DI.Modules.PlayerActivityModule
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.DescriptiveStreamingUrl
 import com.bonnetrouge.toonup.Model.LinkModelHolder
+import com.bonnetrouge.toonup.Model.Series
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.PlayerViewModel
@@ -53,7 +55,8 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
         keepScreenOn()
         app.component.plus(PlayerActivityModule()).inject(this)
         playerViewModel = ViewModelProviders.of(this, playerViewModelFactory).get(PlayerViewModel::class.java)
-        setupVideoPlayer(getStreamingUrls(intent.getStringExtra(VIDEO_ID)))
+        setupVideoPlayer(intent.getStringExtra(VIDEO_ID))
+        cacheFutureEpisodeIds(intent.getStringExtra(EPISDOES_ID))
         hideBottomLinksSheet()
     }
 
@@ -116,7 +119,8 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    private fun setupVideoPlayer(streamingUrlsObservable: Observable<List<List<DescriptiveStreamingUrl>>>?) {
+    private fun setupVideoPlayer(id: String) {
+        val streamingUrlsObservable = getStreamingUrls(id)
         trackSelector = DefaultTrackSelector()
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector)
         player?.addListener(this)
@@ -129,6 +133,10 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
                     findInitialUrl(it)
                     addLinksToBottomSheet()
                 })
+    }
+
+    private fun cacheFutureEpisodeIds(ids: String) {
+        playerViewModel.cacheSeriesIds(ids)
     }
 
     private fun getStreamingUrls(id: String): Observable<List<List<DescriptiveStreamingUrl>>>? {
@@ -159,12 +167,9 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
 
     private fun addLinksToBottomSheet() {
         val items = playerViewModel.getRVLinks()
-        linksRV.layoutManager = GridLayoutManager(app, 4, GridLayoutManager.VERTICAL, false)
-        (linksRV.layoutManager as GridLayoutManager).spanSizeLookup =
-                object : GridLayoutManager.SpanSizeLookup() {
-                    override fun getSpanSize(position: Int) = items[position].getSpanSize()
-                }
+        linksRV.layoutManager = LinearLayoutManager(app, LinearLayoutManager.VERTICAL, false)
         linksRV.adapter = linksAdapter
+        linksAdapter.items.clear()
         linksAdapter.items.addAll(items)
         linksAdapter.notifyDataSetChanged()
     }
@@ -186,7 +191,12 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
         if (playerViewModel.isMultiPartMedia()) {
             showBottomLinksSheet()
         } else {
-            onBackPressed()
+            val nextId = playerViewModel.getNextId()
+            if (nextId == "") {
+                onBackPressed()
+            } else {
+                setupVideoPlayer(nextId)
+            }
         }
     }
 
@@ -199,10 +209,12 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
     companion object {
 
         const val VIDEO_ID = "Video ID"
+        const val EPISDOES_ID = "Episodes ID"
 
-        fun navigate(context: Context, id: String) {
+        fun navigate(context: Context, id: String, series: Series) {
             val intent = Intent(context, PlayerActivity::class.java)
             intent.putExtra(VIDEO_ID, id)
+            intent.putExtra(EPISDOES_ID, series.episode.map { it.id }.toString())
             context.startActivity(intent)
         }
     }

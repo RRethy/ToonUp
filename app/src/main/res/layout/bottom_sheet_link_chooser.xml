@@ -3,7 +3,7 @@
 			  xmlns:app="http://schemas.android.com/apk/res-auto"
 			  android:id="@+id/bottomSheetLinks"
 			  android:orientation="vertical"
-			  android:layout_width="match_parent"
+			  android:layout_width="150dp"
 			  android:layout_height="225dp"
 			  android:background="@drawable/red_blue_circle_gradient"
 			  app:layout_behavior="android.support.design.widget.BottomSheetBehavior"

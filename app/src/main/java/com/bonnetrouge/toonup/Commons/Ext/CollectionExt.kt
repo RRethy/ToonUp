@@ -17,6 +17,12 @@ inline fun <T> Iterable<T>.fuzzyFilter(fuzziness: Int = 1, match: CharSequence, 
     return filteredList
 }
 
+fun <T> Iterable<T>.getNext(current: T): T {
+    val currentIndex = this.indexOf(current)
+    return if (currentIndex == this.count() - 1) current
+    else return this.elementAt(currentIndex + 1)
+}
+
 /**
  * Returns a fuzzy pattern with a degree of [fuzziness]
  */

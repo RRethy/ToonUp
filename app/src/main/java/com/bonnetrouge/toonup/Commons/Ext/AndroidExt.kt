@@ -2,6 +2,8 @@ package com.bonnetrouge.toonup.Commons.Ext
 
 import android.graphics.Rect
 import android.os.Handler
+import android.os.Parcel
+import android.os.Parcelable
 import android.util.DisplayMetrics
 import android.view.View
 
@@ -57,3 +59,9 @@ inline fun sdkAbove(sdkVerson: Int, action: () -> Unit, actionIfBelow: () -> Uni
         actionIfBelow()
     }
 }
+
+inline fun <reified T : Parcelable> createParcel(crossinline createFromParcel: (Parcel) -> T?) =
+        object : Parcelable.Creator<T> {
+            override fun createFromParcel(source: Parcel): T? = createFromParcel(source)
+            override fun newArray(size: Int): Array<out T?> = arrayOfNulls(size)
+        }
