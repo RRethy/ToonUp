@@ -121,28 +121,28 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
     //endregion
 
     //region UI Initialization
-    fun initBaseUI() {
+    private fun initBaseUI() {
         hideBackButton()
         navigateCategoryChooser()
     }
 
-    fun onPostRotation(savedInstanceState: Bundle) {
+    private fun onPostRotation(savedInstanceState: Bundle) {
         stateMachine.updateState(savedInstanceState.getInt(UnitedStates.CURRENT_BROWSE_STATE))
     }
 
-    fun setupSickBackgroundGradients() {
+    private fun setupSickBackgroundGradients() {
         backgroundAnimation.with {
             setEnterFadeDuration(5000)
             setExitFadeDuration(5000)
         }
     }
 
-    fun setupSearchTextWatcher() {
+    private fun setupSearchTextWatcher() {
         searchEditText.addTextChangedListener(debounceTextWatcher)
         clearIcon.setOnClickListener { searchEditText.setText("") }
     }
 
-    fun updateSearchIconVisibility() {
+    private fun updateSearchIconVisibility() {
         if (stateMachine.isBrowsing()) {
             showSearchIcon()
         } else {
@@ -164,7 +164,7 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
         }
     }
 
-    fun hideSearchToolbar() {
+    private fun hideSearchToolbar() {
         searchEditText.with {
             hideKeyboard()
             setText("")

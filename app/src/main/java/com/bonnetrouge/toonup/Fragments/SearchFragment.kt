@@ -59,7 +59,7 @@ class SearchFragment @Inject constructor() : Fragment(), OnRVTransitionItemClick
         (activity as BrowseActivity).searchListener = null
     }
 
-    fun popularRecyclerView() {
+    private fun popularRecyclerView() {
         searchDelegate.getFilteredSearchResults("", browseViewModel) {
             searchAdapter.with {
                 if (it != null && it.isNotEmpty()) {
@@ -74,7 +74,7 @@ class SearchFragment @Inject constructor() : Fragment(), OnRVTransitionItemClick
         }
     }
 
-    fun dispatchSearch(s: CharSequence) {
+    private fun dispatchSearch(s: CharSequence) {
         searchDelegate.getFilteredSearchResults(s, browseViewModel) {
             if (it != null && it.isNotEmpty()) {
                 hideNoSearchResultsMsg()
@@ -97,13 +97,13 @@ class SearchFragment @Inject constructor() : Fragment(), OnRVTransitionItemClick
         }
     }
 
-    fun showNoSearchResultsMsg() {
+    private fun showNoSearchResultsMsg() {
         searchAdapter.items.clear()
         searchAdapter.notifyDataSetChanged()
         no_search_found_msg_container?.visibility = View.VISIBLE
     }
 
-    fun hideNoSearchResultsMsg() {
+    private fun hideNoSearchResultsMsg() {
         no_search_found_msg_container?.visibility = View.INVISIBLE
     }
 

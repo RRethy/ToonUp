@@ -48,7 +48,7 @@ class BrowsingFragment @Inject constructor() : Fragment(), OnRVTransitionItemCli
     }
 
     //TODO: Use coroutines with this so it's cancellable to avoid the switcher bug
-    fun refreshBanners() {
+    private fun refreshBanners() {
         if (bannerListAdapter.banners.size == 0) {
             dataFetchingDelegate.fetchBrowsingData({ showLoading() }, browseViewModel, {
                 this.subscribe({
@@ -68,40 +68,40 @@ class BrowsingFragment @Inject constructor() : Fragment(), OnRVTransitionItemCli
         }
     }
 
-    fun updateBanners(banners: MutableList<BannerModel>) {
+    private fun updateBanners(banners: MutableList<BannerModel>) {
         bannerListAdapter.banners.addAll(banners)
         bannerListAdapter.notifyDataSetChanged()
     }
 
-    fun onNetworkError() {
+    private fun onNetworkError() {
         hideLoading()
         showErroMsg()
     }
 
-    fun showErroMsg() {
+    private fun showErroMsg() {
         browsingErrorMessage?.visibility = View.VISIBLE
         hideSearchIcon()
     }
 
-    fun hideErrorMsg() {
+    private fun hideErrorMsg() {
         browsingErrorMessage?.visibility = View.INVISIBLE
     }
 
-    fun showLoading() {
+    private fun showLoading() {
         swipeRefreshLayout?.isRefreshing = true
         hideSearchIcon()
     }
 
-    fun hideLoading() {
+    private fun hideLoading() {
         swipeRefreshLayout?.isRefreshing = false
         showSearchIcon()
     }
 
-    fun showSearchIcon() {
+    private fun showSearchIcon() {
         ifAdded { (activity as BrowseActivity).showSearchIcon() }
     }
 
-    fun hideSearchIcon() {
+    private fun hideSearchIcon() {
         ifAdded { (activity as BrowseActivity).hideSearchIcon() }
     }
 

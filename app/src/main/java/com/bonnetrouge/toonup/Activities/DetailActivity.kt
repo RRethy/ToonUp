@@ -57,7 +57,7 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
         backgroundAnimation.stop()
     }
 
-    fun cacheIntentData() {
+    private fun cacheIntentData() {
         detailViewModel.id = intent.getStringExtra(DetailActivity.ID)
         detailViewModel.title = intent.getStringExtra(DetailActivity.TITLE)
         detailViewModel.description = intent.getStringExtra(DetailActivity.DESCRIPTION)
@@ -67,7 +67,7 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
         detailViewModel.status = intent.getStringExtra(DetailActivity.STATUS)
     }
 
-    fun setupToolbar() {
+    private fun setupToolbar() {
         toolbar.title = ""
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -76,13 +76,13 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
                 .into(parallaxImage)
     }
 
-    fun setupRecyclerView() {
+    private fun setupRecyclerView() {
         detailsRecyclerView.addItemDecoration(DividerItemDecoration(app, LinearLayout.VERTICAL))
         detailsRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
         detailsRecyclerView.adapter = detailAdapter
     }
 
-    fun popularRecyclerView() {
+    private fun popularRecyclerView() {
         detailViewModel.getMediaInfo()
                 .subscribe({
                     postDelayed(200) {
@@ -97,11 +97,11 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
                 })
     }
 
-    fun hideError() {
+    private fun hideError() {
         errorMessage.invisible()
     }
 
-    fun showError() {
+    private fun showError() {
         errorMessage.visible()
     }
 

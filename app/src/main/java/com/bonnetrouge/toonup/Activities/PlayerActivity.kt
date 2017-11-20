@@ -101,7 +101,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
 
     override fun onTimelineChanged(timeline: Timeline?, manifest: Any?) { }
 
-    fun setFullscreen() {
+    private fun setFullscreen() {
         val decorView = window.decorView
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -112,11 +112,11 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
                         or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
 
-    fun keepScreenOn() {
+    private fun keepScreenOn() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    fun setupVideoPlayer(streamingUrlsObservable: Observable<List<List<DescriptiveStreamingUrl>>>?) {
+    private fun setupVideoPlayer(streamingUrlsObservable: Observable<List<List<DescriptiveStreamingUrl>>>?) {
         trackSelector = DefaultTrackSelector()
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector)
         player?.addListener(this)
@@ -131,12 +131,12 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
                 })
     }
 
-    fun getStreamingUrls(id: String): Observable<List<List<DescriptiveStreamingUrl>>>? {
+    private fun getStreamingUrls(id: String): Observable<List<List<DescriptiveStreamingUrl>>>? {
         return playerViewModel.getFullStreamingUrls(id)
                 .subscribeOn(Schedulers.io())
     }
 
-    fun findInitialUrl(streamingUrls: List<List<DescriptiveStreamingUrl>?>) {
+    private fun findInitialUrl(streamingUrls: List<List<DescriptiveStreamingUrl>?>) {
         for (streamingUrlObject in streamingUrls) {
             if (streamingUrlObject != null) {
                 prepareStreamUrl(streamingUrlObject[0].link)
@@ -145,7 +145,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
         }
     }
 
-    fun prepareStreamUrl(url: String) {
+    private fun prepareStreamUrl(url: String) {
         mediaSource = ExtractorMediaSource(
                 Uri.parse(url),
                 dataSourceFactory,
@@ -157,7 +157,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
         player?.playWhenReady = true
     }
 
-    fun addLinksToBottomSheet() {
+    private fun addLinksToBottomSheet() {
         val items = playerViewModel.getRVLinks()
         linksRV.layoutManager = GridLayoutManager(app, 4, GridLayoutManager.VERTICAL, false)
         (linksRV.layoutManager as GridLayoutManager).spanSizeLookup =
@@ -169,20 +169,20 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
         linksAdapter.notifyDataSetChanged()
     }
 
-    fun showBottomLinksSheet() {
+    private fun showBottomLinksSheet() {
         playerProgressBar.invisible()
         bottomSheetController.peekHeight = convertToPixels(90.0).toInt()
         bottomSheetController.isHideable = false
         bottomSheetController.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
-    fun hideBottomLinksSheet() {
+    private fun hideBottomLinksSheet() {
         bottomSheetController.peekHeight = 0
         bottomSheetController.isHideable = true
         bottomSheetController.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
-    fun onMediaEnded() {
+    private fun onMediaEnded() {
         if (playerViewModel.isMultiPartMedia()) {
             showBottomLinksSheet()
         } else {
