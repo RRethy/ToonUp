@@ -48,7 +48,7 @@ dependencies {
     // JSON deserialization library: Moshi
     compile "com.squareup.moshi:moshi:1.5.0"
     compile "com.squareup.retrofit2:converter-moshi:2.3.0"
- 
+
     // REST client: retrofit
     compile "com.squareup.retrofit2:retrofit:$retrofit_version"
     compile "com.squareup.retrofit2:adapter-rxjava2:$retrofit_version"
