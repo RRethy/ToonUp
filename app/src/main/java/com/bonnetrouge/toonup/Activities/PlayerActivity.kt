@@ -62,7 +62,6 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
 
     override fun onStop() {
         super.onStop()
-        player?.playWhenReady = false
     }
 
     override fun onStart() {
@@ -72,6 +71,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
 
     override fun onDestroy() {
         super.onDestroy()
+        player?.playWhenReady = false
         player?.release()
     }
 
