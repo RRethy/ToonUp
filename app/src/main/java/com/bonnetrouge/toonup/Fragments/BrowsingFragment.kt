@@ -25,15 +25,15 @@ import javax.inject.Inject
 
 class BrowsingFragment @Inject constructor() : Fragment(), OnRVTransitionItemClicked {
 
-    val browseViewModel by lazyAndroid { ViewModelProviders.of(activity).get(BrowseViewModel::class.java) }
+    val browseViewModel by lazyAndroid { ViewModelProviders.of(activity!!).get(BrowseViewModel::class.java) }
     val bannerListAdapter by lazyAndroid { BannerListAdapter(this) }
 
     var dataFetchingDelegate: DataFetchingDelegate = CartoonFetchingDelegate()
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?)
-            = inflater?.inflate(R.layout.fragment_browsing, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
+            = inflater.inflate(R.layout.fragment_browsing, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         browsingRecyclerView.adapter = bannerListAdapter
         browsingRecyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)

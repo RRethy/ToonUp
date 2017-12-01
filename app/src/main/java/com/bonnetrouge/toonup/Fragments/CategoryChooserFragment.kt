@@ -14,10 +14,10 @@ import javax.inject.Inject
 
 class CategoryChooserFragment @Inject constructor() : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-            inflater?.inflate(R.layout.fragment_category_chooser, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+            inflater.inflate(R.layout.fragment_category_chooser, container, false)
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         attachClickAnimation(tvShowsChooserContainer) { (activity as BrowseActivity).navigateTvShows() }
         attachClickAnimation(moviesChooserContainer) { (activity as BrowseActivity).navigateMovies() }
@@ -26,24 +26,24 @@ class CategoryChooserFragment @Inject constructor() : Fragment() {
     }
 
     fun attachClickAnimation(view: View?, onUp: () -> Unit) {
-        view?.setOnTouchListener { view, motionEvent ->
+        view?.setOnTouchListener { v, motionEvent ->
             when (motionEvent.action) {
                 MotionEvent.ACTION_DOWN -> {
-                    view?.scaleX = 0.98f
-                    view?.scaleY = 0.98f
+                    v?.scaleX = 0.98f
+                    v?.scaleY = 0.98f
                 }
                 MotionEvent.ACTION_MOVE ->
-                    if (!isInViewBounds(view, motionEvent.rawX.toInt(), motionEvent.rawY.toInt())) {
-                        view?.scaleX = 1f
-                        view?.scaleY = 1f
+                    if (!isInViewBounds(v, motionEvent.rawX.toInt(), motionEvent.rawY.toInt())) {
+                        v?.scaleX = 1f
+                        v?.scaleY = 1f
                     } else {
-                        view?.scaleX = 0.98f
-                        view?.scaleY = 0.98f
+                        v?.scaleX = 0.98f
+                        v?.scaleY = 0.98f
                     }
                 MotionEvent.ACTION_UP ->
-                    if (isInViewBounds(view, motionEvent.rawX.toInt(), motionEvent.rawY.toInt())) {
-                        view?.scaleX = 1f
-                        view?.scaleY = 1f
+                    if (isInViewBounds(v, motionEvent.rawX.toInt(), motionEvent.rawY.toInt())) {
+                        v?.scaleX = 1f
+                        v?.scaleY = 1f
                         onUp()
                     }
             }
