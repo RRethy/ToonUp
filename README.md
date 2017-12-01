@@ -39,6 +39,7 @@ Android App that lets you Choose from Thousands of Cartoons/Movies/Animes to Wat
 * Clean browsing UI with Netflix style banners
 * Large selection of videos to choose from
 * Auto plays the next episode
+  * Auto tries all available links
 
 ## Future Plans ##
 
@@ -46,15 +47,12 @@ These are possible future features that I am looking to implement. However,
 currently I am working on an array of other projects and am in school so these
 are not high priorities.
 
-* Auto try the next link instead of prompting the user to pick one after initial link failure
 * Add user sign-in
   * Add user specific favorites category
   * Maintain last watched position so user can leave, and come back to the
   same spot
-* Create custom MediaSource/TrackSelector for Exoplayer that can handle link
-failures and retry with the next link on its own. This would also need to be
-able to handle multiple possible links for muliple parts.
 * Save info to room/realm db for a nicer offline experience
+  * Also save the spot that they were previous watching
 
 ## FAQ ##
 
@@ -67,7 +65,7 @@ Not really FAQ, more like question I assume people would frequently ask
 > No, it breaks terms of service.
 
 **Why no tests?**
-> I write probably 100+ tests per week on cs assignments so I will pass on writing them for my side projects unless I feel they are absolutely necessary. Also, this is not a production app.
+> I write too many tests on assignment, since this is a side project and not a production app I'm choosing not to write them.
 
 **Why use so many delegates with browsing and searching?**
 > I process all the info I get from the api the same way and display it the same way, only difference is the api call and what variable caches the data. Delegates are perfect for that type of scenario.
