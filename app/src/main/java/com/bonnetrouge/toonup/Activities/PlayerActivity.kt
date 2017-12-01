@@ -76,7 +76,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
                 Player.STATE_IDLE -> visible()
                 Player.STATE_BUFFERING -> visible()
                 Player.STATE_READY -> invisible()
-                Player.STATE_ENDED -> onMediaEnded()
+                Player.STATE_ENDED -> videoLinkHandler.onMediaEnded()
             }
         }
     }
@@ -84,7 +84,6 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
     override fun onLoadingChanged(isLoading: Boolean) { }
 
     override fun onPlayerError(error: ExoPlaybackException?) {
-        dog("onPlayerError")
         videoLinkHandler.onLinkError()
     }
 
@@ -113,13 +112,15 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
         videoLinkHandler.viewModel = playerViewModel
         videoLinkHandler.onNewLink = { link -> prepareNewLink(link) }
         videoLinkHandler.messageDispatcher = { msgRes, i -> showMessage(msgRes, i) }
+        videoLinkHandler.onAllMediaWatched = { onBackPressed() }
+        videoLinkHandler.processNextMedia = { setupVideoPlayer(it) }
     }
 
     private fun keepScreenOn() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
-    private fun setupVideoPlayer(id: String) {
+    fun setupVideoPlayer(id: String) {
         val streamingUrlsObservable = getStreamingUrls(id)
         trackSelector = DefaultTrackSelector()
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector)
@@ -131,7 +132,10 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
         streamingUrlsObservable?.observeOn(AndroidSchedulers.mainThread())?.subscribe(
                 {
                     findInitialUrl(it)
-                }, {})
+                },
+                {
+                    onBackPressed()
+                })
     }
 
     private fun cacheFutureEpisodeIds(ids: String) {
@@ -164,22 +168,9 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
         player?.playWhenReady = true
     }
 
-    private fun onMediaEnded() {
-        if (playerViewModel.isMultiPartMedia()) {
-            videoLinkHandler.onPartEnded()
-        } else {
-            val nextId = playerViewModel.getNextId()
-            if (nextId == "") {
-                onBackPressed()
-            } else {
-                setupVideoPlayer(nextId)
-            }
-        }
-    }
-
     private fun prepareNewLink(link: String) {
         if (link == "") {
-            onMediaEnded()
+            videoLinkHandler.onMediaEnded()
         } else {
             prepareStreamUrl(link)
         }

@@ -1,6 +1,5 @@
 package com.bonnetrouge.toonup.Handlers
 
-import com.bonnetrouge.toonup.Commons.Ext.dog
 import com.bonnetrouge.toonup.Commons.Ext.lazyAndroid
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.ViewModels.PlayerViewModel
@@ -22,13 +21,25 @@ class VideoLinkHandler @Inject constructor() {
 
     lateinit var onNewLink: (String) -> Unit
     lateinit var messageDispatcher: (Int, Int) -> Unit
+    lateinit var onAllMediaWatched: () -> Unit
+    lateinit var processNextMedia: (String) -> Unit
 
     private fun moveToNextEpisode() {
         onNewLink("")
     }
 
+    private fun onPartEnded() {
+        if (part < (maxParts - 1)) {
+            messageDispatcher(partEndMsg, part + 2)
+            part++
+            linkIndex = 0
+            onNewLink(getLink(part, linkIndex))
+        } else {
+            moveToNextEpisode()
+        }
+    }
+
     fun onLinkError() {
-        dog("onLinkError")
         messageDispatcher(linkFailureMsg, linkIndex + 2)
         if (linkIndex < (maxLinks(part) - 1)) {
             linkIndex++
@@ -43,15 +54,16 @@ class VideoLinkHandler @Inject constructor() {
         }
     }
 
-    fun onPartEnded() {
-        dog("onPartEnded")
-        if (part < (maxParts - 1)) {
-            messageDispatcher(partEndMsg, part + 2)
-            part++
-            linkIndex = 0
-            onNewLink(getLink(part, linkIndex))
+    fun onMediaEnded() {
+        if (viewModel.isMultiPartMedia()) {
+            onPartEnded()
         } else {
-            moveToNextEpisode()
+            val nextId = viewModel.getNextId()
+            if (nextId == "") {
+                onAllMediaWatched()
+            } else {
+                processNextMedia(nextId)
+            }
         }
     }
 }
