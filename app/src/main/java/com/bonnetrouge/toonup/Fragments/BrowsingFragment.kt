@@ -25,7 +25,7 @@ import javax.inject.Inject
 
 class BrowsingFragment @Inject constructor() : Fragment(), OnRVTransitionItemClicked {
 
-    val browseViewModel by lazyAndroid { ViewModelProviders.of(activity!!).get(BrowseViewModel::class.java) }
+    private val browseViewModel by lazyAndroid { ViewModelProviders.of(activity!!).get(BrowseViewModel::class.java) }
     val bannerListAdapter by lazyAndroid { BannerListAdapter(this) }
 
     var dataFetchingDelegate: DataFetchingDelegate = CartoonFetchingDelegate()

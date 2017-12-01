@@ -27,12 +27,12 @@ import javax.inject.Inject
 
 class SearchFragment @Inject constructor() : Fragment(), OnRVTransitionItemClicked, OnSearchDebounceListener {
 
-    val browseViewModel by lazyAndroid { ViewModelProviders.of(activity!!).get(BrowseViewModel::class.java) }
+    private val browseViewModel by lazyAndroid { ViewModelProviders.of(activity!!).get(BrowseViewModel::class.java) }
 
-    val itemWidth = getDisplayWidth() / 3
+    private val itemWidth = getDisplayWidth() / 3
     val searchAdapter by lazyAndroid { SearchAdapter(this, itemWidth) }
 
-    lateinit var searchDelegate: SearchDelegate
+    private lateinit var searchDelegate: SearchDelegate
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View?
             = inflater.inflate(R.layout.fragment_search, container, false)
