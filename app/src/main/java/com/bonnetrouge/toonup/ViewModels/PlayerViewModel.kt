@@ -50,7 +50,7 @@ class PlayerViewModel @Inject constructor(private val videoRepository: VideoRepo
     fun isMultiPartMedia() = fullStreamingUrls!!.size > 1
 
     fun cacheSeriesIds(ids: String) {
-        val trimmedIds = ids.trimEnd { it == '[' || it == ']' }
+        val trimmedIds = ids.trimEnd { it == ']' }.trimStart { it == '[' }
         idList = trimmedIds.split(", ")
     }
 }

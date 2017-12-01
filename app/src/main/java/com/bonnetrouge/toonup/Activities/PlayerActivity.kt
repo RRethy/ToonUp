@@ -5,14 +5,11 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.view.View
 import android.view.WindowManager
-import com.bonnetrouge.toonup.Adapters.LinksAdapter
 import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.DI.Modules.PlayerActivityModule
+import com.bonnetrouge.toonup.Handlers.VideoLinkHandler
 import com.bonnetrouge.toonup.Listeners.OnRecyclerViewItemClicked
 import com.bonnetrouge.toonup.Model.DescriptiveStreamingUrl
 import com.bonnetrouge.toonup.Model.LinkModelHolder
@@ -33,20 +30,18 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_player.*
-import kotlinx.android.synthetic.main.bottom_sheet_link_chooser.*
 import javax.inject.Inject
 
-class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemClicked {
+class PlayerActivity : BaseActivity(), Player.EventListener {
 
-    var player: SimpleExoPlayer? = null
     @Inject lateinit var playerViewModelFactory: PlayerViewModelFactory
+    @Inject lateinit var videoLinkHandler: VideoLinkHandler
     lateinit var playerViewModel: PlayerViewModel
     lateinit var trackSelector: DefaultTrackSelector
     lateinit var dataSourceFactory: DefaultDataSourceFactory
     lateinit var extractorFactory: DefaultExtractorsFactory
     lateinit var mediaSource: ExtractorMediaSource
-    val bottomSheetController by lazyAndroid { BottomSheetBehavior.from(bottomSheetLinks) }
-    val linksAdapter = LinksAdapter(this)
+    var player: SimpleExoPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,9 +50,9 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
         keepScreenOn()
         app.component.plus(PlayerActivityModule()).inject(this)
         playerViewModel = ViewModelProviders.of(this, playerViewModelFactory).get(PlayerViewModel::class.java)
+        setupVideoLinkHandler()
         setupVideoPlayer(intent.getStringExtra(VIDEO_ID))
         cacheFutureEpisodeIds(intent.getStringExtra(EPISDOES_ID))
-        hideBottomLinksSheet()
     }
 
     override fun onStop() {
@@ -90,8 +85,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
 
     override fun onPlayerError(error: ExoPlaybackException?) {
         dog("onPlayerError")
-        shortToast(R.string.bad_link_msg)
-        showBottomLinksSheet()
+        videoLinkHandler.onLinkError()
     }
 
     override fun onPlaybackParametersChanged(playbackParameters: PlaybackParameters?) { }
@@ -115,6 +109,12 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
                         or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY)
     }
 
+    private fun setupVideoLinkHandler() {
+        videoLinkHandler.viewModel = playerViewModel
+        videoLinkHandler.onNewLink = { link -> prepareNewLink(link) }
+        videoLinkHandler.messageDispatcher = { msgRes, i -> showMessage(msgRes, i) }
+    }
+
     private fun keepScreenOn() {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
@@ -131,8 +131,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
         streamingUrlsObservable?.observeOn(AndroidSchedulers.mainThread())?.subscribe(
                 {
                     findInitialUrl(it)
-                    addLinksToBottomSheet()
-                })
+                }, {})
     }
 
     private fun cacheFutureEpisodeIds(ids: String) {
@@ -165,31 +164,9 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
         player?.playWhenReady = true
     }
 
-    private fun addLinksToBottomSheet() {
-        val items = playerViewModel.getRVLinks()
-        linksRV.layoutManager = LinearLayoutManager(app, LinearLayoutManager.VERTICAL, false)
-        linksRV.adapter = linksAdapter
-        linksAdapter.items.clear()
-        linksAdapter.items.addAll(items)
-        linksAdapter.notifyDataSetChanged()
-    }
-
-    private fun showBottomLinksSheet() {
-        playerProgressBar.invisible()
-        bottomSheetController.peekHeight = convertToPixels(90.0).toInt()
-        bottomSheetController.isHideable = false
-        bottomSheetController.state = BottomSheetBehavior.STATE_EXPANDED
-    }
-
-    private fun hideBottomLinksSheet() {
-        bottomSheetController.peekHeight = 0
-        bottomSheetController.isHideable = true
-        bottomSheetController.state = BottomSheetBehavior.STATE_HIDDEN
-    }
-
     private fun onMediaEnded() {
         if (playerViewModel.isMultiPartMedia()) {
-            showBottomLinksSheet()
+            videoLinkHandler.onPartEnded()
         } else {
             val nextId = playerViewModel.getNextId()
             if (nextId == "") {
@@ -200,10 +177,16 @@ class PlayerActivity : BaseActivity(), Player.EventListener, OnRecyclerViewItemC
         }
     }
 
-    override fun onRecyclerViewItemClicked(item: RVItem) {
-        dog((item as LinkModelHolder).link)
-        hideBottomLinksSheet()
-        prepareStreamUrl(item.link)
+    private fun prepareNewLink(link: String) {
+        if (link == "") {
+            onMediaEnded()
+        } else {
+            prepareStreamUrl(link)
+        }
+    }
+
+    private fun showMessage(msgRes: Int, i: Int) {
+        shortToast("${resString(msgRes)} ${i.toString()}")
     }
 
     companion object {
