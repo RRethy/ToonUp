@@ -1,10 +1,7 @@
 package com.bonnetrouge.toonup.ViewModels
 
 import android.arch.lifecycle.ViewModel
-import com.bonnetrouge.toonup.Commons.Ext.MED_FUZZY
-import com.bonnetrouge.toonup.Commons.Ext.dog
-import com.bonnetrouge.toonup.Commons.Ext.fuzzyFilter
-import com.bonnetrouge.toonup.Commons.Ext.resString
+import com.bonnetrouge.toonup.Commons.Ext.*
 import com.bonnetrouge.toonup.Data.VideoRepository
 import com.bonnetrouge.toonup.Delegates.*
 import com.bonnetrouge.toonup.Model.BannerModel
@@ -66,7 +63,7 @@ class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepo
     }
 
     private fun filterMedia(delegate: VMDelegate, s: CharSequence) =
-            delegate.rawData(dataHolder)?.fuzzyFilter(fuzziness = MED_FUZZY, match = s){ this.name }?.toMutableList()
+            delegate.rawData(dataHolder)?.fuzzyFilter(fuzziness = LOW_FUZZY, match = s){ this.name }?.toMutableList()
 
     private fun requestAllMedia(observable: Observable<List<BasicSeriesInfo>>,
                                 delegate: VMDelegate,

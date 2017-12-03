@@ -20,7 +20,7 @@
 	<string name="episode">E</string>
 	<string name="season">S</string>
 	<string name="connectivity_toast_msg">I once heard of a legend that you had internet. The legend was wrong</string>
-	<string name="bad_link_msg">Recalculating missile trajectory! Targeting Planet</string>
+	<string name="bad_link_msg">Recalculating missile trajectory!\nTargeting Planet</string>
 	<string name="next_part_msg">Location compromised! Moving to sector</string>
 	<string name="no_links_for_part">There seems to be no workings links for this video :(</string>
 </resources>
