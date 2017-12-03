@@ -49,8 +49,6 @@ are not high priorities.
 
 * Add user sign-in
   * Add user specific favorites category
-  * Maintain last watched position so user can leave, and come back to the
-  same spot
 * Save info to room/realm db for a nicer offline experience
   * Also save the spot that they were previous watching
 
@@ -69,9 +67,6 @@ Not really FAQ, more like question I assume people would frequently ask
 
 **Why use so many delegates with browsing and searching?**
 > I process all the info I get from the api the same way and display it the same way, only difference is the api call and what variable caches the data. Delegates are perfect for that type of scenario.
-
-**I searched for "simpsons" but didn't find the simpsons, but I found it browsing?**
-> While it is fuzzy search, I currently have it matching the start of the search, so if you want to find "The Simpson's", then you need to begin your search with 't'.
 
 **Why are some shows categorized by season while others are not**
 > It's not my backend so that's just how they store stuff. Typically large shows like "Family Guy" are split into seasons while smaller ones are not.
