@@ -39,13 +39,6 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
 
     var searchListener: OnSearchDebounceListener? = null
 
-    companion object {
-        fun navigate(context: Context) {
-            val intent = Intent(context, BrowseActivity::class.java)
-            context.startActivity(intent)
-        }
-    }
-
     //region Activity methods
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -240,4 +233,11 @@ class BrowseActivity : BaseActivity(), DebounceTextWatcher.OnDebouncedListener {
         }
     }
     //endregion
+
+    companion object {
+        fun navigate(context: Context) {
+            val intent = Intent(context, BrowseActivity::class.java)
+            context.startActivity(intent)
+        }
+    }
 }

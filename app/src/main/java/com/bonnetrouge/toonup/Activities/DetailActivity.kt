@@ -114,13 +114,13 @@ class DetailActivity : BaseActivity(), OnRecyclerViewItemClicked {
     }
 
     companion object {
-        val ID = "Id"
-        val TITLE = "Title"
-        val DESCRIPTION = "Description"
-        val RELEASED = "Released"
-        val GENRES = "Genres"
-        val RATING = "Ratings"
-        val STATUS = "Status"
+        const val ID = "Id"
+        const val TITLE = "Title"
+        const val DESCRIPTION = "Description"
+        const val RELEASED = "Released"
+        const val GENRES = "Genres"
+        const val RATING = "Ratings"
+        const val STATUS = "Status"
 
         fun navigate(activity: AppCompatActivity, basicSeriesInfo: BasicSeriesInfo, imageView: ImageView) {
             val intent = Intent(activity, DetailActivity::class.java)

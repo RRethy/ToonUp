@@ -2,8 +2,8 @@ package com.bonnetrouge.toonup.Commons.Ext
 
 import java.util.regex.Pattern
 
-val LOW_FUZZY = 1
-val MED_FUZZY = 2
+const val LOW_FUZZY = 1
+const val MED_FUZZY = 2
 
 /**
  * Returns a list containing only elements where an elements [filterProperty] fuzzy matches [match]
