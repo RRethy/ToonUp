@@ -47,6 +47,8 @@ These are possible future features that I am looking to implement. However,
 currently I am working on an array of other projects and am in school so these
 are not high priorities.
 
+* Add UI while watching video to switch to new episode
+* Add tests and change DI to inject implementations rather than hard objects
 * Add user sign-in
   * Add user specific favorites category
 * Save info to room/realm db for a nicer offline experience
@@ -61,9 +63,6 @@ Not really FAQ, more like question I assume people would frequently ask
 
 **Can I get this on the play store?**
 > No, it breaks terms of service.
-
-**Why no tests?**
-> I write too many tests on assignment, since this is a side project and not a production app I'm choosing not to write them.
 
 **Why use so many delegates with browsing and searching?**
 > I process all the info I get from the api the same way and display it the same way, only difference is the api call and what variable caches the data. Delegates are perfect for that type of scenario.
