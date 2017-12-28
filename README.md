@@ -16,9 +16,9 @@ Android App that lets you Choose from Thousands of Cartoons/Movies/Animes to Wat
 
 <img src="https://github.com/RRethy/GifHost/blob/master/browsing_gif.gif" width="250" height="444" title="gif1"> <img src="https://github.com/RRethy/GifHost/blob/master/watching_gif.gif" width="250" height="444" title="gif2">
 
-<img src="https://github.com/RRethy/ToonUp/blob/master/art/banners_ss_toonup.png" width="250" height="444" title="banners_ss_toonup"> <img src="https://github.com/RRethy/ToonUp/blob/master/art/detail_1_ss_toonup.png" width="250" height="444" title="detail_1_ss_toonup"> <img src="https://github.com/RRethy/ToonUp/blob/master/art/detail_expanded_ss_toonup.png" width="250" height="444" title="detail_expanded_ss_toonup">
-<img src="https://github.com/RRethy/ToonUp/blob/master/art/main_chooser_ss_toonup.png" width="250" height="444" title="main_chooser_ss_toonup"> <img src="https://github.com/RRethy/ToonUp/blob/master/art/search_ss_toonup.png" width="250" height="444" title="search_ss_toonup">
-<img src="https://github.com/RRethy/ToonUp/blob/master/art/video_playing_ss_toonup.png" width="444" height="250" title="video_playing_ss_toonup">
+<img src="https://user-images.githubusercontent.com/21000943/34424673-501ea672-ebf3-11e7-8e85-452f8f6d229d.png" width="250" height="444" title="banners_ss_toonup"> <img src="https://user-images.githubusercontent.com/21000943/34424678-57a4683c-ebf3-11e7-813e-f6a78d78448d.png" width="250" height="444" title="detail_1_ss_toonup"> <img src="https://user-images.githubusercontent.com/21000943/34424680-5895dda2-ebf3-11e7-9c06-a29d046917b9.png" width="250" height="444" title="detail_expanded_ss_toonup">
+<img src="https://user-images.githubusercontent.com/21000943/34424681-5b17ade4-ebf3-11e7-8843-19c95f01bab5.png" width="250" height="444" title="main_chooser_ss_toonup"> <img src="https://user-images.githubusercontent.com/21000943/34424682-5ca6a61a-ebf3-11e7-94fb-e8f9106b5960.png" width="250" height="444" title="search_ss_toonup">
+<img src="https://user-images.githubusercontent.com/21000943/34424683-5ddbc38a-ebf3-11e7-8230-182108695a3e.png" width="444" height="250" title="video_playing_ss_toonup">
 
 ## Libraries Used ##
 
