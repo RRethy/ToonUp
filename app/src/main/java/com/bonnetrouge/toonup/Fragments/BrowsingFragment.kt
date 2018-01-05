@@ -20,6 +20,8 @@ import com.bonnetrouge.toonup.Model.BasicSeriesInfo
 import com.bonnetrouge.toonup.R
 import com.bonnetrouge.toonup.UI.RVItem
 import com.bonnetrouge.toonup.ViewModels.BrowseViewModel
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_browsing.*
 import javax.inject.Inject
 
@@ -50,16 +52,19 @@ class BrowsingFragment @Inject constructor() : Fragment(), OnRVTransitionItemCli
     //TODO: Use coroutines with this so it's cancellable to avoid the switcher bug
     private fun refreshBanners() {
         if (bannerListAdapter.banners.size == 0) {
-            dataFetchingDelegate.fetchBrowsingData({ showLoading() }, browseViewModel, {
-                this.subscribe({
-                    hideLoading()
-                    hideErrorMsg()
-                    swipeRefreshLayout.postDelayed({
-                        updateBanners(it)
-                    }, 150)
-                }, {
-                    onNetworkError()
-                })
+            dataFetchingDelegate.fetchBrowsingData({ showLoading() },
+                    browseViewModel, {
+                this.subscribeOn(Schedulers.io())
+                observeOn(AndroidSchedulers.mainThread())
+                        .subscribe({
+                            hideLoading()
+                            hideErrorMsg()
+                            swipeRefreshLayout.postDelayed({
+                                updateBanners(it)
+                            }, 150)
+                        }, {
+                            onNetworkError()
+                        })
             }, {
                 onNetworkError()
             })
