@@ -46,8 +46,6 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
-        setFullscreen()
-        keepScreenOn()
         app.component.plus(PlayerActivityModule()).inject(this)
         playerViewModel = ViewModelProviders.of(this, playerViewModelFactory).get(PlayerViewModel::class.java)
         setupVideoLinkHandler()
@@ -62,6 +60,8 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
     override fun onStart() {
         super.onStart()
         player?.playWhenReady = true
+        setFullscreen()
+        keepScreenOn()
     }
 
     override fun onDestroy() {
