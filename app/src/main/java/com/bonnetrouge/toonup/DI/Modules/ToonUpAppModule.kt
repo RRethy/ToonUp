@@ -11,7 +11,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import javax.inject.Singleton
 
-
 @Module
 class ToonUpAppModule(val app: ToonUpApp) {
 

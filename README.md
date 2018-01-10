@@ -4,6 +4,8 @@
 
 Android App that lets you Choose from Thousands of Cartoons/Movies/Animes to Watch for Free
 
+[Download the APK!](https://drive.google.com/file/d/1vsO91fP9cIyu-CSgJmiDikxxunAzHhj0/view)
+
 ## Table of Contents ##
 
   * [Check it out!](#check-it-out)
