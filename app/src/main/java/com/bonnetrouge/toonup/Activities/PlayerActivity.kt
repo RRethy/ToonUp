@@ -71,6 +71,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
     }
 
     override fun onPlayerStateChanged(playWhenReady: Boolean, playbackState: Int) {
+        // Choose when to show the progress bar
         with (playerProgressBar) {
             when (playbackState) {
                 Player.STATE_IDLE -> visible()
@@ -111,7 +112,7 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
     private fun setupVideoLinkHandler() {
         videoLinkHandler.viewModel = playerViewModel
         videoLinkHandler.onNewLink = { link -> prepareNewLink(link) }
-        videoLinkHandler.messageDispatcher = { msgRes, i -> showMessage(msgRes, i) }
+        videoLinkHandler.messageDispatcher = { msgRes, i -> shortToast("${resString(msgRes)} ${i.toString()}") }
         videoLinkHandler.onAllMediaWatched = { onBackPressed() }
         videoLinkHandler.processNextMedia = { setupVideoPlayer(it) }
     }
@@ -130,12 +131,8 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
         dataSourceFactory = DefaultDataSourceFactory(this, Util.getUserAgent(this, "ToonUp"))
         extractorFactory = DefaultExtractorsFactory()
         streamingUrlsObservable?.observeOn(AndroidSchedulers.mainThread())?.subscribe(
-                {
-                    findInitialUrl(it)
-                },
-                {
-                    onBackPressed()
-                })
+                { findInitialUrl(it) },
+                { onBackPressed() })
     }
 
     private fun cacheFutureEpisodeIds(ids: String) {
@@ -174,10 +171,6 @@ class PlayerActivity : BaseActivity(), Player.EventListener {
         } else {
             prepareStreamUrl(link)
         }
-    }
-
-    private fun showMessage(msgRes: Int, i: Int) {
-        shortToast("${resString(msgRes)} ${i.toString()}")
     }
 
     companion object {
