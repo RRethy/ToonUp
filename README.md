@@ -50,10 +50,10 @@ currently I am working on an array of other projects and am in school so these
 are not high priorities.
 
 * Add UI while watching video to switch to new episode
-* Add tests and change DI to inject implementations rather than hard objects
 * Add user sign-in
   * Add user specific favorites category
 * Save info to room/realm db for a nicer offline experience
+  * Add a favorites category
   * Also save the spot that they were previous watching
 
 ## FAQ ##
