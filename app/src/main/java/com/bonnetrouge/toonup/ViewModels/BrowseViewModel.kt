@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 class BrowseViewModel @Inject constructor(private val videoRepository: VideoRepository) : ViewModel() {
 
-    val dataHolder = BrowseVMDataHolder()
+    private val dataHolder = BrowseVMDataHolder()
 
     fun getFormattedMedia(delegate: VMDelegate,
                           showLoading: () -> Unit,
